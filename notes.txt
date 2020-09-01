@@ -8,3 +8,10 @@ https://github.com/shtsai7/checker-game
 https://github.com/MuhammadUsman94
 https://github.com/erginbostanci
 https://github.com/sabdj2020
+
+
+
+Git commands:
+
+git checkout <branch name> to create or switch branch
+git push <remote> <branch> (remote is orgin for me Bayard repo and branch name zeal_branch)
