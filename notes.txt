@@ -1,0 +1,10 @@
+links:
+
+https://vuejs.org/
+https://flask.palletsprojects.com/en/1.1.x/
+https://github.com/shtsai7/checker-game
+
+
+https://github.com/MuhammadUsman94
+https://github.com/erginbostanci
+https://github.com/sabdj2020
