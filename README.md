@@ -6,3 +6,6 @@ the design docs file contains some files that are built on
 draw.io to open these docs go to draw.io and load them to the site.
 
 
+https://github.com/RyanBranco/Checkers
+
+https://ryanbranco.github.io/Checkers/
