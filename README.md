@@ -24,6 +24,11 @@ https://www.sqlstyle.guide/
 pythong testing library:
 https://docs.pytest.org/en/stable/
 
+code review links
+https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/#:~:text=Review%20fewer%20than%20400%20lines%20of%20code%20at%20a%20time&text=In%20practice%2C%20a%20review%20of,seven%20and%20nine%20of%20them.
+and 
+https://medium.com/palantir/code-review-best-practices-19e02780015f
+
 
 
 
