@@ -15,6 +15,10 @@ https://www.python.org/dev/peps/pep-0008/
 javascrip:
 ihttps://google.github.io/styleguide/jsguide.html
 
+To look at Drawio diagram
+https://app.diagrams.net/#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Fbrucker3%2FCS5551%2Fmaster%2FdesignDocs%2FcheckersIUmlV3.drawio
+
+
 MySQL:
 https://dev.mysql.com/doc/internals/en/coding-style.html
 and
