@@ -1,0 +1,124 @@
+/*----------- Game State Data ----------*/
+//top left box is blank, number start from top left to end at bottom right numbers from 1 to 32 OR if using array 0 to 31
+//every piece has id 1 to 12 with there color code in front e.g. D4 (dark 4)(L for light side; D fro dark side)
+//top side of game is always light side
+//element of of array are in string format
+//if piece id is end by K e.g. "L11K" that means it is king
+
+/*
+following recived data is dictionary object which will be communicated between serve and client in order to sync game
+key of the dictionary is position of board square and value is array which contain piece id as first element and 
+other element as its possible moves.
+*/
+var recieved_data = {
+					1:['L1'], 2:['L2'], 3:['L3'], 4:['L4'],
+					5:['L5'], 6:['L6'], 7:['L7'], 8:['L8'],
+					9:['L9',13,14], 10:['L10',14,15], 11:['L11K',15,16], 12:['L12',16],
+					13:['X'], 14:['X'], 15:['X'], 16:['X'],
+					17:['X'], 18:['X'], 19:['X'], 20:['X'],
+					21:['D1',17], 22:['D2',17,18], 23:['D3K',18,19], 24:['D4'],
+					25:['D5'], 26:['D6'], 27:['D7'], 28:['D8'],
+					29:['D9'], 30:['D10'], 31:['D11'], 32:['D12']
+					};
+					
+let selected_piece;
+let vue_board = [];
+
+//create vue object for every position and use that object to manupulate output
+function verify_recived_data(input_dictionary){
+	//Complete this function
+	return 0
+}					
+var i;
+for (i=1;i<=Object.keys(recieved_data).length;i++){
+	// console.log(i,recieved_data[i]);
+	var position = "#position-"+i.toString();
+	if (recieved_data[i][0].includes('X')){
+		var temp = new Vue({
+			el:position,
+			data: {
+				piece_color: 'empty',
+				piece_type: 'empty',
+				selection: 'not-selected',
+				possible_square: 'not-possible-move'
+				},
+			methods: {
+				select_piece:function (event){}
+			}
+		})
+		vue_board.push(temp);
+		continue;
+	}
+	else{
+		if (recieved_data[i][0].includes('K')){
+			var type = "king";
+		}
+		else{
+			var type = "normal";
+		}
+		
+		if (recieved_data[i][0].includes('L')){
+			var color = 'light-piece';
+		}
+		else{
+			var color = 'dark-piece';
+		}
+	
+	var temp = new Vue({
+		el:position,
+		data: {
+			piece_color: color,
+			piece_type: type,
+			selection: 'not-selected',
+			possible_square: 'not-possible-move'
+			},
+		methods: {
+			select_piece:function (event){
+				// console.log(event.target);
+				if (selected_piece != null) {
+					selected_piece.selection = 'not-selected';
+					hide_possible_squares()
+					}
+				
+				var position_number = parseInt(event.target.id.split("-")[1]);
+				// console.log(recieved_data[position_number]);
+				if (recieved_data[position_number].length>1){
+					this.selection = 'selected';
+					selected_piece = this;
+					
+					for (var j =1;j<recieved_data[position_number].length;j++){
+						position = recieved_data[position_number][j];
+						show_possible_square(position);
+					}
+				}
+			}
+		}
+	})
+	
+	vue_board.push(temp);
+	}
+}
+
+function show_possible_square(position){
+	vue_board[position-1].possible_square = "possible-move";
+	/*add move function here where possible moves are shown on board*/
+	// vue_board[position-1].select_piece = function(){}
+	
+}
+
+function hide_possible_squares(){
+	for (var k=0;k<vue_board.length;k++){
+		vue_board[k].possible_square = 'not-possible-move';
+	}
+	
+}
+
+	
+
+
+
+
+
+
+
+
