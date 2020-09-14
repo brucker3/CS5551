@@ -38,3 +38,8 @@ https://medium.com/palantir/code-review-best-practices-19e02780015f
 
 
 
+https://levelup.gitconnected.com/creating-a-board-game-checkers-with-javascript-ecd562f985c2
+
+https://github.com/RyanBranco/Checkers
+
+https://ryanbranco.github.io/Checkers/
