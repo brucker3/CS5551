@@ -1,0 +1,36 @@
+Thsi is a simple text doc of our meeting agenda and notes 
+
+
+general meeting agenda 
+
+this meeting agenda is based on basic scrum pratices for more info you can visite 
+:
+
+stand up:
+    time 5 minutes
+    each team member will give a brief explanation about what they have been working on 
+    If a developer is expirencing blocks and difficults they should mention it but it wont be delt with during this part of the meeting
+
+    
+colaberation:
+    10 minutes 
+    for any devloper that mentioned issue they will be addressed 
+
+
+backlong refinment:
+    15 min
+    note( this is a good topic for devs to think of on there own before the meeting starts)
+    during this time the team should talk about up coming work that should be done 
+    how this work should be borken up into sotries and what sort of acceptac criteria they should have 
+    the team should also point stories based on how complex they are 
+
+
+pritorization:
+    10 min 
+    after new stories have been created the team should pritorize what sotries to work on next
+
+other 
+    another other general topics that need to be discussed related to the proejct 
+
+
+
