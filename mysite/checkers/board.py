@@ -1,43 +1,77 @@
+from array import *
 
-class Board:
-	
-		
-	def initboard(self):
+class  Board(object):
 
-		w, h = 8, 8;
-		board = [[0 for x in range(w)] for y in range(h)]  # 8*8 array
-	
-		y = 0
-		while y < 8 :
-
-			x = 0
-
-			while x < 8 :
-
-				if((x + y) % 2) == 0:
-
-					board[x][y] = ''
-
-				else:
-
-					board[x][y] = ''
-				x +=1
-			y +=1
-
-		a = 0
-		while a < 7:
-			b = 0
-			while b < 7:
-				print (board[a][b],end = " ")
-
-				b +=1
-			print("\n")
-				
-			a += 1
+		# this class generates a 8x8 arrya for the boadclass
+        # this data strucutre is an inbetweeen between the UI and
+        # game logic in the game class
+    def __init__(self, black_space, red_space, free_space, board):
+        self.black_space = black_space
+        self.red_space =   red_space
+        self.free_space =  free_space
+        self.board = board  #[[0 for i in range(8)] for j in range(8)]
 
 
-board_object = Board()
-board_object.initboard()
+    # game type variable was added so that different boards could be
+    # generated later
+    # this fuction generates a 2D game board array.
+    # with a tuple as a location pice example A8
+    # and a charater to done what player controles the spot
+    # example "b", "r", "f
+    #@classmethod try to get this working later
+    def generate_board(self, game_type ):
+        if(game_type == "standard"):
+            piece = "b"
+            for  i in range(0,32):
+                index = i % 4
+                holder = [i ,piece]
+                self.board.append(holder)
+                if i  == 7:
+                    piece = "f"
+                if i == 23 :
+                    piece = "r"
+        self.black_space = self.board[:8]
+        self.free_space = self.board[8:24]
+        self.red_space = self.board[23:31]
+
+    # this is a simple method for retrieving set of board squares
+    def get_spaces(self, piece_type):
+        if(piece_type == "black"):
+            return self.black_space
+        if(piece_type == "red"):
+            return self.red_space
+        if(piece_type == "free"):
+            return self.free_space
+
+    # this method handles swapping spaces as long as they are ope
+    # this if this metho will call the game engin
+    def space_swap(self, original, new):
+        if original in self.free_space:
+            return "invalie space swap"
+        elif new in self.red_space or  new in self.black_space:
+            print( "call game egine funciton")
+        else:
+            #need to find occurance or original and remove it
+            # this add to new list
+
+
+
+
+
+if __name__ == "__main__":
+    test_board = Board( black_space=[], red_space=[], free_space= [],
+                       board=[])   #[[0 for i in range(8)] for j in range(8)])
+    test_board.generate_board("standard")
+    print(test_board.board)
+    print("--------")
+    print(test_board.get_spaces("black"))
+    print(test_board.space_swap( [6, 'b'] , [26, "r"]))
+
+
+
+
+
+
 
 
 
