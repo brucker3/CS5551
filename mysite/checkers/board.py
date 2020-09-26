@@ -2,23 +2,19 @@ from array import *
 
 class  board(object):
 
-		# this class generates a 8x8 arrya for the boadclass
+		# this class generates a arrya for the boad class
         # this data strucutre is an inbetweeen between the UI and
         # game logic in the game class
     def __init__(self, black_space, red_space, free_space, board):
         self.black_space = black_space
         self.red_space =   red_space
         self.free_space =  free_space
-        self.board = board  #[[0 for i in range(8)] for j in range(8)]
+        self.board = board
 
 
     # game type variable was added so that different boards could be
     # generated later
-    # this fuction generates a 2D game board array.
-    # with a tuple as a location pice example A8
-    # and a charater to done what player controles the spot
-    # example "b", "r", "f
-    #@classmethod try to get this working later
+    # this fuction generates sstandard  board array.
     def generate_board(self, game_type ):
         if(game_type == "standard"):
             piece = "b"
@@ -53,25 +49,6 @@ class  board(object):
             print( "call game egine funciton player take funtioin")
         else:
             print("call is legal move function")
-
-
-
-
-
-if __name__ == "__main__":
-    test_board = board( black_space=[], red_space=[], free_space= [],
-                       board=[])   #[[0 for i in range(8)] for j in range(8)])
-    test_board.generate_board("standard")
-    print(test_board.board)
-    print("--------")
-    print(test_board.get_spaces("black"))
-    print(test_board.space_swap( [6, 'b'] , [26, "r"]))
-
-
-
-
-
-
 
 
 
