@@ -1,6 +1,6 @@
 from array import *
 
-class  Board(object):
+class  board(object):
 
 		# this class generates a 8x8 arrya for the boadclass
         # this data strucutre is an inbetweeen between the UI and
@@ -43,23 +43,23 @@ class  Board(object):
         if(piece_type == "free"):
             return self.free_space
 
-    # this method handles swapping spaces as long as they are ope
+    # this method handles swapping spaces
+    # but calls game engine class for game rules logic
     # this if this metho will call the game engin
     def space_swap(self, original, new):
         if original in self.free_space:
             return "invalie space swap"
         elif new in self.red_space or  new in self.black_space:
-            print( "call game egine funciton")
+            print( "call game egine funciton player take funtioin")
         else:
-            #need to find occurance or original and remove it
-            # this add to new list
+            print("call is legal move function")
 
 
 
 
 
 if __name__ == "__main__":
-    test_board = Board( black_space=[], red_space=[], free_space= [],
+    test_board = board( black_space=[], red_space=[], free_space= [],
                        board=[])   #[[0 for i in range(8)] for j in range(8)])
     test_board.generate_board("standard")
     print(test_board.board)
