@@ -1,6 +1,6 @@
 
 #local add ons
-/mysite/checkers/.test_script/ 
+/mysite/checkers/.test_script 
 
 # Editors
 .vscode/
