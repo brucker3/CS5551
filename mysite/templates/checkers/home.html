@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand"> Play Checkers! </a>
+  <a class="btn btn-success"  style="position:absolute; right:120px" href="/playerview/"> Play as Guest </a>
+  <a class="btn btn-danger" href="/login/"> LOGIN </a>
+
+</nav>
+
+{% for m in messages %}
+<p style="text-align:center">{{m}}</p>
+{% endfor %}
+
+<div class="container-fluid"  style="height:600px; position:relative; background-image: url({% static "images/checkersbg.jpg"%})">
+  <div class="container" style="width:500px; height: 470px; right:40px; top:50px; position: absolute; background-color: green; padding:30px" >
+    <h1 style="margin-bottom:40px"> Sign Up Here! </h1>
+    <form method="post" action="/signup/">
+      {% csrf_token %}
+      <input class="form-control" style="margin-bottom:30px" type="text" name="nickname" placeholder="Enter your nickname">
+      <input class="form-control" style="margin-bottom:30px" type="text" name="email" placeholder="Enter your Email address">
+      <input class="form-control" style="margin-bottom:30px" type="password" name="password" placeholder="Enter your password">
+
+      <button class="btn btn-warning" style="margin-top:5px;" type="submit">Sign Up</button>
+
+    </form>
+  </div>
+</div>
+{% endblock %}
