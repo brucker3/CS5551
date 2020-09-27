@@ -1,4 +1,6 @@
-/mysite/checkers/.test_script 
+
+#local add ons
+/mysite/checkers/.test_script/ 
 
 # Editors
 .vscode/
