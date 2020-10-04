@@ -20,8 +20,10 @@ def signupview (request):
     if (request.method == 'POST'):
         form = SignupForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            username = form.cleaned_data.get("username")
             return redirect('login')
+            messages.success(request, "registration successful")
     context={'form':form}
     return render(request, 'checkers/signup.html',context)
 
