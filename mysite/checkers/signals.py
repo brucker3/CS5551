@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from .models import Adherent
 
 
-def create_profile(sender, instance, created, **kwargs):
+def create_adherent(sender, instance, created, **kwargs):
 
     if created:
         try:
@@ -12,4 +12,4 @@ def create_profile(sender, instance, created, **kwargs):
         except:
             pass
 
-post_save.connect(create_profile, sender=User)
+post_save.connect(create_adherent, sender=User)
