@@ -1,34 +1,45 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from .forms import SignupForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from .models import Adherent
-from operator import itemgetter
+
 
 
 # Create your views here.
+@login_required(login_url='login')
 def homeview (request):
     return render(request, 'checkers/home.html')
 
-def playerview (request):
-    return render(request, 'checkers/playerview.html')
+def signupview (request):
+    form = SignupForm()
 
-def signup (request):
-    if request.method=="POST":
-       nickname = request.POST['nickname']
-       email = request.POST['email']
-       password = request.POST['password']
-    #check if nickname doesn't exist, then create the new player
-    User.objects.create_user(username=nickname, password=password).save()
-    lo = len(User.objects.all())-1
-    Adherent(id = User.objects.all()[int(lo)].id, email=email).save()
-    messages.add_message(request, messages.ERROR,"Sign Up Successful")
+    if (request.method == 'POST'):
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get("username")
+            return redirect('login')
+            messages.success(request, "registration successful")
+    context={'form':form}
+    return render(request, 'checkers/signup.html',context)
+
+def loginview (request):
+    if (request.method == 'POST'):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user=authenticate(request,username=username,password=password)
+        if user is not None:
+            login(request,user)
+            return redirect('home')
+        else:
+            messages.info(request, 'incorrect informations')
+    context={}
+    return render(request,'checkers/login.html',context)
+
+def logoutview(request):
+    logout(request)
     return redirect('login')
-
-    # check if nickname exist
-    if User.objects.filter( username=nickname).exists():
-        messages.add_message(request, messages.ERROR,"this nickname is already in use")
-        return redirect('home')
-
-def loginp (request):
-    return render(request,'checkers/login.html')
