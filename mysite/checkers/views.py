@@ -6,8 +6,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Adherent
-
-
+from checkers import  board
+from django.http import HttpResponse
+from django.views import View
 
 # Create your views here.
 @login_required(login_url='login')
@@ -43,3 +44,17 @@ def loginview (request):
 def logoutview(request):
     logout(request)
     return redirect('login')
+
+class game(View):
+    board = board( black_space=[], red_space=[], free_space= [],board=[])
+    board.generate_board("standard")
+    print("test of board build class")
+
+    def get(self, request):
+        if request.method == 'GET':
+            return HttpResponse(render(request,'checkers/game.html'))
+
+
+
+
+
