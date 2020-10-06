@@ -45,6 +45,12 @@ def logoutview(request):
     logout(request)
     return redirect('login')
 
+def rulesview(request):
+    return render(request, 'checkers/rules.html')
+
+def player_statsview(request):
+    return render(request, 'checkers/player_stats.html')
+
 class game(View):
     board = board( black_space=[], red_space=[], free_space= [],board=[])
     board.generate_board("standard")
