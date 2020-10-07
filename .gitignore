@@ -1,7 +1,4 @@
 
-#local add ons
-/mysite/checkers/.test_script 
-
 # Editors
 .vscode/
 .idea/
@@ -127,3 +124,10 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.jsons
+
+
+#local add ons
+/mysite/checkers/.test_script 
+/.django_practice
+*.swp
+*.swo
