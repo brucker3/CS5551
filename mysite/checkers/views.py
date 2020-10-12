@@ -9,47 +9,75 @@ from .models import Adherent
 from checkers import  board
 from django.http import HttpResponse
 from django.views import View
+from django.views.generic.edit import FormView
 
 # Create your views here.
 @login_required(login_url='login')
 def homeview (request):
     return render(request, 'checkers/home.html')
 
-def signupview (request):
-    form = SignupForm()
+#------------------------------
+#-------registration---------
+#------------------------------
+class signupview (FormView):
+    template_name = 'checkers/signup.html'
+    form_class = SignupForm
+    success_url = '/login/'
 
-    if (request.method == 'POST'):
-        form = SignupForm(request.POST)
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get("username")
+            messages.success(request, "registration successful, please login to access your space")
             return redirect('login')
-            messages.success(request, "registration successful")
-    context={'form':form}
-    return render(request, 'checkers/signup.html',context)
+        return render(request, self.template_name, {'form': form})
 
-def loginview (request):
-    if (request.method == 'POST'):
+#------------------------------
+#-------login view---------
+#------------------------------
+class loginview (FormView):
+    template_name = 'checkers/login.html'
+    form_class = SignupForm
+    success_url = 'home'
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
         username = request.POST.get('username')
         password = request.POST.get('password')
         user=authenticate(request,username=username,password=password)
+
         if user is not None:
             login(request,user)
             return redirect('home')
         else:
             messages.info(request, 'incorrect informations')
-    context={}
-    return render(request,'checkers/login.html',context)
+        context={}
+        return render(request,'checkers/login.html',context)
 
-def logoutview(request):
-    logout(request)
-    return redirect('login')
+#------------------------------
+#-------logout view---------
+#------------------------------
 
-def rulesview(request):
-    return render(request, 'checkers/rules.html')
+class logoutview(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
 
-def player_statsview(request):
-    return render(request, 'checkers/player_stats.html')
+# def logoutview(request):
+#     logout(request)
+#     return redirect('login')
+
+class rulesview(View):
+    def get(self, request):
+        return render(request, 'checkers/rules.html')
+
+class player_statsview(View):
+    def get(self, request):
+        return render(request, 'checkers/player_stats.html')
+
 
 class game(View):
     board = board( black_space=[], red_space=[], free_space= [],board=[])
@@ -59,8 +87,3 @@ class game(View):
     def get(self, request):
         if request.method == 'GET':
             return HttpResponse(render(request,'checkers/game.html'))
-
-
-
-
-
