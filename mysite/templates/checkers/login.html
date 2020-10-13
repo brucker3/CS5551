@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <nav class="navbar navbar-dark bg-dark">
@@ -11,17 +12,25 @@
 
 <div class="container-fluid"  style="height:600px; position:relative; background-image: url({% static "images/checkersbg.jpg"%})">
   <div class="container" style="width:500px; height: 400px; right:40px; top:50px; position: absolute; background-color: green; padding:30px" >
-    <h1 style="margin-bottom:40px">LOGIN PAGE </h1>
+    <h1 style="margin-bottom:20px">LOGIN PAGE </h1>
+
+{% if messages %}
+<div class="messages" style="color:yellow; margin-bottom:10px">
+    {% for msg in messages %}
+    {{ msg }}
+    {% endfor %}
+</div>
+{% endif %}
     <form class = "post-form" method="post" action="#">
       {% csrf_token %}
-      <input class="form-control" style="margin-bottom:30px" type="text" name="username" placeholder="Enter your username"><br>
-      <input class="form-control" style="margin-bottom:30px" type="password" name="password" placeholder="Enter your password">
 
+        {{ form|crispy }}
+        
       <button class="btn btn-warning" style="margin-top:5px;" type="submit">LOGIN</button>
 
     </form>
     <div class="mt-4">
-      <p>Don't have an account yet? <a href="{%url 'signup'%}" style="color:yellow">Sign Up</a></p>
+      <p>Don't have an account? <a href="{%url 'signup'%}" style="color:yellow">Sign Up</a></p>
     </div>
 
     </div>
