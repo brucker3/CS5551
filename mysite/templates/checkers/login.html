@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 <nav class="navbar navbar-dark bg-dark">
@@ -22,14 +23,14 @@
 {% endif %}
     <form class = "post-form" method="post" action="#">
       {% csrf_token %}
-      <input class="form-control" style="margin-bottom:30px" type="text" name="username" placeholder="Enter your username"><br>
-      <input class="form-control" style="margin-bottom:30px" type="password" name="password" placeholder="Enter your password">
 
+        {{ form|crispy }}
+        
       <button class="btn btn-warning" style="margin-top:5px;" type="submit">LOGIN</button>
 
     </form>
     <div class="mt-4">
-      <p>Don't have an account yet? <a href="{%url 'signup'%}" style="color:yellow">Sign Up</a></p>
+      <p>Don't have an account? <a href="{%url 'signup'%}" style="color:yellow">Sign Up</a></p>
     </div>
 
     </div>

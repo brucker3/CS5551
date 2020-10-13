@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignupForm
+from .forms import SignupForm,LoginForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -30,6 +30,7 @@ class signupview (FormView):
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password1")
             messages.success(request, "registration successful, please login to access your space")
             return redirect('login')
         return render(request, self.template_name, {'form': form})
@@ -39,7 +40,7 @@ class signupview (FormView):
 #------------------------------
 class loginview (FormView):
     template_name = 'checkers/login.html'
-    form_class = SignupForm
+    form_class = LoginForm
     success_url = 'home'
 
     def post(self, request, *args, **kwargs):
