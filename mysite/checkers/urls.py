@@ -5,11 +5,11 @@ from .views import *
 
 urlpatterns = [
     path('', homeview, name='home'),
-    path('signup/',signupview, name='signup'),
-    path('login/',loginview, name='login'),
-    path('logout/',logoutview, name='logout'),
+    path('signup/',signupview.as_view(), name='signup'),
+    path('login/',loginview.as_view(), name='login'),
+    path('logout/',logoutview.as_view(), name='logout'),
     path('game/', game.as_view(), name='game'),
-    path('rules/', rulesview, name='rules'),
-    path('player_stats', player_statsview, name='player_stats'),
+    path('rules', rulesview.as_view(), name='rules'),
+    path('player_stats', player_statsview.as_view(), name='player_stats'),
 
 ]
