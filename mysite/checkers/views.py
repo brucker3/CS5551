@@ -1,3 +1,4 @@
+# checkers/views.py
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -10,11 +11,14 @@ from checkers import  board
 from django.http import HttpResponse
 from django.views import View
 from django.views.generic.edit import FormView
+import logging
+logger = logging.getLogger("mylogger")
 
 # Create your views here.
 @login_required(login_url='login')
 def homeview (request):
     return render(request, 'checkers/home.html')
+
 
 #------------------------------
 #-------registration---------
@@ -88,3 +92,15 @@ class game(View):
     def get(self, request):
         if request.method == 'GET':
             return HttpResponse(render(request,'checkers/game.html'))
+			
+    def room(request, room_name):
+        return render(request, 'game/room.html', {
+            'room_name': room_name
+        })		
+	
+##	
+def index(request):
+    return render(request, 'game/index.html', {})
+
+
+##

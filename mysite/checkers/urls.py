@@ -3,6 +3,9 @@ from django.urls import path
 from .views import *
 #homeview,signupview, loginview,logoutview
 
+import logging
+logger = logging.getLogger("mylogger")
+
 urlpatterns = [
     path('', homeview, name='home'),
     path('signup/',signupview.as_view(), name='signup'),
@@ -11,5 +14,8 @@ urlpatterns = [
     path('game/', game.as_view(), name='game'),
     path('rules', rulesview.as_view(), name='rules'),
     path('player_stats', player_statsview.as_view(), name='player_stats'),
-
+    path('game/<str:room_name>/', game.room, name='room'),
 ]
+
+
+

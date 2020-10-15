@@ -14,7 +14,7 @@ class  board(object):
 
     # game type variable was added so that different boards could be
     # generated later
-    # this fuction generates sstandard  board array.
+    # this fuction generates standard  board array.
     def generate_board(self, game_type ):
         if(game_type == "standard"):
             piece = "b"

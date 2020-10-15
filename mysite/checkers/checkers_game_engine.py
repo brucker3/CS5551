@@ -26,7 +26,7 @@
 from collections import namedtuple
 import itertools 
 import json
-SQUARES = [s for s in xrange(1, 36) if s%9 != 0]
+SQUARES = [s for s in range(1, 36) if s%9 != 0]
 
 # a "jump" means both single and multiple jumps.
 
@@ -299,7 +299,7 @@ def human_square_to_normal(human_s):
 ### Playing Stuff ###
 
 # starting position of checkers
-START = State(State.RED, xrange(1, 14), xrange(23, 36), [])
+START = State(State.RED, range(1, 14), range(23, 36), [])
 
 def checkers(red, white):
     """Play English Checkers between the two given players - red makes
@@ -339,7 +339,7 @@ def display_checkers(game, upper_color=State.RED):
     State.RED or State.WHITE.
     """
     for _, state in game:
-        print_board(state, upper_color)
+        return print_board(state, upper_color)
 
 def play_display_checkers(red, white, upper_color=State.RED):
     """Play a game of checkers with the given players `red` and `white`,
@@ -348,7 +348,7 @@ def play_display_checkers(red, white, upper_color=State.RED):
     boards. (color = either State.RED or State.WHITE)
     See the docstring of `checkers` for more information about players.
     """
-    display_checkers(checkers(red, white), upper_color)
+    return display_checkers(checkers(red, white), upper_color)
 
 def UserPlayer(dummy_state, error=None):
     """A player function that uses the protocol of the `checkers` function.
@@ -361,17 +361,17 @@ def UserPlayer(dummy_state, error=None):
     """
     if error is not None:
         print (error)
-    inp = raw_input("What's your move? Seperate the squares by dashes (-). ")
+    inp = input("What's your move? Seperate the squares by dashes (-). ")
 
     while True:
         try:
             human_squares = map(int, inp.split('-'))
             move = map(human_square_to_normal, human_squares)
         except ValueError:
-            inp = raw_input('Invalid input. Try again: ')
+            inp = input('Invalid input. Try again: ')
         except KeyError:  # Because of human_square_to_normal
             print (MovingErrors.NotASquare)
-            inp = raw_input('Try again: ')
+            inp = input('Try again: ')
         else:
             break
     return tuple(move)
@@ -384,7 +384,7 @@ def pairs(seq):
     Each element (except the first and the last ones) appears in exactly
     two pairs: one where it is the first element, and another one where
     it is the second one."""
-    return [(seq[i], seq[i+1]) for i in xrange(len(seq)-1)]
+    return [(seq[i], seq[i+1]) for i in range(len(seq)-1)]
 
 def print_board(state, upper_color=State.RED):
     """Print the given state to the user as a board."""
@@ -393,6 +393,7 @@ def print_board(state, upper_color=State.RED):
     squares = SQUARES if upper_color == State.RED else SQUARES[::-1]
     # zip(*[iterator]*n) clusters the iterator elements into n-length groups.
     rows = zip(*[iter(squares)]*4)
+    whole_board = ''
     for row in rows:
         for square in row:
             player_ch = ('x' if square in state.reds
@@ -408,10 +409,11 @@ def print_board(state, upper_color=State.RED):
         # print (board)
         json_board = json.dumps(board)
         print(json_board)
-
+        whole_board += json_board.strip('"').replace(' ','')
         line = []
+    return whole_board
 
 ###############
 
-if __name__ == '__main__':
-    play_display_checkers(UserPlayer, UserPlayer, upper_color=State.WHITE)
+# if __name__ == '__main__':
+    # play_display_checkers(UserPlayer, UserPlayer, upper_color=State.WHITE)
