@@ -1,4 +1,5 @@
-
+notes.txt
+*.pyc
 # Editors
 .vscode/
 .idea/
