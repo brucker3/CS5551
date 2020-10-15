@@ -7,7 +7,6 @@
   <a class="navbar-brand"> Play Checkers! </a>
   <a class="btn btn-success"  style="position:absolute; right:120px" href="/"> Play as Guest </a>
   <a class="btn btn-danger" href="/signup/"> Sign Up</a>
-
 </nav>
 
 <div class="container-fluid"  style="height:600px; position:relative; background-image: url({% static "images/checkersbg.jpg"%})">
@@ -25,7 +24,7 @@
       {% csrf_token %}
 
         {{ form|crispy }}
-        
+
       <button class="btn btn-warning" style="margin-top:5px;" type="submit">LOGIN</button>
 
     </form>

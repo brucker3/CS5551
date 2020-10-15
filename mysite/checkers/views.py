@@ -59,8 +59,9 @@ class loginview (FormView):
             return redirect('home')
         else:
             messages.info(request, 'incorrect informations')
-        context={}
-        return render(request,'checkers/login.html',context)
+            return redirect('login')
+        #context={}
+        #return render(request,'checkers/login.html',context)
 
 #------------------------------
 #-------logout view---------
