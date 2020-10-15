@@ -100,8 +100,3 @@ class game(View):
         })		
 	
 ##	
-def index(request):
-    return render(request, 'game/index.html', {})
-
-
-##

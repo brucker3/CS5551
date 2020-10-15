@@ -7,7 +7,8 @@ from .checkers_game_engine import *
 logger = logging.getLogger("mylogger")
 
 
-
+#this class is about websocket communication
+# when websocket is connected disconnects and message is received respective fuctions is triggered 
 class GameConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
