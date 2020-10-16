@@ -35,7 +35,7 @@
 
     <link rel="stylesheet" type="text/css" href='{% static "checkers_style.css" %}'/>
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
+	
 	<main class="main">
         
         <div class="dark-turn-text mobile">
@@ -139,9 +139,6 @@
         </div>
 	</main>
 	
-    <textarea id="game-log" cols="10" rows="2"></textarea><br>
-    <input id="game-message-input" type="text" size="100"><br>
-    <input id="game-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
     
 	<script>

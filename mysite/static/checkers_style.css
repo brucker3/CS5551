@@ -31,21 +31,21 @@ div {
 td {
     text-align: center;
     background-color: #007040;
-    width: 65px;
-    height: 65px;
+    width: 60px;
+    height: 60px;
 }
 
 .light-turn-text {
     text-align: center;
     font-family: "open sans";
-    font-size: 55px;
+    font-size: 45px;
     color: lightgray;
 }
 
 .dark-turn-text {
     text-align: center;
     font-family: "open sans";
-    font-size: 55px;
+    font-size: 45px;
     color: dark;
 }
 
@@ -66,17 +66,17 @@ td {
 }
 
 .selected{
-	border: 8px solid lightgreen;
+	border: 4px solid lightgreen;
 }
 
 .king.light-piece {
     background-color: #ccc;
-    box-shadow: inset 0px 0px 0px 5px black;
+    box-shadow: inset 0px 0px 0px 3px black;
 }
 
 .king.dark-piece {
     background-color: #622;
-    box-shadow: inset 0px 0px 0px 5px white;
+    box-shadow: inset 0px 0px 0px 3px white;
 }
 
 .possible-move{
@@ -94,7 +94,7 @@ p {
 }
 
 #divider {
-    font-size: 90px;
+    font-size: 50px;
     margin-left: 15px;
     margin-right: 15px;
 }

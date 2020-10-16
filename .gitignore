@@ -1,3 +1,5 @@
+.gitignore
+mysite\checkers\rules.py
 notes.txt
 *.pyc
 # Editors

@@ -19,6 +19,7 @@ class GameConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+		#call some function here which return board according to the room and player who is requesting
         logger.info('connected to websocket')
         board = play_display_checkers(UserPlayer, UserPlayer, upper_color=State.WHITE)
         async_to_sync(self.channel_layer.group_send)(
@@ -42,17 +43,20 @@ class GameConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-
-        # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'game_message',
-                'message': message
-            }
-        )
         logger.info(text_data)
+        #do some thing here
 
+        self.send(text_data=json.dumps({'message': message+'recievd99999','turn':'dark','room_name':self.room_name}))
+        
+        # Send message to room group
+        # async_to_sync(self.channel_layer.group_send)(
+            # self.room_group_name,
+            # {
+                # 'type': 'game_message',
+                # 'message': message
+            # }
+        # )
+    
     # Receive message from room group
     def game_message(self, event):
         message = event['message']
@@ -63,3 +67,5 @@ class GameConsumer(WebsocketConsumer):
         }))
         logger.info('game_message funcion')
         logger.info(event)
+		
+
