@@ -1,0 +1,149 @@
+<!-- chat/templates/chat/room.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Checkers Board</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+          <a class="nav-link" href={%url 'home'%}>Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href={%url 'rules'%}>rules</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href={%url 'player_stats'%}>player states</a>
+      </li>
+
+      <li class="nav-item" style="right:130px; position:absolute">
+        <span class="nav-link">Welcome, {{request.user}}</span>
+      </li>
+
+      <li class="nav-item" style="right:20px; position:absolute">
+        <a class="nav-link" href="logout">logout</a>
+      </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+
+    <link rel="stylesheet" type="text/css" href='{% static "checkers_style.css" %}'/>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	
+	<main class="main">
+        
+        <div class="dark-turn-text mobile">
+            Dark's turn
+        </div>
+        <table>
+            <tr>
+                <td class="noPieceHere"></td>
+                <td><div id="position-1" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-2" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-3" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-4" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+            </tr>
+            <tr>
+                <td><div id="position-5" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-6" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-7" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-8" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+            </tr>
+            <tr>
+                <td class="noPieceHere"></td>
+                <td><div id="position-9" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-10" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-11" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-12" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+            </tr>
+            <tr>
+                <td><div id="position-13" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-14" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-15" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-16" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+            </tr>
+            <tr>
+                <td class="noPieceHere"></td>
+                <td><div id="position-17" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-18" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-19" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-20" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+            </tr>
+            <tr>
+                <td><div id="position-21" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-22" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-23" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-24" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+            </tr>
+            <tr>
+                <td class="noPieceHere"></td>
+                <td><div id="position-25" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-26" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-27" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-28" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+            </tr>
+            <tr>
+                <td><div id="position-29" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-30" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+				<td class="noPieceHere"></td>
+				<td><div id="position-31" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-32" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+            </tr>
+			
+        </table>
+        <div class="desktop">
+			<div class="dark-turn-text">
+                Dark's turn
+            </div>
+            <p id="divider">|</p>
+            <div class="light-turn-text">
+                Light's turn
+            </div>
+            
+        </div>
+		<div class="light-turn-text mobile">
+            Light's turn
+        </div>
+	</main>
+	
+    {{ room_name|json_script:"room-name" }}
+    
+	<script>
+	
+	</script>
+	 <script src='{% static "checkers_script.js" %}'></script>
+	
+{% endblock %}

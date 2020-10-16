@@ -12,24 +12,14 @@
 # divisible by 9 are skipped - thus, two squares are adjacents if and
 # only if their difference is 4 or 5. 
 
-# move - a tuple of squares - the first square is the piece we want to
-#     move, and the others are the sequence of moves. Usually that tuple
-#     is 2 squares long - it's only longer if the player made a multiple
-#     jump.
 
-# In some places of the program, the word "edges" will mean pairs of
-# squares that have only one reachable square between them (in a
-# diagonal line), so you can jump between them if they are both empty
-# and there is an opponent's piece in the middle.
-# The square in the middle of the two edges will just be called
-# "the middle".
 from collections import namedtuple
 import itertools 
 import json
 SQUARES = [s for s in range(1, 36) if s%9 != 0]
 
 # a "jump" means both single and multiple jumps.
-
+print (SQUARES)
 
 class MovingErrors:
     """A namespace for error constants for illegal moves."""
