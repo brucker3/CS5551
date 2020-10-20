@@ -412,8 +412,8 @@ def print_board(state, upper_color=State.RED):
         whole_board += json_board.strip('"').replace(' ','')
         line = []
     return whole_board
-
 ###############
 
-# if __name__ == '__main__':
-    # play_display_checkers(UserPlayer, UserPlayer, upper_color=State.WHITE)
+if __name__ == '__main__':
+	while (True):
+		x = play_display_checkers(UserPlayer, UserPlayer, upper_color=State.WHITE)

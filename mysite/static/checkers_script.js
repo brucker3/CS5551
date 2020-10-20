@@ -28,22 +28,23 @@ const gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' +
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
 	console.log(data);
-	data = (data['message']);
-
-	recieved_data = format_incoming_data(data);
+	var board = JSON.parse(data['message']);
+	var moves = data['moves'];
+	var sel_piece = data['selected_piece'];
+	recieved_data = format_incoming_data(board,moves,sel_piece);
 	
-	recieved_data = {
-			1:['L1'], 2:['L2'], 3:['L3'], 4:['L4'],
-			5:['L5'], 6:['L6'], 7:['L7'], 8:['L8'],
-			9:['L9',13,14], 10:['L10',14,15], 11:['L11K',15,16], 12:['L12',16],
-			13:['X'], 14:['X'], 15:['X'], 16:['X'],
-			17:['X'], 18:['X'], 19:['X'], 20:['X'],
-			21:['D1',17], 22:['D2',17,18], 23:['D3K',18,19], 24:['D4'],
-			25:['D5'], 26:['D6'], 27:['D7'], 28:['D8'],
-			29:['D9'], 30:['D10'], 31:['D11'], 32:['D12']
-			};
+	// recieved_data = {
+			// 1:['L1'], 2:['L2'], 3:['L3'], 4:['L4'],
+			// 5:['L5'], 6:['L6'], 7:['L7'], 8:['L8'],
+			// 9:['L9',13,14], 10:['L10',14,15], 11:['L11K',15,16], 12:['L12',16],
+			// 13:['X'], 14:['X'], 15:['X'], 16:['X'],
+			// 17:['X'], 18:['X'], 19:['X'], 20:['X'],
+			// 21:['D1',17], 22:['D2',17,18], 23:['D3K',18,19], 24:['D4'],
+			// 25:['D5'], 26:['D6'], 27:['D7'], 28:['D8'],
+			// 29:['D9'], 30:['D10'], 31:['D11'], 32:['D12']
+			// };
 
-	update_board(recieved_data);
+	update_board(board);
 	function verify_recived_data(input_dictionary){
 		//Complete this function
 		return 0
@@ -62,7 +63,11 @@ key of the dictionary is position of board square and value is array which conta
 other element as its possible moves.
 */
 
+let translation_dict = {};var k =1;for (var i=0; i<8; i++){	for (var j=0; j<8; j++){if (((j+i))%2!=0){translation_dict[k]=[j,i];k+=1;}}}
 
+function getKeyByValue(object, value) {
+  return Object.keys(object).find(key => object[key] == value);
+}
 
 function initialize_board(){
 	for (var i=1; i<=32; i++){
@@ -83,31 +88,24 @@ function initialize_board(){
 	}
 }
 
-function format_incoming_data(data){
-	var temp_data = {};
-	for (var i=0; i<data.length; i++){
-		if (data[i]=='.'){
-			temp_data[i+1]=['X'];
-		} else if (data[i]=='x'){
-			temp_data[i+1]=['D'+i];					
-		} else if (data[i]=='X'){
-			temp_data[i+1]=['D'+i+'K'];					
-		} else if (data[i]=='y'){
-			temp_data[i+1]=['L'+i];					
-		} else if (data[i]=='Y'){
-			temp_data[i+1]=['L'+i+'K'];					
+function format_incoming_data(data, moves, sel_piece){
+	if (sel_piece!= null){
+		data[sel_piece].push(...moves)
+		vue_board[sel_piece-1].selection = 'selected';
+		selected_piece = vue_board[sel_piece-1];
+		for (var j =1; j<data[sel_piece].length;j++){
+			target_position = data[sel_piece][j];
+			console.log(target_position, sel_piece);
+			show_possible_square(target_position, sel_piece);
 		}
 	}
-	return temp_data
+	console.log(data);
+	return data
 }
 
 function update_board(recieved_data){
 	//create vue object for every position and use that object to manipulate output
-	if (selected_piece != null) {
-			selected_piece.selection = 'not-selected';
-			hide_possible_squares()
-	}
-	
+		
 	for (var i in recieved_data){
 	// console.log(i,recieved_data[i]);
 		if (recieved_data[i][0].includes('K')){
@@ -131,20 +129,21 @@ function update_board(recieved_data){
 		}
 		
 		vue_board[i-1].select_piece = function (event){
-			// console.log(event.target);
+			console.log(event.target);
 			if (selected_piece != null) {
 				selected_piece.selection = 'not-selected';
 				hide_possible_squares()
 			}
 			var position_number = parseInt(event.target.id.split("-")[1]);
-			console.log(recieved_data[position_number],i);
+			console.log(translation_dict[position_number],position_number);
+			gameSocket.send(JSON.stringify({
+				'message': translation_dict[position_number],
+				'room-name':roomName
+			}));
 			if (recieved_data[position_number].length>1){
 				this.selection = 'selected';
 				selected_piece = this;
-				for (var j =1;j<recieved_data[position_number].length;j++){
-					target_position = recieved_data[position_number][j];
-					show_possible_square(target_position, position_number);
-				}
+				
 			}
 		}
 		
@@ -157,15 +156,11 @@ function show_possible_square(target_position,current_position){
 	/*add move function here where possible moves are shown on board*/
 	vue_board[target_position-1].select_piece = function(event){
 		console.log(current_position+'-'+target_position);
-		
-		recieved_data[target_position] = [recieved_data[current_position][0]];
-		recieved_data[current_position] = ['X'];
-		
 		gameSocket.send(JSON.stringify({
-			'message': current_position+'-'+target_position,
-			'room-name':roomName
-		}));
-		update_board(recieved_data);
+				'message': translation_dict[target_position],
+				'room-name':roomName
+			}));
+		// update_board(recieved_data);
 	}	
 }
 
