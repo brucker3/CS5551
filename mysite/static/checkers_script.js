@@ -31,8 +31,8 @@ gameSocket.onmessage = function(e) {
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
 	var sel_piece = data['selected_piece'];
-	recieved_data = format_incoming_data(board,moves,sel_piece);
-	
+	update_board(board);
+	show_moves(board,moves,sel_piece);
 	// recieved_data = {
 			// 1:['L1'], 2:['L2'], 3:['L3'], 4:['L4'],
 			// 5:['L5'], 6:['L6'], 7:['L7'], 8:['L8'],
@@ -44,7 +44,6 @@ gameSocket.onmessage = function(e) {
 			// 29:['D9'], 30:['D10'], 31:['D11'], 32:['D12']
 			// };
 
-	update_board(board);
 	function verify_recived_data(input_dictionary){
 		//Complete this function
 		return 0
@@ -88,19 +87,26 @@ function initialize_board(){
 	}
 }
 
-function format_incoming_data(data, moves, sel_piece){
-	if (sel_piece!= null){
-		data[sel_piece].push(...moves)
+function show_moves(board, moves, sel_piece){
+	if (sel_piece!= null){		
 		vue_board[sel_piece-1].selection = 'selected';
 		selected_piece = vue_board[sel_piece-1];
-		for (var j =1; j<data[sel_piece].length;j++){
-			target_position = data[sel_piece][j];
-			console.log(target_position, sel_piece);
-			show_possible_square(target_position, sel_piece);
+		for (var i in moves){
+			console.log(moves[i]);
+			show_possible_square(moves[i],sel_piece)
 		}
+		// data[sel_piece].push(...moves)
+		// vue_board[sel_piece-1].selection = 'selected';
+		// selected_piece = vue_board[sel_piece-1];
 	}
-	console.log(data);
-	return data
+	// if (recieved_data[i].length>1){
+		// for (var j =1; j<recieved_data[i].length;j++){
+			// target_position = recieved_data[i][j];
+			// console.log('showing possble sq', target_position, i);
+			// show_possible_square(target_position, i);
+		// }
+	// }
+	// console.log(data);
 }
 
 function update_board(recieved_data){
@@ -127,24 +133,21 @@ function update_board(recieved_data){
 		else if (recieved_data[i][0].includes('D')){
 			vue_board[i-1].piece_color = 'dark-piece';
 		}
-		
+			
 		vue_board[i-1].select_piece = function (event){
-			console.log(event.target);
+			// console.log(event.target);
 			if (selected_piece != null) {
 				selected_piece.selection = 'not-selected';
 				hide_possible_squares()
 			}
 			var position_number = parseInt(event.target.id.split("-")[1]);
-			console.log(translation_dict[position_number],position_number);
+			// console.log(translation_dict[position_number],position_number);
 			gameSocket.send(JSON.stringify({
 				'message': translation_dict[position_number],
+				'selected_piece' : translation_dict[position_number],
 				'room-name':roomName
 			}));
-			if (recieved_data[position_number].length>1){
-				this.selection = 'selected';
-				selected_piece = this;
-				
-			}
+			
 		}
 		
 	}
@@ -153,14 +156,16 @@ function update_board(recieved_data){
 
 function show_possible_square(target_position,current_position){
 	vue_board[target_position-1].possible_square = "possible-move";
+	console.log(vue_board[target_position-1].possible_square, target_position);
 	/*add move function here where possible moves are shown on board*/
 	vue_board[target_position-1].select_piece = function(event){
-		console.log(current_position+'-'+target_position);
+		console.log(current_position,target_position);
 		gameSocket.send(JSON.stringify({
 				'message': translation_dict[target_position],
+				'selected_piece' : translation_dict[current_position],
 				'room-name':roomName
 			}));
-		// update_board(recieved_data);
+		hide_possible_squares();
 	}	
 }
 

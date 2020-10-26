@@ -1,13 +1,22 @@
 import sys
 import json
 ##COLORS##
+'''
+.   1,0     .   3,0     .   5,0     .   7,0
+0,1     .   2,1     .   4,1     .   6,1     .
+.   1,2     .   3,2     .   5,2     .   7,2
+0,3     .   2,3     .   4,3     .   6,3     .
+.   1,4     .   3,4     .   5,4     .   7,4
+0,5     .   2,5     .   4,5     .   6,5     .
+.   1,6     .   3,6     .   5,6     .   7,6
+0,7     .   2,7     .   4,7     .   6,7     . 
+'''
 #             R    G    B 
-WHITE    = (255, 255, 255)
+WHITE    = 'WHITE'
 DARK     = 'D' #bottom pieces
 LIGHT      = 'L' #uppoer pieces
-BLACK    = (  0,   0,   0)
+BLACK    = 'BLACK'
 GOLD     = 'K'
-HIGH     = (160, 190, 255)
 
 ##DIRECTIONS##
 NORTHWEST = "northwest"
@@ -47,13 +56,12 @@ class Game:
 		"""	The event loop. This is where events are triggered 
 		(like a mouse click) and then effect the game state."""
 		self.mouse_pos = mouse_position # what square is the mouse clicked in? .. format (x,y)
-			
 		if self.hop == False:
 			if self.board.location(self.mouse_pos).occupant != None and self.board.location(self.mouse_pos).occupant.color == self.turn:
 				self.selected_piece = self.mouse_pos
 
 			elif self.selected_piece != None and self.mouse_pos in self.board.legal_moves(self.selected_piece):
-
+				print ('moveing................')
 				self.board.move_piece(self.selected_piece, self.mouse_pos)
 			
 				if self.mouse_pos not in self.board.adjacent(self.selected_piece):
@@ -193,15 +201,15 @@ class Board:
 	
 	def rel(self, dir, x_y ):
 		"""	Returns the coordinates one square in a different direction to (x,y).	"""
-		(x,y) = x_y
+		[x,y] = x_y
 		if dir == NORTHWEST:
-			return (x - 1, y - 1)
+			return [x - 1, y - 1]
 		elif dir == NORTHEAST:
-			return (x + 1, y - 1)
+			return [x + 1, y - 1]
 		elif dir == SOUTHWEST:
-			return (x - 1, y + 1)
+			return [x - 1, y + 1]
 		elif dir == SOUTHEAST:
-			return (x + 1, y + 1)
+			return [x + 1, y + 1]
 		else:
 			return 0
 
@@ -225,7 +233,7 @@ class Board:
 		Returns a list of blind legal move locations from a set of coordinates (x,y) on the board. 
 		If that location is empty, then blind_legal_moves() return an empty list.
 		"""
-		(x,y)  = x_y
+		[x,y]  = x_y
 		if self.matrix[x][y].occupant != None:
 			
 			if self.matrix[x][y].occupant.king == False and self.matrix[x][y].occupant.color == DARK:
@@ -247,7 +255,7 @@ class Board:
 		Returns a list of legal move locations from a given set of coordinates (x,y) on the board.
 		If that location is empty, then legal_moves() returns an empty list.
 		"""
-		(x,y) =x_y
+		[x,y] = x_y
 		blind_legal_moves = self.blind_legal_moves((x,y)) 
 		legal_moves = []
 
@@ -259,21 +267,21 @@ class Board:
 							legal_moves.append(move)
 
 						elif self.location(move).occupant.color != self.location((x,y)).occupant.color and self.on_board((move[0] + (move[0] - x), move[1] + (move[1] - y))) and self.location((move[0] + (move[0] - x), move[1] + (move[1] - y))).occupant == None: # is this location filled by an enemy piece?
-							legal_moves.append((move[0] + (move[0] - x), move[1] + (move[1] - y)))
+							legal_moves.append([move[0] + (move[0] - x), move[1] + (move[1] - y)])
 
 		else: # hop == True
 			for move in blind_legal_moves:
 				if self.on_board(move) and self.location(move).occupant != None:
 					if self.location(move).occupant.color != self.location((x,y)).occupant.color and self.on_board((move[0] + (move[0] - x), move[1] + (move[1] - y))) and self.location((move[0] + (move[0] - x), move[1] + (move[1] - y))).occupant == None: # is this location filled by an enemy piece?
-						legal_moves.append((move[0] + (move[0] - x), move[1] + (move[1] - y)))
-
+						legal_moves.append([move[0] + (move[0] - x), move[1] + (move[1] - y)])
 		return legal_moves
 
 	def remove_piece(self, x_y):
 		"""
 		Removes a piece from the board at position (x,y). 
 		"""
-		(x,y) = x_y
+		print (list(map(int,x_y)))
+		(x,y) = list(map(int,x_y))
 		self.matrix[x][y].occupant = None
 
 	def move_piece(self, start_x_y, end_x_y):
@@ -284,7 +292,6 @@ class Board:
 		(end_x, end_y) = end_x_y
 		self.matrix[end_x][end_y].occupant = self.matrix[start_x][start_y].occupant
 		self.remove_piece((start_x, start_y))
-
 		self.king((end_x, end_y))
 
 	def is_end_square(self, coords):

@@ -55,6 +55,7 @@ class GameConsumer(WebsocketConsumer):
         global game
         game.event_loop(message)
         board, moves, selected_piece = game.update()
+        print (board)
         self.send(text_data=json.dumps({
 		                     'message': board, 
 		                     'moves': moves, 
