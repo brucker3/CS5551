@@ -1,3 +1,5 @@
+to start redis server with docker: docker run -p 6379:6379 -d redis:2.8
+
 TO DO:
 replace html table background with image for better texure.
 
