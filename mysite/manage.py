@@ -2,16 +2,12 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+from mysite import start_redis_server
 
 def main():
 	"""Run administrative tasks."""
 	os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
 	
-	"""Start redis server using docker (make sure docker is running)"""
-	print ("starting redis server by docker run -p 6379:6379 -d redis:2.8")
-	os.system("docker run -p 6379:6379 -d redis:2.8")
-
 	try:
 		from django.core.management import execute_from_command_line
 	except ImportError as exc:
