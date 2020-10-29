@@ -86,8 +86,6 @@ class player_statsview(View):
 
 
 class game(View):
-    board = board( black_space=[], red_space=[], free_space= [],board=[])
-    board.generate_board("standard")
     print("test of board build class")
 
     def get(self, request):

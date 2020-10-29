@@ -27,11 +27,13 @@ const gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' +
 //function which called when message is recieved
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
-	console.log(data);
+	
+	//console.log(data); // print incoming data from backend
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
 	var sel_piece = data['selected_piece'];
 	update_board(board);
+	// show_turn_text(data['turn']);
 	show_moves(board,moves,sel_piece);
 	// recieved_data = {
 			// 1:['L1'], 2:['L2'], 3:['L3'], 4:['L4'],
@@ -92,22 +94,12 @@ function show_moves(board, moves, sel_piece){
 		vue_board[sel_piece-1].selection = 'selected';
 		selected_piece = vue_board[sel_piece-1];
 		for (var i in moves){
-			console.log(moves[i]);
 			show_possible_square(moves[i],sel_piece)
 		}
-		// data[sel_piece].push(...moves)
-		// vue_board[sel_piece-1].selection = 'selected';
-		// selected_piece = vue_board[sel_piece-1];
 	}
-	// if (recieved_data[i].length>1){
-		// for (var j =1; j<recieved_data[i].length;j++){
-			// target_position = recieved_data[i][j];
-			// console.log('showing possble sq', target_position, i);
-			// show_possible_square(target_position, i);
-		// }
-	// }
-	// console.log(data);
 }
+
+
 
 function update_board(recieved_data){
 	//create vue object for every position and use that object to manipulate output
@@ -135,13 +127,11 @@ function update_board(recieved_data){
 		}
 			
 		vue_board[i-1].select_piece = function (event){
-			// console.log(event.target);
 			if (selected_piece != null) {
 				selected_piece.selection = 'not-selected';
 				hide_possible_squares()
 			}
 			var position_number = parseInt(event.target.id.split("-")[1]);
-			// console.log(translation_dict[position_number],position_number);
 			gameSocket.send(JSON.stringify({
 				'message': translation_dict[position_number],
 				'selected_piece' : translation_dict[position_number],
@@ -156,10 +146,8 @@ function update_board(recieved_data){
 
 function show_possible_square(target_position,current_position){
 	vue_board[target_position-1].possible_square = "possible-move";
-	console.log(vue_board[target_position-1].possible_square, target_position);
 	/*add move function here where possible moves are shown on board*/
 	vue_board[target_position-1].select_piece = function(event){
-		console.log(current_position,target_position);
 		gameSocket.send(JSON.stringify({
 				'message': translation_dict[target_position],
 				'selected_piece' : translation_dict[current_position],
