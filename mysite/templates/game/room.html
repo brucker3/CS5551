@@ -1,4 +1,4 @@
-<!-- chat/templates/chat/room.html -->
+<!-- mysite/templates/game/room.html -->
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
@@ -33,7 +33,7 @@
 </nav>
 
 
-    <link rel="stylesheet" type="text/css" href='{% static "checkers_style.css" %}'/>
+    <link rel="stylesheet" type="text/css" href='{% static "css/checkers_style.css" %}'/>
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	
 	<main class="main">
@@ -41,7 +41,7 @@
         <div class="dark-turn-text mobile">
             Dark's turn
         </div>
-        <table>
+        <table id="game-table">
             <tr>
                 <td class="noPieceHere"></td>
                 <td><div id="position-1" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
@@ -144,6 +144,6 @@
 	<script>
 	
 	</script>
-	 <script src='{% static "checkers_script.js" %}'></script>
+	 <script src='{% static "javascript/checkers_script.js" %}'></script>
 	
 {% endblock %}

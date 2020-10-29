@@ -41,7 +41,6 @@ class Board:
 			for y in range(5, 8):
 				if matrix[x][y].color == BLACK:
 					matrix[x][y].occupant = Piece(DARK)
-
 		return matrix
 
 	def board_string(self, board):

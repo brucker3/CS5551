@@ -76,7 +76,7 @@ class GameConsumer(WebsocketConsumer):
         message = event['message']
         # Send message to WebSocket
         self.send(text_data=json.dumps(event))
-        logger.info('game_message funcion')
-        logger.info(event)
+        # logger.info('game_message funcion')
+        # logger.info(event)
 		
 
