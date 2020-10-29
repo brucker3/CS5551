@@ -8,7 +8,7 @@ def main():
 	"""Run administrative tasks."""
 	os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mysite.settings')
 	
-	"""Start redis server using docker"""
+	"""Start redis server using docker (make sure docker is running)"""
 	print ("starting redis server by docker run -p 6379:6379 -d redis:2.8")
 	os.system("docker run -p 6379:6379 -d redis:2.8")
 
