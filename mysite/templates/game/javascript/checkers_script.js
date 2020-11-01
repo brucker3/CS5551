@@ -27,15 +27,15 @@ const gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' +
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
 	
-	console.log(data); // print incoming data from backend
+	// console.log(data); // print incoming data from backend
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
 	var sel_piece = data['selected_piece'];
+	hide_possible_squares();
 	update_board(board);
 	// show_turn_text(data['turn']);
 	show_moves(board,moves,sel_piece);
 	update_turn_text(data.turn);
-	console.log(data.turn);
 	// recieved_data = {
 			// 1:['L1'], 2:['L2'], 3:['L3'], 4:['L4'],
 			// 5:['L5'], 6:['L6'], 7:['L7'], 8:['L8'],
@@ -139,17 +139,16 @@ function update_board(recieved_data){
 }
 
 function auto_update_board(){
-	if (selected_piece!=null){
-		var message = translation_dict[selected_piece._uid+1];
-		var temp = translation_dict[selected_piece._uid+1];
-	}
-	else {
-		var message = [0,0];
-		var temp = null;
-	}
+	// if (selected_piece!=null){
+		// var message = translation_dict[selected_piece._uid+1];
+		// var temp = translation_dict[selected_piece._uid+1];
+	// }
+	// else {
+		// var message = [0,0];
+		// var temp = null;
+	// }
 	gameSocket.send(JSON.stringify({
-				'message': message,
-				'selected_piece' : temp,
+				'message': [0,0],
 				'room-name':roomName
 			}));
 }
@@ -181,12 +180,13 @@ function show_possible_square(target_position,current_position){
 function hide_possible_squares(){
 	for (var k=0;k<vue_board.length;k++){
 		vue_board[k].possible_square = 'not-possible-move';
+		vue_board[k].selection = 'not-selected';
 	}
 	
 }
 
 	
-//setInterval(auto_update_board , 500);
+setInterval(auto_update_board , 500);
 
 
 
