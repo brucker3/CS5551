@@ -23,18 +23,19 @@ initialize_board();
 //Initialize game socket
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 const gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' + roomName + '/' );
-
 //function which called when message is recieved
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
 	
-	//console.log(data); // print incoming data from backend
+	console.log(data); // print incoming data from backend
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
 	var sel_piece = data['selected_piece'];
 	update_board(board);
 	// show_turn_text(data['turn']);
 	show_moves(board,moves,sel_piece);
+	update_turn_text(data.turn);
+	console.log(data.turn);
 	// recieved_data = {
 			// 1:['L1'], 2:['L2'], 3:['L3'], 4:['L4'],
 			// 5:['L5'], 6:['L6'], 7:['L7'], 8:['L8'],
@@ -55,14 +56,10 @@ gameSocket.onmessage = function(e) {
 
 //function when socket is closed
 gameSocket.onclose = function(e) {
+	// add something which shows to user that network connection is broken
 	console.error('Game socket closed unexpectedly');
 };
 
-/*
-following recived data is dictionary object which will be communicated between serve and client in order to sync game
-key of the dictionary is position of board square and value is array which contain piece id as first element and 
-other element as its possible moves.
-*/
 
 let translation_dict = {};var k =1;for (var i=0; i<8; i++){	for (var j=0; j<8; j++){if (((j+i))%2!=0){translation_dict[k]=[j,i];k+=1;}}}
 
@@ -98,8 +95,6 @@ function show_moves(board, moves, sel_piece){
 		}
 	}
 }
-
-
 
 function update_board(recieved_data){
 	//create vue object for every position and use that object to manipulate output
@@ -143,6 +138,32 @@ function update_board(recieved_data){
 	}
 }
 
+function auto_update_board(){
+	if (selected_piece!=null){
+		var message = translation_dict[selected_piece._uid+1];
+		var temp = translation_dict[selected_piece._uid+1];
+	}
+	else {
+		var message = [0,0];
+		var temp = null;
+	}
+	gameSocket.send(JSON.stringify({
+				'message': message,
+				'selected_piece' : temp,
+				'room-name':roomName
+			}));
+}
+
+function update_turn_text(turn_text_letter){
+	if (turn_text_letter=="D"){
+		$('.dark-turn-text').css('color','black');
+		$('.light-turn-text').css('color','lightgray');
+	}
+	else if (turn_text_letter=="L"){
+		$('.light-turn-text').css('color','black');
+		$('.dark-turn-text').css('color','lightgray');
+	}
+}
 
 function show_possible_square(target_position,current_position){
 	vue_board[target_position-1].possible_square = "possible-move";
@@ -165,7 +186,7 @@ function hide_possible_squares(){
 }
 
 	
-
+//setInterval(auto_update_board , 500);
 
 
 
