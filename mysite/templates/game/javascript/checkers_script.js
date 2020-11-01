@@ -58,6 +58,9 @@ gameSocket.onmessage = function(e) {
 gameSocket.onclose = function(e) {
 	// add something which shows to user that network connection is broken
 	console.error('Game socket closed unexpectedly');
+	$('.main').css('display','none'); //hide whole table on loss of connection
+	$('#network-error').css('display','block'); //show error message on loss of connection
+	clearInterval(start_auto_update);
 };
 
 
@@ -139,16 +142,9 @@ function update_board(recieved_data){
 }
 
 function auto_update_board(){
-	// if (selected_piece!=null){
-		// var message = translation_dict[selected_piece._uid+1];
-		// var temp = translation_dict[selected_piece._uid+1];
-	// }
-	// else {
-		// var message = [0,0];
-		// var temp = null;
-	// }
+
 	gameSocket.send(JSON.stringify({
-				'message': [0,0],
+				'message': [-1,-1],
 				'room-name':roomName
 			}));
 }
@@ -186,7 +182,7 @@ function hide_possible_squares(){
 }
 
 	
-setInterval(auto_update_board , 500);
+var start_auto_update = setInterval(auto_update_board , 500);
 
 
 
