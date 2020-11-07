@@ -10,6 +10,14 @@ style quides for each of these parts can be found below
 
 To start Redis use this commond: `docker run -p 6379:6379 -d redis:2.8`
 
+INSTALL FOLLOWING LIBRARIES:
+pip3 install django-crispy-forms
+pip3 install django-bootstrap-forms
+pip3 install django-channels
+pip3 install channels docker
+pip3 install mysqlclient
+
+
 python:
 https://www.python.org/dev/peps/pep-0008/
 
