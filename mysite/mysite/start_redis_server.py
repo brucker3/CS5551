@@ -8,7 +8,7 @@ try:
 	if "<Image: 'redis:2.8'>" in running_container_images:
 		print ("Redis server already running")
 	else:
-		print ("starting redis server by docker run -p 6379:6379 -d redis:2.8")
+		print ("starting redis server by docker run -p 6379:6379 -d redis:2.8") #we are using version 2.8 latest one 6 feel free to try other versions
 		os.system("docker run -p 6379:6379 -d redis:2.8")
 
 	

@@ -31,22 +31,27 @@
   </div>
 </nav>
 
-Enter Game room number/text?<br>
-Here we can show that person game sessions<br>
-    <input id="room-name-input" type="text" size="100"><br>
-    <input id="room-name-submit" type="button" value="Enter">
+	<button id="create-game" type="button" >CREATE GAME</button><br><br>
+	
+	<form action="/game/joinGame/" method="post" style="border-style: ridge;">
+		{% csrf_token %}
+	  <div id="games-list-radio"></div>
+	  <button id="join-game" type="submit" value="submit" >JOIN GAME</button><br>
+	</form>
 
-    <script>
-        document.querySelector('#room-name-input').focus();
-        document.querySelector('#room-name-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#room-name-submit').click();
-            }
-        };
 
-        document.querySelector('#room-name-submit').onclick = function(e) {
-            var roomName = document.querySelector('#room-name-input').value;
-            window.location.pathname = '/game/' + roomName + '/';
+	{{ all_active_game_data|json_script:"all-games-data" }}
+    <script>		
+		let game_data_dict = JSON.parse(document.getElementById('all-games-data').textContent);
+        console.log(game_data_dict);
+		
+		var result = document.getElementById('games-list-radio');
+		for (var i in game_data_dict) {
+			result.innerHTML += ('<label><input type="radio" name="game-id" value="' + i + '" checked/> ' + i+'  by user:  '+game_data_dict[i] + '</label><br>');
+		  } 
+		
+		document.querySelector('#create-game').onclick = function(e) {
+            window.location.pathname = '/game/createGame/';
         };
     </script>
 

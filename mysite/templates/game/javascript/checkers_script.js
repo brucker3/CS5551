@@ -21,13 +21,20 @@ let vue_board = [];
 initialize_board();
 
 //Initialize game socket
-const roomName = JSON.parse(document.getElementById('room-name').textContent);
-const gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' + roomName + '/' );
+const gameId = JSON.parse(document.getElementById('game-id').textContent);
+let gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' + gameId + '/' );
+
+
+gameSocket.onopen = function(e){
+	$('.main').css('display','block'); //show whole table on loss of connection
+	$('#network-error').css('display','none'); //hide error message on loss of connection
+	console.log(e);
+}
 //function which called when message is recieved
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
 	
-	// console.log(data); // print incoming data from backend
+	console.log(data); // print incoming data from backend
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
 	var sel_piece = data['selected_piece'];
@@ -61,6 +68,9 @@ gameSocket.onclose = function(e) {
 	$('.main').css('display','none'); //hide whole table on loss of connection
 	$('#network-error').css('display','block'); //show error message on loss of connection
 	clearInterval(start_auto_update);
+	setTimeout(function() {
+      connect();
+    }, 1000);
 };
 
 
@@ -133,7 +143,7 @@ function update_board(recieved_data){
 			gameSocket.send(JSON.stringify({
 				'message': translation_dict[position_number],
 				'selected_piece' : translation_dict[position_number],
-				'room-name':roomName
+				'game_id':gameId
 			}));
 			
 		}
@@ -141,13 +151,7 @@ function update_board(recieved_data){
 	}
 }
 
-function auto_update_board(){
 
-	gameSocket.send(JSON.stringify({
-				'message': [-1,-1],
-				'room-name':roomName
-			}));
-}
 
 function update_turn_text(turn_text_letter){
 	if (turn_text_letter=="D"){
@@ -167,7 +171,7 @@ function show_possible_square(target_position,current_position){
 		gameSocket.send(JSON.stringify({
 				'message': translation_dict[target_position],
 				'selected_piece' : translation_dict[current_position],
-				'room-name':roomName
+				'game_id':gameId
 			}));
 		hide_possible_squares();
 	}	
@@ -181,8 +185,14 @@ function hide_possible_squares(){
 	
 }
 
+function auto_update_board(){
+	gameSocket.send(JSON.stringify({
+				'message': [-1,-1],
+				'game_id':gameId
+			}));
+}
 	
-var start_auto_update = setInterval(auto_update_board , 500);
+//var start_auto_update = setInterval(auto_update_board , 500);
 
 
 

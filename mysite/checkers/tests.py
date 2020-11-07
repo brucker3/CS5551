@@ -5,7 +5,7 @@ from checkers import  board
 
 # Create your tests here.
 # build test board
-test_board = board( black_space=[], red_space=[], free_space= [],board=[])
+test_board = board()
 
 # check is board data structures are correct
 def test_board_build():

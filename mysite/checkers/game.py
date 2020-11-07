@@ -1,5 +1,4 @@
-import sys
-import json
+import sys, json, random, string
 
 from .board import Board
 ##COLORS##
@@ -26,14 +25,15 @@ for i in range(8):
 			translation_dict[k]=[j,i]
 			k+=1
 					
-class Game:
+class Game(object):
+	instances = []
 	"""
 	The main game control.
 	"""
-
 	def __init__(self):
-		self.board = Board()
-		
+		self.__class__.instances.append(self)
+		self.id = self.generate_random_alphanumeric_string()
+		self.board = Board() 
 		self.turn = DARK
 		self.selected_piece = None # a board location. 
 		self.hop = False
@@ -41,6 +41,12 @@ class Game:
 
 	def setup(self):
 		"""Draws the window and board at the beginning of the game"""
+		
+	def generate_random_alphanumeric_string(self):
+		return (''.join(random.choices(string.ascii_letters + string.digits, k=16))) #here k is length of string
+		
+	def regenerate_game_id(self):
+		self.id = self.generate_random_alphanumeric_string()
 	
 	def update_legal_moves(self):
 		if self.selected_piece != None:
