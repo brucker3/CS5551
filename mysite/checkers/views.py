@@ -17,7 +17,8 @@ logger = logging.getLogger("mylogger")
 from .game import Game
 from django_currentuser.middleware import get_current_user, get_current_authenticated_user
 from django.core import serializers
-import pickle
+from django.db.models import Q
+import pickle, codecs
 # Create your views here.
 @login_required(login_url='login')
 def homeview (request):
@@ -93,16 +94,20 @@ class game(View):
     print("test of board build class")
 
     def get(self, request):
-        all_games_data = {i.game_id:i.player1_username 
-                           for i in Game_Session.objects.filter(
-                                is_active=1)}
-								# ).filter(
-								# player1_username !=str(get_current_authenticated_user())
-								# )} #active 1 means player is waiting for other player to join
-        print (all_games_data)
+        open_to_join_games_data = {i.game_id:i.player1_username 
+                                for i in Game_Session.objects.filter(
+                                is_open_to_join=True
+                                ).exclude(
+                                player1_username = str(get_current_authenticated_user())
+                                )} #active 1 means player is waiting for other player to join
+        my_games_data = {i.game_id:i.player1_username 
+                                for i in Game_Session.objects.filter(
+                                Q(player1_username = str(get_current_authenticated_user())) |
+                                Q(player2_username = str(get_current_authenticated_user())) )}
         if request.method == 'GET':
             return render(request,'checkers/game.html',{
-                   'all_active_game_data':all_games_data 
+                   'all_active_game_data':open_to_join_games_data,
+                   'my_active_games': my_games_data,				   
             })
 			   
     def room(request, game_id):
@@ -112,12 +117,13 @@ class game(View):
 	
     def create_game(request):
         new_game = Game()
+        new_game.player1 = get_current_authenticated_user()
         all_game_ids = [i.game_id for i in Game_Session.objects.all()]
         while new_game.id in all_game_ids: # this while loop is to avoid game having same session id
             print ("regenerating new game id")
             new_game.regenerate_game_id()
-        record = Game_Session(game_id=new_game.id, player1_username=get_current_authenticated_user(), 
-                              game_object=pickle.dumps(new_game))
+        record = Game_Session(game_id=new_game.id, player1_username = new_game.player1, 
+                              game_object = codecs.encode(pickle.dumps(new_game), "base64").decode())
         record.save()
         return redirect('/game/'+new_game.id)
 		
@@ -128,10 +134,14 @@ class game(View):
             record_edit = Game_Session.objects.get(game_id=selected_game_id)
             print (dir(record_edit),record_edit, get_current_authenticated_user())
             record_edit.player2_username = str(get_current_authenticated_user())
-            record_edit.is_active = False
+            record_edit.is_open_to_join = False
             record_edit.save()
             return redirect('/game/'+selected_game_id)
-     
+    
+    def resume_game(request):
+        if request.method == "POST":
+            selected_game_id = request.POST.get("game-id")
+            return redirect('/game/'+selected_game_id)			
 ##	
 
 

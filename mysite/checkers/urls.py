@@ -16,6 +16,7 @@ urlpatterns = [
     path('player_stats/', player_statsview.as_view(), name='player_stats'),
     path('game/createGame/', game.create_game, name='create_game'),
     path('game/joinGame/', game.join_game, name='join_game'),
+    path('game/resumeGame/', game.resume_game, name='resume_game'),
     path('game/<str:game_id>/', game.room, name='game-id'),
 
 ]

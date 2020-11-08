@@ -26,18 +26,19 @@ for i in range(8):
 			k+=1
 					
 class Game(object):
-	instances = []
 	"""
 	The main game control.
 	"""
 	def __init__(self):
-		self.__class__.instances.append(self)
 		self.id = self.generate_random_alphanumeric_string()
 		self.board = Board() 
 		self.turn = DARK
 		self.selected_piece = None # a board location. 
 		self.hop = False
 		self.selected_legal_moves = []
+		self.winner  = ''
+		self.player1 = ''
+		self.player2 = ''
 
 	def setup(self):
 		"""Draws the window and board at the beginning of the game"""

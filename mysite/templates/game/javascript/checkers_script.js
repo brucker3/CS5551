@@ -34,7 +34,7 @@ gameSocket.onopen = function(e){
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
 	
-	console.log(data); // print incoming data from backend
+	// console.log(data); // print incoming data from backend
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
 	var sel_piece = data['selected_piece'];
@@ -143,7 +143,7 @@ function update_board(recieved_data){
 			gameSocket.send(JSON.stringify({
 				'message': translation_dict[position_number],
 				'selected_piece' : translation_dict[position_number],
-				'game_id':gameId
+				'game_id':gameId,
 			}));
 			
 		}
@@ -192,7 +192,7 @@ function auto_update_board(){
 			}));
 }
 	
-//var start_auto_update = setInterval(auto_update_board , 500);
+var start_auto_update = setInterval(auto_update_board , 100);
 
 
 
