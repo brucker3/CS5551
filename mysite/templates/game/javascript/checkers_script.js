@@ -28,12 +28,12 @@ let gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' + g
 gameSocket.onopen = function(e){
 	$('.main').css('display','block'); //show whole table on loss of connection
 	$('#network-error').css('display','none'); //hide error message on loss of connection
-	console.log(e);
+
 }
 //function which called when message is recieved
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
-	
+	console.log(data['winner']);
 	// console.log(data); // print incoming data from backend
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
@@ -43,16 +43,12 @@ gameSocket.onmessage = function(e) {
 	// show_turn_text(data['turn']);
 	show_moves(board,moves,sel_piece);
 	update_turn_text(data.turn);
-	// recieved_data = {
-			// 1:['L1'], 2:['L2'], 3:['L3'], 4:['L4'],
-			// 5:['L5'], 6:['L6'], 7:['L7'], 8:['L8'],
-			// 9:['L9',13,14], 10:['L10',14,15], 11:['L11K',15,16], 12:['L12',16],
-			// 13:['X'], 14:['X'], 15:['X'], 16:['X'],
-			// 17:['X'], 18:['X'], 19:['X'], 20:['X'],
-			// 21:['D1',17], 22:['D2',17,18], 23:['D3K',18,19], 24:['D4'],
-			// 25:['D5'], 26:['D6'], 27:['D7'], 28:['D8'],
-			// 29:['D9'], 30:['D10'], 31:['D11'], 32:['D12']
-			// };
+	if (data['winner']=="DARK" || data['winner']=="LIGHT"){
+		stop_auto_update();
+		$('.main').css('display','none');
+		$('#network-error').text('Winner:  '+data['winner']);
+		$('#network-error').css({'display':'block', 'color':'blue'});
+	}
 
 	function verify_recived_data(input_dictionary){
 		//Complete this function
@@ -66,8 +62,9 @@ gameSocket.onclose = function(e) {
 	// add something which shows to user that network connection is broken
 	console.error('Game socket closed unexpectedly');
 	$('.main').css('display','none'); //hide whole table on loss of connection
-	$('#network-error').css('display','block'); //show error message on loss of connection
-	clearInterval(start_auto_update);
+	$('#network-error').text('Please Check your network connection!');
+	$('#network-error').css({'display':'block', 'color':'red'}); //show error message on loss of connection
+	stop_auto_update();
 	setTimeout(function() {
       connect();
     }, 1000);
@@ -192,6 +189,10 @@ function auto_update_board(){
 			}));
 }
 	
+function stop_auto_update(){
+	clearInterval(start_auto_update);
+}
+
 var start_auto_update = setInterval(auto_update_board , 100);
 
 

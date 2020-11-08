@@ -43,6 +43,7 @@ class GameConsumer(WebsocketConsumer):
 				'winner': game.winner,
             }
         )
+        
         self.accept()
 
     def disconnect(self, close_code):
@@ -62,7 +63,7 @@ class GameConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 		#below line check if click is coming from correct person or not
-        if (game.turn == 'D' and self.auth_user==game.player1) or (game.turn == 'L' and self.auth_user==game.player2):
+        if (game.turn == 'D' and self.auth_user==game.player1) or 1 or (game.turn == 'L' and self.auth_user==game.player2):
             if message != [-1,-1]:
                 game.event_loop(message)
                 board, moves, selected_piece = game.update()
