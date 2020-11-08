@@ -1,10 +1,11 @@
 from django.test import TestCase
-from checkers import  board
+from checkers import  board, players 
 
 
 
 # Create your tests here.
 # build test board
+"""
 test_board = board( black_space=[], red_space=[], free_space= [],board=[])
 
 # check is board data structures are correct
@@ -29,3 +30,20 @@ def test_baord_get_spaces():
     assert isinstance(black , list)
     assert isinstance(red,list)
     assert isinstance(free, list)
+"""
+
+# this is a set of new test added for the player class
+test_player = players.Player("ted", "ted@.com")
+
+def test_player_build():
+    assert isinstance(test_player.name, str)
+    assert isinstance(test_player.email, str)
+    assert isinstance(test_player.game_color, str)
+    assert isinstance(test_player.active_game, bool)
+    assert isinstance(test_player.piece_count, list)
+     
+def test_player_new_game():
+    test_player.new_game([(1,2),(2,3),(3,4)], "red")
+    assert test_player.game_color =="red"
+    assert test_player.active_game , True
+    assert len(test_player.piece_count), 2
