@@ -1,4 +1,5 @@
-f)rom django.test import TestCase
+from django.test import TestCase
+
 from checkers import  board, players 
 
 
@@ -47,3 +48,23 @@ def test_player_new_game():
     assert test_player.game_color =="red"
     assert test_player.active_game , True
     assert len(test_player.piece_count), 2
+
+def test_player_get_funcitons():
+    assert test_player.get_name() == "ted"
+    assert test_player.get_email() == "ted@.com"
+    assert test_player.is_active() == True
+    assert test_player.player_color() == "red"
+    assert isinstance(test_player.player_pieces(), list)
+
+
+def test_player_reset():
+    test_player.game_reset()
+    assert test_player.is_active() ==False
+    assert test_player.player_color() =="none"
+    assert len(test_player.player_pieces()) ==  0
+
+
+
+
+
+

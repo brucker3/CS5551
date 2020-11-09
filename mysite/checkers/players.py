@@ -45,7 +45,7 @@ class Player(object):
     # only three attributes of this class change
     # name and email never change
     def change_active(self):
-        if self.acitve_game == True:
+        if self.active_game == True:
             self.active_game = False
         else:
             self.active_game = True
@@ -59,13 +59,13 @@ class Player(object):
     def color_change(self,color):
         self.game_color = color
 
-    def _pieces_change(self, pices):
+    def pieces_change(self, pieces):
         self.piece_count = pieces
 
     def game_reset(self):
         self.change_active()
         self.color_change("none")
-        self._pieces_cahnge([])
+        self.pieces_change([])
 
 
 
