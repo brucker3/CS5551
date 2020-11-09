@@ -41,8 +41,31 @@ class Player(object):
     def player_pieces(self):
         return self.piece_count
 
+    # this is a simple set of modifier functions
+    # only three attributes of this class change
+    # name and email never change
+    def change_active(self):
+        if self.acitve_game == True:
+            self.active_game = False
+        else:
+            self.active_game = True
 
-# need modifiers plus an end game funciton to 
-# reset the player
+    """
+    this method should support three kinds of color changes
+    red 
+    balck 
+    none
+    """
+    def color_change(self,color):
+        self.game_color = color
+
+    def _pieces_change(self, pices):
+        self.piece_count = pieces
+
+    def game_reset(self):
+        self.change_active()
+        self.color_change("none")
+        self._pieces_cahnge([])
+
 
 

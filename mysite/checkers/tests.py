@@ -1,4 +1,4 @@
-from django.test import TestCase
+f)rom django.test import TestCase
 from checkers import  board, players 
 
 
