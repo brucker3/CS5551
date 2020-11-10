@@ -39,9 +39,6 @@ class Game:
 		self.hop = False
 		self.selected_legal_moves = []
 		self.winner  = ''
-
-	def setup(self):
-		"""empty function might be used to setup in future"""
 	
 	def update_legal_moves(self):
 		if self.selected_piece != None:
