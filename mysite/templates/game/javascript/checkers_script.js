@@ -24,6 +24,12 @@ initialize_board();
 const roomName = JSON.parse(document.getElementById('room-name').textContent);
 const gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' + roomName + '/' );
 
+gameSocket.onopen = function(e){
+	$('.main').css('display','block'); //show whole table on loss of connection
+	$('#network-error').css('display','none'); //hide error message on loss of connection
+
+}
+
 //function which called when message is recieved
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
@@ -32,19 +38,17 @@ gameSocket.onmessage = function(e) {
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
 	var sel_piece = data['selected_piece'];
+	hide_possible_squares();
 	update_board(board);
 	// show_turn_text(data['turn']);
 	show_moves(board,moves,sel_piece);
-	// recieved_data = {
-			// 1:['L1'], 2:['L2'], 3:['L3'], 4:['L4'],
-			// 5:['L5'], 6:['L6'], 7:['L7'], 8:['L8'],
-			// 9:['L9',13,14], 10:['L10',14,15], 11:['L11K',15,16], 12:['L12',16],
-			// 13:['X'], 14:['X'], 15:['X'], 16:['X'],
-			// 17:['X'], 18:['X'], 19:['X'], 20:['X'],
-			// 21:['D1',17], 22:['D2',17,18], 23:['D3K',18,19], 24:['D4'],
-			// 25:['D5'], 26:['D6'], 27:['D7'], 28:['D8'],
-			// 29:['D9'], 30:['D10'], 31:['D11'], 32:['D12']
-			// };
+	update_turn_text(data.turn);
+	if (data['winner']=="DARK" || data['winner']=="LIGHT"){
+		stop_auto_update();
+		$('.main').css('display','none');
+		$('#network-error').text('Winner:  '+data['winner']);
+		$('#network-error').css({'display':'block', 'color':'blue'});
+	}
 
 	function verify_recived_data(input_dictionary){
 		//Complete this function
@@ -56,13 +60,15 @@ gameSocket.onmessage = function(e) {
 //function when socket is closed
 gameSocket.onclose = function(e) {
 	console.error('Game socket closed unexpectedly');
+	$('.main').css('display','none'); //hide whole table on loss of connection
+	$('#network-error').text('Please Check your network connection!');
+	$('#network-error').css({'display':'block', 'color':'red'}); //show error message on loss of connection
+	stop_auto_update();
+	setTimeout(function() {
+    	connect();
+    }, 1000);
 };
 
-/*
-following recived data is dictionary object which will be communicated between serve and client in order to sync game
-key of the dictionary is position of board square and value is array which contain piece id as first element and 
-other element as its possible moves.
-*/
 
 let translation_dict = {};var k =1;for (var i=0; i<8; i++){	for (var j=0; j<8; j++){if (((j+i))%2!=0){translation_dict[k]=[j,i];k+=1;}}}
 
@@ -144,6 +150,17 @@ function update_board(recieved_data){
 }
 
 
+function update_turn_text(turn_text_letter){
+	if (turn_text_letter=="D"){
+		$('.dark-turn-text').css('color','black');
+		$('.light-turn-text').css('color','lightgray');
+	}
+	else if (turn_text_letter=="L"){
+		$('.light-turn-text').css('color','black');
+		$('.dark-turn-text').css('color','lightgray');
+	}
+}
+
 function show_possible_square(target_position,current_position){
 	vue_board[target_position-1].possible_square = "possible-move";
 	/*add move function here where possible moves are shown on board*/
@@ -160,11 +177,24 @@ function show_possible_square(target_position,current_position){
 function hide_possible_squares(){
 	for (var k=0;k<vue_board.length;k++){
 		vue_board[k].possible_square = 'not-possible-move';
+		vue_board[k].selection = 'not-selected';
 	}
-	
 }
 
+
+function auto_update_board(){
+	gameSocket.send(JSON.stringify({
+				'message': [-1,-1],
+				'game_id':roomName
+			}));
+}
 	
+function stop_auto_update(){
+	clearInterval(start_auto_update);
+}
+
+//this line will send empty message to get update board back every 100ms
+var start_auto_update = setInterval(auto_update_board , 100);
 
 
 

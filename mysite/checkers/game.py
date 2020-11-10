@@ -38,9 +38,10 @@ class Game:
 		self.selected_piece = None # a board location. 
 		self.hop = False
 		self.selected_legal_moves = []
+		self.winner  = ''
 
 	def setup(self):
-		"""Draws the window and board at the beginning of the game"""
+		"""empty function might be used to setup in future"""
 	
 	def update_legal_moves(self):
 		if self.selected_piece != None:
