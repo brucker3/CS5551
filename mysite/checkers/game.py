@@ -39,9 +39,6 @@ class Game(object):
 		self.winner  = ''
 		self.player1 = ''
 		self.player2 = ''
-
-	def setup(self):
-		"""Draws the window and board at the beginning of the game"""
 		
 	def generate_random_alphanumeric_string(self):
 		return (''.join(random.choices(string.ascii_letters + string.digits, k=16))) #here k is length of string

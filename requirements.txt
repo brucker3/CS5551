@@ -1,0 +1,6 @@
+pip3 install django==3.1.1
+pip3 install django-crispy-forms==1.9.2
+pip3 install django-bootstrap-form==3.4
+pip3 install channels-redis==2.4.2
+pip3 install docker==4.3.1
+

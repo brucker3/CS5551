@@ -40,7 +40,7 @@ class GameConsumer(WebsocketConsumer):
 				'moves': moves,
 				'selected_piece' : selected_piece,
 				'turn': game.turn,
-				'winner': game.winner,
+                'winner': game.winner,
             }
         )
         
@@ -69,6 +69,7 @@ class GameConsumer(WebsocketConsumer):
                 board, moves, selected_piece = game.update()
         # logger.info(text_data)
         #click is recieved here are update board is sent back
+<<<<<<< HEAD
         board, moves, selected_piece = game.update()
         self.send(text_data=json.dumps({
 						 'message': board, 
@@ -80,6 +81,21 @@ class GameConsumer(WebsocketConsumer):
 						 }))
         
     
+=======
+        global game
+        if message != [-1,-1]:
+            game.event_loop(message)
+        board, moves, selected_piece = game.update()
+        self.send(text_data=json.dumps({
+		                     'message': board, 
+		                     'moves': moves, 
+		                     'selected_piece' : selected_piece,
+		                     'room_name':self.room_name,
+							 'turn': game.turn,
+                             'winner': game.winner,
+                             }))
+           
+>>>>>>> 60a1a2d1bad62089b37724298b66b09c81f39b84
     # Receive message from room group
     def game_message(self, event):
         message = event['message']

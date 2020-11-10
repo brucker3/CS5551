@@ -8,11 +8,20 @@ draw.io to open these docs go to draw.io and load them to the site.
 this project conisit of three main parts a mySQL DB a Flask bakc end and a vue front end 
 style quides for each of these parts can be found below 
 
+To start Redis use this commond: `docker run -p 6379:6379 -d redis:2.8`
+
+INSTALL FOLLOWING LIBRARIES:
+pip3 install django-crispy-forms
+pip3 install django-bootstrap-forms
+pip3 install django-channels
+pip3 install channels docker
+pip3 install mysqlclient
+
 
 python:
 https://www.python.org/dev/peps/pep-0008/
 
-javascrip:
+javascript:
 ihttps://google.github.io/styleguide/jsguide.html
 
 To look at Drawio diagram

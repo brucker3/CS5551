@@ -24,7 +24,6 @@ initialize_board();
 const gameId = JSON.parse(document.getElementById('game-id').textContent);
 let gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' + gameId + '/' );
 
-
 gameSocket.onopen = function(e){
 	$('.main').css('display','block'); //show whole table on loss of connection
 	$('#network-error').css('display','none'); //hide error message on loss of connection
@@ -66,7 +65,7 @@ gameSocket.onclose = function(e) {
 	$('#network-error').css({'display':'block', 'color':'red'}); //show error message on loss of connection
 	stop_auto_update();
 	setTimeout(function() {
-      connect();
+    	connect();
     }, 1000);
 };
 
@@ -149,7 +148,6 @@ function update_board(recieved_data){
 }
 
 
-
 function update_turn_text(turn_text_letter){
 	if (turn_text_letter=="D"){
 		$('.dark-turn-text').css('color','black');
@@ -179,7 +177,6 @@ function hide_possible_squares(){
 		vue_board[k].possible_square = 'not-possible-move';
 		vue_board[k].selection = 'not-selected';
 	}
-	
 }
 
 function auto_update_board(){
