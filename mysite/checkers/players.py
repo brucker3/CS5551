@@ -9,7 +9,7 @@ class Player(object):
         piece_count: list of the number of pices a player has and there locaiton on the board
     """
 
-    def __init__(self, name, email):
+    def __init__(self, name, email="none" ):
         self.name = name 
         self.email = email
         self.game_color = "none"

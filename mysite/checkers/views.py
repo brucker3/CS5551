@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic.edit import FormView
 import logging
+from checkers import  players 
 logger = logging.getLogger("mylogger")
 
 # Create your views here.
@@ -56,6 +57,9 @@ class loginview (FormView):
 
         if user is not None:
             login(request,user)
+            logger.info("sccessful login proceding to home page")
+            new_player = players.Player(username)
+            #create player instance set up glaobl player list 
             return redirect('home')
         else:
             messages.info(request, 'incorrect informations')
