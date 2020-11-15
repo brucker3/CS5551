@@ -25,7 +25,7 @@ SECRET_KEY = '0vjw3&s&p%q7k*wt@4%s@mybj83wxyz%c*i*m$(mk-z5y%e431'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*'] #added '*' so it allowed everyone on localhost to access site
+ALLOWED_HOSTS = ['localhost', '127.0.0.1','*'] #added '*' so it allowed everyone on localhost to access site
 
 
 # Application definition
@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_currentuser.middleware.ThreadLocalUserMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -113,6 +114,9 @@ DATABASES = {
     }
 }
 
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -153,6 +157,8 @@ USE_TZ = True
 STATIC_URL = '/files/'
 STATICFILES_DIRS = ['static','templates\game']
 
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Channels
 ASGI_APPLICATION = 'mysite.routing.application'
