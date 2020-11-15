@@ -21,20 +21,19 @@ let vue_board = [];
 initialize_board();
 
 //Initialize game socket
-const roomName = JSON.parse(document.getElementById('room-name').textContent);
-const gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' + roomName + '/' );
+const gameId = JSON.parse(document.getElementById('game-id').textContent);
+let gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' + gameId + '/' );
 
 gameSocket.onopen = function(e){
 	$('.main').css('display','block'); //show whole table on loss of connection
 	$('#network-error').css('display','none'); //hide error message on loss of connection
 
 }
-
 //function which called when message is recieved
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
-	
-	//console.log(data); // print incoming data from backend
+	console.log(data['winner']);
+	// console.log(data); // print incoming data from backend
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
 	var sel_piece = data['selected_piece'];
@@ -59,6 +58,7 @@ gameSocket.onmessage = function(e) {
 
 //function when socket is closed
 gameSocket.onclose = function(e) {
+	// add something which shows to user that network connection is broken
 	console.error('Game socket closed unexpectedly');
 	$('.main').css('display','none'); //hide whole table on loss of connection
 	$('#network-error').text('Please Check your network connection!');
@@ -105,8 +105,6 @@ function show_moves(board, moves, sel_piece){
 	}
 }
 
-
-
 function update_board(recieved_data){
 	//create vue object for every position and use that object to manipulate output
 		
@@ -141,7 +139,7 @@ function update_board(recieved_data){
 			gameSocket.send(JSON.stringify({
 				'message': translation_dict[position_number],
 				'selected_piece' : translation_dict[position_number],
-				'room-name':roomName
+				'game_id':gameId,
 			}));
 			
 		}
@@ -168,7 +166,7 @@ function show_possible_square(target_position,current_position){
 		gameSocket.send(JSON.stringify({
 				'message': translation_dict[target_position],
 				'selected_piece' : translation_dict[current_position],
-				'room-name':roomName
+				'game_id':gameId
 			}));
 		hide_possible_squares();
 	}	
@@ -181,11 +179,10 @@ function hide_possible_squares(){
 	}
 }
 
-
 function auto_update_board(){
 	gameSocket.send(JSON.stringify({
 				'message': [-1,-1],
-				'game_id':roomName
+				'game_id':gameId
 			}));
 }
 	
@@ -193,9 +190,7 @@ function stop_auto_update(){
 	clearInterval(start_auto_update);
 }
 
-//this line will send empty message to get update board back every 100ms
 var start_auto_update = setInterval(auto_update_board , 100);
-
 
 
 

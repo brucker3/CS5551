@@ -31,7 +31,8 @@
     </ul>
   </div>
 </nav>
-
+	
+    {{ game_id|json_script:"game-id" }}
 
     <link rel="stylesheet" type="text/css" href='{% static "css/checkers_style.css" %}'/>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -40,7 +41,6 @@
 	<h2 id="network-error" style="display:none; color:red">Please Check your network connection!</h2>    
 
 	<main class="main">
-        
         <div class="dark-turn-text mobile">
             Dark's turn
         </div>
@@ -142,11 +142,7 @@
         </div>
 	</main>
 	
-    {{ room_name|json_script:"room-name" }}
-    
-	<script>
-	
-	</script>
+
 	 <script src='{% static "javascript/checkers_script.js" %}'></script>
 	
 {% endblock %}
