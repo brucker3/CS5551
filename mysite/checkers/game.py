@@ -41,7 +41,7 @@ class Game(object):
 		self.player2 = ''
 		
 	def generate_random_alphanumeric_string(self):
-		return (''.join(random.choices(string.ascii_letters + string.digits, k=16))) #here k is length of string
+		return (''.join(random.choices(string.ascii_lowercase + string.digits, k=16))) #here k is length of string
 		
 	def regenerate_game_id(self):
 		self.id = self.generate_random_alphanumeric_string()
