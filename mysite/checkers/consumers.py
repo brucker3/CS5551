@@ -29,7 +29,7 @@ class GameConsumer(WebsocketConsumer):
         game = pickle.loads(codecs.decode(game_record.game_object.encode(), "base64"))
         game.player1 = game_record.player1_username
         game.player2 = game_record.player2_username		
-        game.event_loop()
+        game.update_game_object()
         board, moves, selected_piece = game.update()
         print (board)
         async_to_sync(self.channel_layer.group_send)(
@@ -41,6 +41,8 @@ class GameConsumer(WebsocketConsumer):
 				'selected_piece' : selected_piece,
 				'turn': game.turn,
                 'winner': game.winner,
+                'player1_username': game.player1,
+                'player2_username': game.player2,
             }
         )
         
@@ -65,7 +67,7 @@ class GameConsumer(WebsocketConsumer):
 		#below line check if click is coming from correct person or not
         if (game.turn == 'D' and self.auth_user==game.player1) or (game.turn == 'L' and self.auth_user==game.player2):
             if message != [-1,-1]:
-                game.event_loop(message)
+                game.update_game_object(message)
         # logger.info(text_data)
         #click is recieved here are update board is sent back
         board, moves, selected_piece = game.update()
@@ -76,6 +78,8 @@ class GameConsumer(WebsocketConsumer):
 						 'game_id':self.game_id,
 						 'turn': game.turn,
 						 'winner': game.winner,
+                         'player1_username': game.player1,
+                         'player2_username': game.player2,
 						 }))
         
     

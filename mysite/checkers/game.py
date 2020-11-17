@@ -50,7 +50,7 @@ class Game(object):
 		if self.selected_piece != None:
 			self.selected_legal_moves = self.board.legal_moves(self.selected_piece, self.hop)
 		
-	def event_loop(self, mouse_position=[0,0]):
+	def update_game_object(self, mouse_position=[0,0]):
 		"""	The event loop. This is where events are triggered 
 		(like a mouse click) and then effect the game state."""
 		self.mouse_pos = mouse_position # what square is the mouse clicked in? .. format (x,y)
@@ -109,7 +109,7 @@ class Game(object):
 		""""This executes the game and controls its flow."""
 		self.setup()
 		while True: # main game loop
-			self.event_loop()
+			self.update_game_object()
 			self.update()
 
 	def end_turn(self):

@@ -51,9 +51,9 @@ def test_game_change_turn():
     assert test_game.turn == "D"
 
 def test_game_functions():
-    test_game.event_loop([0,5]) #this selects piece at position 0,5
+    test_game.update_game_object([0,5]) #this selects piece at position 0,5
     assert test_game.selected_piece == [0,5]
-    test_game.event_loop([1,4]) #this moves seleted piece if it passes conditions
+    test_game.update_game_object([1,4]) #this moves seleted piece if it passes conditions
     assert test_game.turn == "L"
 
 def test_game_check_end_game():
