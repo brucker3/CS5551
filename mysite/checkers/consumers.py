@@ -30,7 +30,7 @@ class GameConsumer(WebsocketConsumer):
         game.player1 = game_record.player1_username
         game.player2 = game_record.player2_username		
         game.update_game_object()
-        board, moves, selected_piece = game.update()
+        board, moves, selected_piece = game.get_update()
         print (board)
         async_to_sync(self.channel_layer.group_send)(
             self.game_group_id,
@@ -70,7 +70,7 @@ class GameConsumer(WebsocketConsumer):
                 game.update_game_object(message)
         # logger.info(text_data)
         #click is recieved here are update board is sent back
-        board, moves, selected_piece = game.update()
+        board, moves, selected_piece = game.get_update()
         self.send(text_data=json.dumps({
 						 'message': board, 
 						 'moves': moves, 

@@ -81,15 +81,8 @@ class Game(object):
 
 			else:
 				self.selected_piece = self.mouse_pos
-		# for event in pygame.event.get():
 
-			# if event.type == QUIT:
-				# self.terminate_game()
-
-			# if event.type == MOUSEBUTTONDOWN:
-
-
-	def update(self):
+	def get_update(self):
 		"""Calls on the graphics class to update the game display."""
 		#send signal to update front end
 		moves = []
