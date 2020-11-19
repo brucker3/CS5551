@@ -2,7 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-#from mysite import start_redis_server
+from mysite import start_redis_server
 
 def main():
 	"""Run administrative tasks."""
