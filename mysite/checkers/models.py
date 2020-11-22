@@ -1,17 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from .board import Board
-##COLORS##
-DARK     = 'D' #bottom pieces
-LIGHT      = 'L' #uppoer pieces
-BLACK    = 'BLACK'
-translation_dict = {};k =1;
-for i in range(8):
-	for j in range(8):
-		if (((j+i))%2!=0):
-			translation_dict[k]=[j,i]
-			k+=1
 
 # Create your models here.
 class Adherent(models.Model):
@@ -27,8 +16,3 @@ class Game_Session(models.Model):
 	is_active = models.BooleanField(default=True)
 	is_open_to_join = models.BooleanField(default=True)
 	
-
-from django_currentuser.db.models import CurrentUserField
-
-class Foo(models.Model):
-    created_by = CurrentUserField()
