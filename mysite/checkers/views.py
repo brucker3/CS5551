@@ -59,11 +59,16 @@ class loginview (FormView):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user=authenticate(request,username=username,password=password)
-
+        
         if user is not None:
+            global player_list
+            player_list = []
             login(request,user)
             logger.info("sccessful login proceding to home page")
             new_player = players.Player(username)
+            player_list.append(new_player)
+            logger.info(player_list[0].get_name())
+            logger.info(" finish log in change code---------------- ")
             #create player instance set up glaobl player list 
             return redirect('home')
         else:
