@@ -20,6 +20,8 @@ from django_currentuser.middleware import get_current_user, get_current_authenti
 from django.core import serializers
 from django.db.models import Q
 import pickle, codecs
+global player_list
+player_list = []
 # Create your views here.
 @login_required(login_url='login')
 def homeview (request):
@@ -62,7 +64,6 @@ class loginview (FormView):
         
         if user is not None:
             global player_list
-            player_list = []
             login(request,user)
             logger.info("sccessful login proceding to home page")
             new_player = players.Player(username)

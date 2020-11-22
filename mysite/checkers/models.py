@@ -27,8 +27,3 @@ class Game_Session(models.Model):
 	is_active = models.BooleanField(default=True)
 	is_open_to_join = models.BooleanField(default=True)
 	
-
-from django_currentuser.db.models import CurrentUserField
-
-class Foo(models.Model):
-    created_by = CurrentUserField()
