@@ -110,10 +110,11 @@ class game(View):
                                 ).exclude(
                                 player1_username = str(get_current_authenticated_user())
                                 )} #active 1 means player is waiting for other player to join
-        my_games_data = {i.game_id:i.player1_username 
+        my_games_data = {i.game_id:[i.player1_username, i.player2_username] 
                                 for i in Game_Session.objects.filter(
                                 Q(player1_username = str(get_current_authenticated_user())) |
                                 Q(player2_username = str(get_current_authenticated_user())) )}
+        print (open_to_join_games_data,my_games_data)
         if request.method == 'GET':
             return render(request,'checkers/game.html',{
                    'all_active_game_data':open_to_join_games_data,

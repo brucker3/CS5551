@@ -8,6 +8,8 @@ from .game import Game
 from .models import *
 from django_currentuser.middleware import get_current_user, get_current_authenticated_user
 import codecs,pickle
+global games 
+games = {}
 #this class is about websocket communication
 # when websocket is connected disconnects and message is received respective fuctions is triggered 
 class GameConsumer(WebsocketConsumer):
@@ -24,13 +26,13 @@ class GameConsumer(WebsocketConsumer):
 		#call some function here which return board according to the room and player who is requesting
         logger.info('connected to websocket')
 		
-        global game
+        global games
         game_record = Game_Session.objects.get(game_id = self.game_id)
-        game = pickle.loads(codecs.decode(game_record.game_object.encode(), "base64"))
-        game.player1 = game_record.player1_username
-        game.player2 = game_record.player2_username		
-        game.event_loop()
-        board, moves, selected_piece = game.update()
+        games[self.game_id] = pickle.loads(codecs.decode(game_record.game_object.encode(), "base64"))
+        games[self.game_id].player1 = game_record.player1_username
+        games[self.game_id].player2 = game_record.player2_username		
+        games[self.game_id].update_game_object()
+        board, moves, selected_piece = games[self.game_id].get_update()
         print (board)
         async_to_sync(self.channel_layer.group_send)(
             self.game_group_id,
@@ -39,8 +41,10 @@ class GameConsumer(WebsocketConsumer):
                 'message': board,
 				'moves': moves,
 				'selected_piece' : selected_piece,
-				'turn': game.turn,
-                'winner': game.winner,
+				'turn': games[self.game_id].turn,
+                'winner': games[self.game_id].winner,
+                'player1_username': games[self.game_id].player1,
+                'player2_username': games[self.game_id].player2,
             }
         )
         
@@ -54,29 +58,34 @@ class GameConsumer(WebsocketConsumer):
         )
         logger.info('websocket disconnected and saves last game to database')
         record_edit = Game_Session.objects.get(game_id = self.game_id)
-        record_edit.game_object = game_object = codecs.encode(pickle.dumps(game), "base64").decode()
+        record_edit.game_object = game_object = codecs.encode(pickle.dumps(games[self.game_id]), "base64").decode()
         record_edit.save()
 
     # Receive message from WebSocket
     def receive(self, text_data):
-        global game
+        global games
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 		#below line check if click is coming from correct person or not
-        if (game.turn == 'D' and self.auth_user==game.player1) or (game.turn == 'L' and self.auth_user==game.player2):
+        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
             if message != [-1,-1]:
-                game.event_loop(message)
+                games[self.game_id].update_game_object(message)
         # logger.info(text_data)
         #click is recieved here are update board is sent back
-        board, moves, selected_piece = game.update()
-        self.send(text_data=json.dumps({
-						 'message': board, 
-						 'moves': moves, 
-						 'selected_piece' : selected_piece,
-						 'game_id':self.game_id,
-						 'turn': game.turn,
-						 'winner': game.winner,
-						 }))
+        board, moves, selected_piece = games[self.game_id].get_update()
+        async_to_sync(self.channel_layer.group_send)(
+            self.game_group_id,
+            {
+                'type': 'game_message',
+                'message': board, 
+                'moves': moves, 
+                'selected_piece' : selected_piece,
+                'game_id':self.game_id,
+                'turn': games[self.game_id].turn,
+                'winner': games[self.game_id].winner,
+                'player1_username': games[self.game_id].player1,
+                'player2_username': games[self.game_id].player2,
+                })
         
     
     # Receive message from room group
