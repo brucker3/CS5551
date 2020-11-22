@@ -73,16 +73,19 @@ class GameConsumer(WebsocketConsumer):
         # logger.info(text_data)
         #click is recieved here are update board is sent back
         board, moves, selected_piece = games[self.game_id].get_update()
-        self.send(text_data=json.dumps({
-						 'message': board, 
-						 'moves': moves, 
-						 'selected_piece' : selected_piece,
-						 'game_id':self.game_id,
-						 'turn': games[self.game_id].turn,
-						 'winner': games[self.game_id].winner,
-                         'player1_username': games[self.game_id].player1,
-                         'player2_username': games[self.game_id].player2,
-						 }))
+        async_to_sync(self.channel_layer.group_send)(
+            self.game_group_id,
+            {
+                'type': 'game_message',
+                'message': board, 
+                'moves': moves, 
+                'selected_piece' : selected_piece,
+                'game_id':self.game_id,
+                'turn': games[self.game_id].turn,
+                'winner': games[self.game_id].winner,
+                'player1_username': games[self.game_id].player1,
+                'player2_username': games[self.game_id].player2,
+                })
         
     
     # Receive message from room group

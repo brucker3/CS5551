@@ -34,7 +34,7 @@ gameSocket.onopen = function(e){
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
 	//console.log(data['player1_username'],data['player2_username']);
-	// console.log(data); // print incoming data from backend
+	console.log(data); // print incoming data from backend
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
 	var sel_piece = data['selected_piece'];
@@ -201,7 +201,7 @@ function stop_auto_update(){
 	clearInterval(start_auto_update);
 }
 
-var start_auto_update = setInterval(auto_update_board , 100);
+//var start_auto_update = setInterval(auto_update_board , 100);
 
 
 
