@@ -42,6 +42,7 @@
 	
 	<form action="/game/joinGame/" method="post" style="border-style: ridge;">
 		{% csrf_token %}
+	Open to Join Games:
 	  <div id="active-games-list-radio"></div>
 	  <button id="join-game" type="submit" value="submit" disabled>JOIN GAME</button><br>
 	</form>
@@ -57,14 +58,21 @@
 		for (var i in my_game_data_dict) {
 			document.getElementById('resume-game').disabled = false;
 			dom_my_games.innerHTML += ('<label><input type="radio" name="game-id" value="' + i + '" checked/> ' +
-											i+'  by user:  '+my_game_data_dict[i] + '</label><br>');
+											'created by user:  <b>'+my_game_data_dict[i][0]+ '</b>' );
+			if (my_game_data_dict[i][1]==''){
+				dom_my_games.innerHTML += (' and waiting for other player to join');
+			}else {
+				dom_my_games.innerHTML += (' joined by <b>'+my_game_data_dict[i][1]+'</b>');
+			}
+			dom_my_games.innerHTML += ('  <i>(gameid: '+i+')</i></label><br>');
 		  } 
 		
 		var dom_my_games = document.getElementById('active-games-list-radio');
 		for (var i in active_game_data_dict) {
 			document.getElementById('join-game').disabled = false;
 			dom_my_games.innerHTML += ('<label><input type="radio" name="game-id" value="' + i + '" checked/> ' + 
-										i+'  by user:  '+active_game_data_dict[i] + '</label><br>');
+										'created by user:  '+active_game_data_dict[i] +
+										'  <i>(gameid: '+i+')</i></label><br>');
 		}
 		
 		document.querySelector('#create-game').onclick = function(e) {
