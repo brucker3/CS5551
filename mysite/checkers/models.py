@@ -8,6 +8,7 @@ class Adherent(models.Model):
     score = models.IntegerField(null=True)
 
 
+	
 class Game_Session(models.Model):
 	game_id = models.CharField(max_length=255)
 	game_object = models.TextField()
@@ -15,4 +16,3 @@ class Game_Session(models.Model):
 	player2_username = models.CharField(max_length=255)
 	is_active = models.BooleanField(default=True)
 	is_open_to_join = models.BooleanField(default=True)
-	
