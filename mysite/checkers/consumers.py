@@ -25,7 +25,6 @@ class GameConsumer(WebsocketConsumer):
         )
 		#call some function here which return board according to the room and player who is requesting
         logger.info('connected to websocket')
-		
         global games
         game_record = Game_Session.objects.get(game_id = self.game_id)
         games[self.game_id] = pickle.loads(codecs.decode(game_record.game_object.encode(), "base64"))

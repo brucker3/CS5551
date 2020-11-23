@@ -8,8 +8,7 @@ class Player(object):
         game_color: string that references witch color pieces the player is using
         piece_count: list of the number of pices a player has and there locaiton on the board
     """
-
-    def __init__(self, name, email):
+    def __init__(self, name, email="none" ):
         self.name = name 
         self.email = email
         self.game_color = "none"
