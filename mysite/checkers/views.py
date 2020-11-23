@@ -35,7 +35,7 @@ class signupview (FormView):
     template_name = 'checkers/signup.html'
     form_class = SignupForm
     success_url = '/login/'
-
+    logger.info(" sign up view running")
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
 
@@ -44,6 +44,7 @@ class signupview (FormView):
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password1")
             messages.success(request, "registration successful, please login to access your space")
+            logger.info(" succesfully sign up redirect to login")
             return redirect('login')
         return render(request, self.template_name, {'form': form})
 
@@ -82,24 +83,23 @@ class loginview (FormView):
 class logoutview(View):
     def get(self, request):
         logout(request)
+        logger.info("user log out")
         return redirect('login')
 
-# def logoutview(request):
-#     logout(request)
-#     return redirect('login')
 
 class rulesview(View):
     def get(self, request):
+        logger.info(" routing to rules page")
         return render(request, 'checkers/rules.html')
 
 class player_statsview(View):
     def get(self, request):
+        logger.info("routing to stats page")
         return render(request, 'checkers/player_stats.html')
 
 
 class game(View):
-    print("test of board build class")
-
+    logger.info("routing to game view")
     def get(self, request):
         open_to_join_games_data = {i.game_id:i.player1_username 
                                 for i in Game_Session.objects.filter(
@@ -111,7 +111,7 @@ class game(View):
                                 for i in Game_Session.objects.filter(
                                 Q(player1_username = str(get_current_authenticated_user())) |
                                 Q(player2_username = str(get_current_authenticated_user())) )}
-        print (open_to_join_games_data,my_games_data)
+        logger.info(open_to_join_games_data,my_games_data)
         if request.method == 'GET':
             return render(request,'checkers/game.html',{
                    'all_active_game_data':open_to_join_games_data,
@@ -119,6 +119,7 @@ class game(View):
             })
 			   
     def room(request, game_id):
+        logger.info("routing to game room")
         return render(request, 'game/room.html', {
             'game_id': game_id
         })		
@@ -128,7 +129,7 @@ class game(View):
         new_game.player1 = get_current_authenticated_user()
         all_game_ids = [i.game_id for i in Game_Session.objects.all()]
         while new_game.id in all_game_ids: # this while loop is to avoid game having same session id
-            print ("regenerating new game id")
+            logger.info("regenerating new game id")
             new_game.regenerate_game_id()
         record = Game_Session(game_id=new_game.id, player1_username = new_game.player1, 
                               game_object = codecs.encode(pickle.dumps(new_game), "base64").decode())
@@ -144,11 +145,13 @@ class game(View):
             record_edit.player2_username = str(get_current_authenticated_user())
             record_edit.is_open_to_join = False
             record_edit.save()
+            logger.info("player joined game")
             return redirect('/game/'+selected_game_id)
     
     def resume_game(request):
         if request.method == "POST":
             selected_game_id = request.POST.get("game-id")
+            logger.info("player resumed game")
             return redirect('/game/'+selected_game_id)			
 
 
