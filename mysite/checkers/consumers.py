@@ -8,7 +8,6 @@ from .game import Game
 from .models import *
 from django_currentuser.middleware import get_current_user, get_current_authenticated_user
 import codecs,pickle
-global player_list 
 global games 
 games = {}
 #this class is about websocket communication
@@ -26,8 +25,6 @@ class GameConsumer(WebsocketConsumer):
         )
 		#call some function here which return board according to the room and player who is requesting
         logger.info('connected to websocket')
-        global player_list
-        #logger.info(player_list[0].get_name())
         global games
         game_record = Game_Session.objects.get(game_id = self.game_id)
         games[self.game_id] = pickle.loads(codecs.decode(game_record.game_object.encode(), "base64"))
