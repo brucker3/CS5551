@@ -65,12 +65,9 @@ class loginview (FormView):
         if user is not None:
             global player_list
             login(request,user)
-            logger.info("sccessful login proceding to home page")
             new_player = players.Player(username)
             player_list.append(new_player)
-            logger.info(player_list[0].get_name())
-            logger.info(" finish log in change code---------------- ")
-            #create player instance set up glaobl player list 
+            logger.info("sccessful login proceding to home page")
             return redirect('home')
         else:
             messages.info(request, 'incorrect informations')
