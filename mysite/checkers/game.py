@@ -41,7 +41,7 @@ class Game(object):
 		self.player2 = ''
 		
 	def generate_random_alphanumeric_string(self):
-		return (''.join(random.choices(string.ascii_letters + string.digits, k=16))) #here k is length of string
+		return (''.join(random.choices(string.ascii_lowercase + string.digits, k=16))) #here k is length of string
 		
 	def regenerate_game_id(self):
 		self.id = self.generate_random_alphanumeric_string()
@@ -50,7 +50,7 @@ class Game(object):
 		if self.selected_piece != None:
 			self.selected_legal_moves = self.board.legal_moves(self.selected_piece, self.hop)
 		
-	def event_loop(self, mouse_position=[0,0]):
+	def update_game_object(self, mouse_position=[0,0]):
 		"""	The event loop. This is where events are triggered 
 		(like a mouse click) and then effect the game state."""
 		self.mouse_pos = mouse_position # what square is the mouse clicked in? .. format (x,y)
@@ -81,15 +81,8 @@ class Game(object):
 
 			else:
 				self.selected_piece = self.mouse_pos
-		# for event in pygame.event.get():
 
-			# if event.type == QUIT:
-				# self.terminate_game()
-
-			# if event.type == MOUSEBUTTONDOWN:
-
-
-	def update(self):
+	def get_update(self):
 		"""Calls on the graphics class to update the game display."""
 		#send signal to update front end
 		moves = []
@@ -109,7 +102,7 @@ class Game(object):
 		""""This executes the game and controls its flow."""
 		self.setup()
 		while True: # main game loop
-			self.event_loop()
+			self.update_game_object()
 			self.update()
 
 	def end_turn(self):

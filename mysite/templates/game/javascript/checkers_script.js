@@ -23,17 +23,18 @@ initialize_board();
 //Initialize game socket
 const gameId = JSON.parse(document.getElementById('game-id').textContent);
 let gameSocket = new WebSocket( 'ws://' + window.location.host + '/ws/game/' + gameId + '/' );
+const player1_username='a';
 
 gameSocket.onopen = function(e){
 	$('.main').css('display','block'); //show whole table on loss of connection
 	$('#network-error').css('display','none'); //hide error message on loss of connection
-
+	console.log(e);
 }
 //function which called when message is recieved
 gameSocket.onmessage = function(e) {
 	let data = JSON.parse(e.data);
-	console.log(data['winner']);
-	// console.log(data); // print incoming data from backend
+	//console.log(data['player1_username'],data['player2_username']);
+	console.log(data); // print incoming data from backend
 	var board = JSON.parse(data['message']);
 	var moves = data['moves'];
 	var sel_piece = data['selected_piece'];
@@ -48,7 +49,7 @@ gameSocket.onmessage = function(e) {
 		$('#network-error').text('Winner:  '+data['winner']);
 		$('#network-error').css({'display':'block', 'color':'blue'});
 	}
-
+	add_username_to_turn_text(data['player1_username'],data['player2_username']);
 	function verify_recived_data(input_dictionary){
 		//Complete this function
 		return 0
@@ -159,6 +160,16 @@ function update_turn_text(turn_text_letter){
 	}
 }
 
+function add_username_to_turn_text(player1_username, player2_username){
+	$('.dark-turn-text').text("Dark's turn ("+player1_username+")");
+	if (player2_username==''){
+		$('.light-turn-text').text("Light's turn (Waiting for other player to join)");
+	}else{
+		$('.light-turn-text').text("Light's turn ("+player2_username+")");
+	}
+}
+
+
 function show_possible_square(target_position,current_position){
 	vue_board[target_position-1].possible_square = "possible-move";
 	/*add move function here where possible moves are shown on board*/
@@ -190,7 +201,7 @@ function stop_auto_update(){
 	clearInterval(start_auto_update);
 }
 
-var start_auto_update = setInterval(auto_update_board , 100);
+//var start_auto_update = setInterval(auto_update_board , 100);
 
 
 
