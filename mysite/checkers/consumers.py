@@ -26,11 +26,13 @@ class GameConsumer(WebsocketConsumer):
 		#call some function here which return board according to the room and player who is requesting
         logger.info('connected to websocket')
         global games
-        game_record = Game_Session.objects.get(game_id = self.game_id)
-        games[self.game_id] = pickle.loads(codecs.decode(game_record.game_object.encode(), "base64"))
-        games[self.game_id].player1 = game_record.player1_username
-        games[self.game_id].player2 = game_record.player2_username		
-        games[self.game_id].update_game_object()
+        #following condition is to avoid conflict of object retriveing from database and object currently in use
+        if self.game_id not in games: 
+            game_record = Game_Session.objects.get(game_id = self.game_id)
+            games[self.game_id] = pickle.loads(codecs.decode(game_record.game_object.encode(), "base64"))
+            games[self.game_id].player1 = game_record.player1_username
+            games[self.game_id].player2 = game_record.player2_username		
+            games[self.game_id].update_game_object()
         board, moves, selected_piece = games[self.game_id].get_update()
         print (board)
         async_to_sync(self.channel_layer.group_send)(
