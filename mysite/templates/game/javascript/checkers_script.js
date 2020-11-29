@@ -185,10 +185,10 @@ function change_board_orientation(username, player1_username, player2_username){
 	if(username==player2_username){
 		$("table").css({
 			"-webkit-transform": "scale(-1)",
-       		"-moz-transform": "scale(-1)",
-        	"-ms-transform": "scale(-1)",
-         	"-o-transform": "scale(-1)",
-            "transform": "scale(-1)",
+			"-moz-transform": "scale(-1)",
+			"-ms-transform": "scale(-1)",
+			"-o-transform": "scale(-1)",
+			"transform": "scale(-1)",
 		});
 	}
 }
