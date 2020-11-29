@@ -24,6 +24,7 @@ initialize_board();
 const gameId = JSON.parse(document.getElementById('game-id').textContent);
 let gameSocket = new ReconnectingWebSocket( 'ws://' + window.location.host + '/ws/game/' + gameId + '/' );
 
+console.log(yourUsername);
 gameSocket.onopen = function(e){
 	$('.main').css('display','block'); //show whole table on loss of connection
 	$('#network-error').css('display','none'); //hide error message on loss of connection
@@ -42,14 +43,12 @@ gameSocket.onmessage = function(e) {
 	// show_turn_text(data['turn']);
 	show_moves(board,moves,sel_piece);
 	update_turn_text(data.turn);
-	if (data['winner']=="DARK" || data['winner']=="LIGHT"){
-		stop_auto_update();
-		$('.main').css('display','none');
-		$('#network-error').text('Winner:  '+data['winner']);
-		$('#network-error').css({'display':'block', 'color':'blue'});
+	if (check_for_winner(data['winner'])){
+		update_winner_ui(data['winner'],data['player1_username'],data['player2_username']);
 	}
+		
 	add_username_to_turn_text(data['player1_username'],data['player2_username']);
-
+	change_board_orientation(yourUsername, data['player1_username'],data['player2_username'])
 };
 
 //function when socket is closed
@@ -181,11 +180,42 @@ function hide_possible_squares(){
 	}
 }
 
+function change_board_orientation(username, player1_username, player2_username){
+	//default is player1 as dark is down side
+	if(username==player2_username){
+		$("table").css({
+			"-webkit-transform": "scale(-1)",
+       		"-moz-transform": "scale(-1)",
+        	"-ms-transform": "scale(-1)",
+         	"-o-transform": "scale(-1)",
+            "transform": "scale(-1)",
+		});
+	}
+}
 
+function check_for_winner(winner_color){
+	if (winner_color=="DARK" || winner_color=="LIGHT"){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
-
-
-
+function update_winner_ui(winner_color, player1_username, player2_username){
+	if ((winner_color=="DARK" && player1_username==yourUsername) || 
+		(winner_color=="LIGHT" && player2_username==yourUsername))
+		{
+		$('#network-error').text('Awesome! YOU WON');
+		$('#network-error').css({'display':'block', 'color':'green'});
+	}
+	else{
+		$('#network-error').text('You Lost, Better luck next time!');
+		$('#network-error').css({'display':'block', 'color':'red'});
+	}
+	$('.light-turn-text').css('color','lightgray');
+	$('.dark-turn-text').css('color','lightgray');
+}
 
 
 
