@@ -33,7 +33,7 @@
 
 
 <div class="container-fluid"  style="height:600px; position:relative;">
-    <h1 style="margin-bottom:40px"> welcome to your space player! </h1>
+    <h1 style="margin-bottom:40px"> Welcome <u>{{request.user}}</u>! </h1>
 </div>
     <a href={%url 'game'%}>
     <button type="button" class="btn btn-success" style="width:200px; height:80px; position:absolute;top:200px; right:550px"> Start Playing</button>
