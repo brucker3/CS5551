@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import SignupForm,LoginForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+import json
 from django.contrib.auth.decorators import login_required
 from .models import *
 from checkers import  board
@@ -124,7 +125,10 @@ class game(View):
             'game_id': game_id
         })		
 	
-    def create_game(request):
+    def create_game(request, *args, **kwargs):
+        aiplayer = json.loads(request.POST.get('aigame'))
+        logger.info("creat game log")
+        logger.info(aiplayer)
         new_game = Game()
         new_game.player1 = get_current_authenticated_user()
         all_game_ids = [i.game_id for i in Game_Session.objects.all()]
