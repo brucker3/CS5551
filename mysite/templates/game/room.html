@@ -16,7 +16,7 @@
         <a class="nav-link" href={%url 'rules'%}>rules</a>
       </li>
       <li class="nav-item">
-          <a class="nav-link" href={%url 'player_stats'%}>player states</a>
+          <a class="nav-link" href={%url 'player_stats'%}>Your Stats</a>
       </li>
 
       <li class="nav-item" style="right:130px; position:absolute">
@@ -33,11 +33,11 @@
 </nav>
 	
     {{ game_id|json_script:"game-id" }}
-
+    <script>const yourUsername = "{{ request.user }}" </script>
     <link rel="stylesheet" type="text/css" href='{% static "css/checkers_style.css" %}'/>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
 	<h2 id="network-error" style="display:none; color:red">Please Check your network connection!</h2>    
 
 	<main class="main">
