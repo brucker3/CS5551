@@ -126,9 +126,10 @@ class game(View):
         })		
 	
     def create_game(request, *args, **kwargs):
-        aiplayer = json.loads(request.POST.get('aigame'))
+        #aiplayer = json.loads(request.POST.get('aigame'))
+        print (request.POST.get('aiplayer'))
         logger.info("creat game log")
-        logger.info(aiplayer)
+        
         new_game = Game()
         new_game.player1 = get_current_authenticated_user()
         all_game_ids = [i.game_id for i in Game_Session.objects.all()]

@@ -31,10 +31,14 @@
   </div>
 </nav>
 
-	<button id="create-game" type="button" >CREATE GAME</button><br><br>
-	<input type="checkbox" id="aiplayer" value=True  >
-		<label for="aiplayer">   play aganis ai </label><br>
-  
+	<form action="/game/createGame/" method="post" >
+		{% csrf_token %}
+		
+		<input type="checkbox" id="aiplayer" name="aiplayer">
+			<label for="aiplayer">   play aganis ai </label><br><br>
+			<button id="create-game" type="submit" value="submit">CREATE GAME</button><br>
+	</form>
+			
 	<form action="/game/resumeGame/" method="post" style="border-style: ridge;">
 		{% csrf_token %}
 	Your Started Games:
@@ -77,9 +81,9 @@
 										'  <i>(gameid: '+i+')</i></label><br>');
 		}
 		var aigame = document.getElementById('aiplayer')
-		document.querySelector('#create-game').onclick = function(e) {
-            window.location.pathname = '/game/createGame/';
-        };
+		//document.querySelector('#create-game').onclick = function(e) {
+        //    window.location.pathname = '/game/createGame/';
+       // };
     </script>
 
 {% endblock %}
