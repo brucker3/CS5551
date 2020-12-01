@@ -135,7 +135,14 @@ class game(View):
                               game_object = codecs.encode(pickle.dumps(new_game), "base64").decode())
         record.save()
         return redirect('/game/'+new_game.id)
-		
+    
+    def create_ai_game(request):
+        logger.info("creating ai game")
+        new_game= Game()
+        return render(request, 'checkers/ai_game.html')
+
+
+
     def join_game(request):
         if request.method == 'POST':
             selected_game_id = request.POST.get("game-id")
@@ -155,6 +162,13 @@ class game(View):
             return redirect('/game/'+selected_game_id)			
 
 
-class ai_game(View):
-    def get(self, request):
-        return render(request, 'checkers/ai_game.html')
+#class ai_game(View):
+ #   def get(self, request):
+  #      new_game= Game()
+   #     return render(request, 'checkers/ai_game.html')
+
+
+
+
+
+

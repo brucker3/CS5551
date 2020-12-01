@@ -15,6 +15,7 @@ urlpatterns = [
     path('rules/', rulesview.as_view(), name='rules'),
     path('player_stats/', player_statsview.as_view(), name='player_stats'),
     path('game/createGame/', game.create_game, name='create_game'),
+    path('checkers/ai_game.html', game.create_ai_game, name='create_ai_game'),
     path('game/joinGame/', game.join_game, name='join_game'),
     path('game/resumeGame/', game.resume_game, name='resume_game'),
     path('game/<str:game_id>/', game.room, name='game-id'),
