@@ -155,3 +155,6 @@ class game(View):
             return redirect('/game/'+selected_game_id)			
 
 
+class ai_game(View):
+    def get(self, request):
+        return render(request, 'checkers/ai_game.html')
