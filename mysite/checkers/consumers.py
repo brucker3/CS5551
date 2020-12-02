@@ -68,7 +68,7 @@ class GameConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data):
         global games
-        print (games[self.game_id].check_for_both_color_on_board())
+        #print (games[self.game_id].check_for_both_color_on_board())
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 		#below line check if click is coming from correct person or not
