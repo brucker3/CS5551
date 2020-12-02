@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic.edit import FormView
 import logging
+from .aiplayer import * 
 from checkers import  players 
 logger = logging.getLogger("mylogger")
 
@@ -160,11 +161,13 @@ class ai_game(View):
         return render(request, 'checkers/ai_game.html')
 
     def start_game(reqeust):
-    new_game = Game()
-    player1 = get_current_authenticated_user()
-    new_game.regnerate_game_id()
-    # need to create instance of ai player and assigne to player 2 then rerout to game room 
-
+        logger.info("setting up ai game")
+        new_ai_game = Game()
+        new_ai_game.player1 = get_current_authenticated_user()
+        new_ai_game.player2 = Aiplayer()
+        new_game.regnerate_game_id()
+        logger.info("routing to game room")
+        return render(request, 'game/room.html', { 'gameid': game_id })
 
 
 
