@@ -114,7 +114,9 @@ class game(View):
         my_games_data = {i.game_id:[i.player1_username, i.player2_username]
                                 for i in Game_Session.objects.filter(
                                 Q(player1_username = str(get_current_authenticated_user())) |
-                                Q(player2_username = str(get_current_authenticated_user())) )}
+                                Q(player2_username = str(get_current_authenticated_user())) ).exclude(
+                                    is_active=False
+                                )}
         logger.info(open_to_join_games_data,my_games_data)
         if request.method == 'GET':
             return render(request,'checkers/game.html',{

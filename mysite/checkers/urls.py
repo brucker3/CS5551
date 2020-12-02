@@ -11,6 +11,7 @@ urlpatterns = [
     path('signup/',signupview.as_view(), name='signup'),
     path('login/',loginview.as_view(), name='login'),
     re_path(r'/logout/',logoutview.as_view(), name='logout'), # regex will match if there is logot in url it will execute logout in views
+    path('ai_game/', ai_game.as_view(), name='ai_game'),
     path('game/', game.as_view(), name='game'),
     path('rules/', rulesview.as_view(), name='rules'),
     path('player_stats/', player_statsview.as_view(), name='player_stats'),
