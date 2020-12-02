@@ -35,7 +35,7 @@
 		{% csrf_token %}
 		
 		<input type="checkbox" id="aiplayer" name="aiplayer">
-			<label for="aiplayer">   play aganis ai </label><br><br>
+			<label for="aiplayer"> check this box if you want to play aganis the  ai </label><br><br>
 			<button id="create-game" type="submit" value="submit">CREATE GAME</button><br>
 	</form>
 			
@@ -80,7 +80,7 @@
 										'created by user:  '+active_game_data_dict[i] +
 										'  <i>(gameid: '+i+')</i></label><br>');
 		}
-		var aigame = document.getElementById('aiplayer')
+		//var aigame = document.getElementById('aiplayer')
 		//document.querySelector('#create-game').onclick = function(e) {
         //    window.location.pathname = '/game/createGame/';
        // };

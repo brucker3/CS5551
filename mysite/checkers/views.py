@@ -126,12 +126,15 @@ class game(View):
         })		
 	
     def create_game(request, *args, **kwargs):
+        global player_list
         #aiplayer = json.loads(request.POST.get('aigame'))
         print (request.POST.get('aiplayer'))
         logger.info("creat game log")
-        
+        logger.info(len(player_list))
+        logger.info("global player list length")
         new_game = Game()
         new_game.player1 = get_current_authenticated_user()
+        logger.info(new_game.player1)
         all_game_ids = [i.game_id for i in Game_Session.objects.all()]
         while new_game.id in all_game_ids: # this while loop is to avoid game having same session id
             logger.info("regenerating new game id")
