@@ -12,7 +12,7 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic.edit import FormView
 import logging
-from checkers import  players 
+from checkers import  players
 logger = logging.getLogger("mylogger")
 
 from .game import Game
@@ -62,7 +62,7 @@ class loginview (FormView):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user=authenticate(request,username=username,password=password)
-        
+
         if user is not None:
             global player_list
             login(request,user)
@@ -94,20 +94,22 @@ class rulesview(View):
 
 class player_statsview(View):
     def get(self, request):
-        logger.info("routing to stats page")
-        return render(request, 'checkers/player_stats.html')
+        player = str(get_current_authenticated_user())
+        winner = Winner.objects.select_related('game').filter(Q(game__player1_username=player) | Q(game__player2_username=player))
+        context = {'winners': winner}
 
+        return render(request, 'checkers/player_stats.html',context)
 
 class game(View):
     logger.info("routing to game view")
     def get(self, request):
-        open_to_join_games_data = {i.game_id:i.player1_username 
+        open_to_join_games_data = {i.game_id:i.player1_username
                                 for i in Game_Session.objects.filter(
                                 is_open_to_join=True
                                 ).exclude(
                                 player1_username = str(get_current_authenticated_user())
                                 )} #active 1 means player is waiting for other player to join
-        my_games_data = {i.game_id:[i.player1_username, i.player2_username] 
+        my_games_data = {i.game_id:[i.player1_username, i.player2_username]
                                 for i in Game_Session.objects.filter(
                                 Q(player1_username = str(get_current_authenticated_user())) |
                                 Q(player2_username = str(get_current_authenticated_user())) )}
@@ -115,15 +117,15 @@ class game(View):
         if request.method == 'GET':
             return render(request,'checkers/game.html',{
                    'all_active_game_data':open_to_join_games_data,
-                   'my_active_games': my_games_data,				   
+                   'my_active_games': my_games_data,
             })
-			   
+
     def room(request, game_id):
         logger.info("routing to game room")
         return render(request, 'game/room.html', {
             'game_id': game_id
-        })		
-	
+        })
+
     def create_game(request):
         new_game = Game()
         new_game.player1 = str(get_current_authenticated_user())
@@ -131,11 +133,11 @@ class game(View):
         while new_game.id in all_game_ids: # this while loop is to avoid game having same session id
             logger.info("regenerating new game id")
             new_game.regenerate_game_id()
-        record = Game_Session(game_id=new_game.id, player1_username = new_game.player1, 
+        record = Game_Session(game_id=new_game.id, player1_username = new_game.player1,
                               game_object = codecs.encode(pickle.dumps(new_game), "base64").decode())
         record.save()
         return redirect('/game/'+new_game.id)
-		
+
     def join_game(request):
         if request.method == 'POST':
             selected_game_id = request.POST.get("game-id")
@@ -147,7 +149,7 @@ class game(View):
             record_edit.save()
             logger.info("player joined game")
             return redirect('/game/'+selected_game_id)
-    
+
     def resume_game(request):
         if request.method == "POST":
             selected_game_id = request.POST.get("game-id")
