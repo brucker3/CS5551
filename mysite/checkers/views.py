@@ -95,11 +95,6 @@ class rulesview(View):
 class player_statsview(View):
     def get(self, request):
         player = str(get_current_authenticated_user())
-        #winner = Game_Session.objects.raw('select * from checkers_game_session where  player1_username="'+player+'" or player2_username="'+player+'"')
-        #winner = Game_Session.objects.raw('select * from checkers_game_session where checkers_game_session.game_id = Winner.game_id')
-        #winner = Winner.objects.select_related('game').filter()
-
-        #winner = Winner.objects.select_related('game').filter(game__player1_username=player) | Winner.objects.select_related('game').filter(game__player2_username=player)
         winner = Winner.objects.select_related('game').filter(Q(game__player1_username=player) | Q(game__player2_username=player))
         context = {'winners': winner}
 
