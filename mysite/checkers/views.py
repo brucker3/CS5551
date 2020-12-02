@@ -126,7 +126,7 @@ class game(View):
 	
     def create_game(request):
         new_game = Game()
-        new_game.player1 = get_current_authenticated_user()
+        new_game.player1 = str(get_current_authenticated_user())
         all_game_ids = [i.game_id for i in Game_Session.objects.all()]
         while new_game.id in all_game_ids: # this while loop is to avoid game having same session id
             logger.info("regenerating new game id")
