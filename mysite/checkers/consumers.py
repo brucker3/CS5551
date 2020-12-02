@@ -8,10 +8,10 @@ from .game import Game
 from .models import *
 from django_currentuser.middleware import get_current_user, get_current_authenticated_user
 import codecs,pickle
-global games 
+global games
 games = {}
 #this class is about websocket communication
-# when websocket is connected disconnects and message is received respective fuctions is triggered 
+# when websocket is connected disconnects and message is received respective fuctions is triggered
 class GameConsumer(WebsocketConsumer):
     def connect(self):
         self.auth_user = str(self.scope['user'])
@@ -28,14 +28,14 @@ class GameConsumer(WebsocketConsumer):
         global games
         #following condition is to avoid conflict of object retriveing from database and object currently in use
         # other condition to let other player in when player2 joins
-        if self.game_id not in games or games[self.game_id].player2 == '': 
+        if self.game_id not in games or games[self.game_id].player2 == '':
             game_record = Game_Session.objects.get(game_id = self.game_id)
             games[self.game_id] = pickle.loads(codecs.decode(game_record.game_object.encode(), "base64"))
             games[self.game_id].player1 = game_record.player1_username
-            games[self.game_id].player2 = game_record.player2_username		
+            games[self.game_id].player2 = game_record.player2_username
             games[self.game_id].update_game_object()
         board, moves, selected_piece = games[self.game_id].get_update()
-        print ("Current games being played: ", len(games)) # showing number of games being played simultaneously 
+        print ("Current games being played: ", len(games)) # showing number of games being played simultaneously
         async_to_sync(self.channel_layer.group_send)(
             self.game_group_id,
             {
@@ -49,7 +49,7 @@ class GameConsumer(WebsocketConsumer):
                 'player2_username': games[self.game_id].player2,
             }
         )
-        
+
         self.accept()
 
     def disconnect(self, close_code):
@@ -69,18 +69,18 @@ class GameConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 		#below line check if click is coming from correct person or not
-        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
-            if message != [-1,-1]:
-                games[self.game_id].update_game_object(message)
+        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or 1 or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
+            games[self.game_id].update_game_object(message)
         # logger.info(text_data)
+        self.save_winner()
         #click is recieved here are update board is sent back
         board, moves, selected_piece = games[self.game_id].get_update()
         async_to_sync(self.channel_layer.group_send)(
             self.game_group_id,
             {
                 'type': 'game_message',
-                'message': board, 
-                'moves': moves, 
+                'message': board,
+                'moves': moves,
                 'selected_piece' : selected_piece,
                 'game_id':self.game_id,
                 'turn': games[self.game_id].turn,
@@ -88,8 +88,8 @@ class GameConsumer(WebsocketConsumer):
                 'player1_username': games[self.game_id].player1,
                 'player2_username': games[self.game_id].player2,
                 })
-        
-    
+
+
     # Receive message from room group
     def game_message(self, event):
         message = event['message']
@@ -97,5 +97,11 @@ class GameConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps(event))
         # logger.info('game_message funcion')
         # logger.info(event)
-		
 
+
+    def save_winner(self):
+        if (games[self.game_id].winner == 'DARK'):
+            Winner(game_id = self.game_id, winner_user = games[self.game_id].player1).save()
+
+        if (games[self.game_id].winner == 'LIGHT'):
+            Winner(game_id = self.game_id, winner_user = games[self.game_id].player2).save()
