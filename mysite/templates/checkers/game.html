@@ -28,7 +28,6 @@
 </nav>
 
 	<button id="create-game" type="button" >CREATE GAME</button><br><br>
-	<button id="create-AI-game" type="button" >CREATE AI GAME</button><br><br>
 
 	<form action="/game/resumeGame/" method="post" style="border-style: ridge;">
 		{% csrf_token %}
@@ -74,10 +73,6 @@
 		
 		document.querySelector('#create-game').onclick = function(e) {
             window.location.pathname = '/game/createGame/';
-        };
-
-        document.querySelector('#create-AI-game').onclick = function(e) {
-            window.location.pathname = '/game/create-AI-Game/';
         };
     </script>
 
