@@ -112,7 +112,9 @@ class game(View):
         my_games_data = {i.game_id:[i.player1_username, i.player2_username]
                                 for i in Game_Session.objects.filter(
                                 Q(player1_username = str(get_current_authenticated_user())) |
-                                Q(player2_username = str(get_current_authenticated_user())) )}
+                                Q(player2_username = str(get_current_authenticated_user())) ).exclude(
+                                    is_active=False
+                                )}
         logger.info(open_to_join_games_data,my_games_data)
         if request.method == 'GET':
             return render(request,'checkers/game.html',{
@@ -154,4 +156,9 @@ class game(View):
         if request.method == "POST":
             selected_game_id = request.POST.get("game-id")
             logger.info("player resumed game")
-            return redirect('/game/'+selected_game_id)
+            return redirect('/game/'+selected_game_id)			
+
+
+class ai_game(View):
+    def get(self, request):
+        return render(request, 'checkers/ai_game.html')
