@@ -6,3 +6,6 @@ class Aiplayer(Player):
 
     def test(self):
         print("i am an ai playe")
+
+    #def minmax(self):
+    # needed alg for ai an to player checkers 
