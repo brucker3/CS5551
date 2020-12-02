@@ -8,6 +8,7 @@ from .game import Game
 from .models import *
 from django_currentuser.middleware import get_current_user, get_current_authenticated_user
 import codecs,pickle
+from checkers.board import Square,Piece
 global games 
 games = {}
 #this class is about websocket communication
@@ -26,6 +27,7 @@ class GameConsumer(WebsocketConsumer):
 		#call some function here which return board according to the room and player who is requesting
         logger.info('connected to websocket')
         global games
+        # if server restarts unsaved game will be lost!!!!
         #following condition is to avoid conflict of object retriveing from database and object currently in use
         # other condition to let other player in when player2 joins
         if self.game_id not in games or games[self.game_id].player2 == '': 
@@ -63,15 +65,16 @@ class GameConsumer(WebsocketConsumer):
         record_edit.game_object = game_object = codecs.encode(pickle.dumps(games[self.game_id]), "base64").decode()
         record_edit.save()
 
+
     # Receive message from WebSocket
     def receive(self, text_data):
         global games
+        print (games[self.game_id].check_for_both_color_on_board())
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 		#below line check if click is coming from correct person or not
-        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
-            if message != [-1,-1]:
-                games[self.game_id].update_game_object(message)
+        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or 1 or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
+            games[self.game_id].update_game_object(message)
         # logger.info(text_data)
         #click is recieved here are update board is sent back
         board, moves, selected_piece = games[self.game_id].get_update()
