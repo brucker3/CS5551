@@ -203,15 +203,29 @@ function check_for_winner(winner_color){
 }
 
 function update_winner_ui(winner_color, player1_username, player2_username){
+	if (winner_color=="DARK"){
+		var winner_player = player1_username;
+	}
+	else if (winner_color=="LIGHT"){
+		var winner_player = player2_username;
+	}
+
 	if ((winner_color=="DARK" && player1_username==yourUsername) || 
 		(winner_color=="LIGHT" && player2_username==yourUsername))
 		{
 		$('#network-error').text('Awesome! YOU WON');
 		$('#network-error').css({'display':'block', 'color':'green'});
 	}
-	else{
+	else if ((winner_color=="DARK" && player2_username==yourUsername) || 
+			(winner_color=="LIGHT" && player1_username==yourUsername))
+	{
 		$('#network-error').text('You Lost, Better luck next time!');
 		$('#network-error').css({'display':'block', 'color':'red'});
+	}
+	else {
+		console.log(winner_player);
+		$('#network-error').text('Winner: '+ winner_player );
+		$('#network-error').css({'display':'block', 'color':'blue'});
 	}
 	$('.light-turn-text').css('color','lightgray');
 	$('.dark-turn-text').css('color','lightgray');
