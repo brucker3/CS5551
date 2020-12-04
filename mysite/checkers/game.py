@@ -39,8 +39,6 @@ class Game(object):
 		self.winner  = ''
 		self.player1 = ''
 		self.player2 = ''
-		self.history = {}
-		self.move_number = 0
 		
 	def generate_random_alphanumeric_string(self):
 		return (''.join(random.choices(string.ascii_lowercase + string.digits, k=16))) #here k is length of string
