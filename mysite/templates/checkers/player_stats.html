@@ -1,23 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-{% for winner in winners %}
+
 
 
 <div class="container">
-<div class="card">
-  <div class="card-header">
-    <b>Game number:<span style="color:green"><i>{{winner.game.game_id}}</i></span></b> <br>Created by: <b><i>{{winner.game.player1_username}}</i></b>
-  </div>
-  <div class="card-body">
-    <h5 class="card-title">Played against <b><i>{{winner.game.player2_username}}</i></b></h5>
-    <p class="card-text"><b><span style="color:red"><i>Winner:  {{winner.winner_user}}</i></span></b></p>
-    <a href="/game/{{winner.game.game_id}}" class="btn btn-success">Go to Game</a>
-  </div>
-</div>
-</div>
 
-  {%endfor%}
+  <div class="row">
+    {% for winner in winners %}
+
+    <div class="col-12 col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <b>Game number:<span style="color:green"><i>{{winner.game.game_id}}</i></span></b> <br>Created by: <b><i>{{winner.game.player1_username}}</i></b>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Played against <b><i>{{winner.game.player2_username}}</i></b></h5>
+          <p class="card-text"><b><span style="color:red"><i>Winner:  {{winner.winner_user}}</i></span></b></p>
+            <a href="/game/{{winner.game.game_id}}" class="btn btn-success">Go to Game</a>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+
+    </div>
+
+  </div>
+
 
 
 {% endblock %}
