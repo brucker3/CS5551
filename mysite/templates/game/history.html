@@ -4,8 +4,7 @@
 {% block content %}
 
 
-    {{ game_id|json_script:"game-id" }}
-
+    {{ game_id|json_script:"game-id" }}    {{ game_history_file|json_script:"game-history-file" }}
     <script>const yourUsername = "{{ request.user }}" </script>
     <link rel="stylesheet" type="text/css" href='{% static "css/checkers_style.css" %}'/>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
@@ -98,24 +97,21 @@
                 <td><div id="position-32" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
                 <td class="noPieceHere"></td>
             </tr>
-
         </table>
-        <div class="desktop">
-			<div class="dark-turn-text">
-                Dark's turn
-            </div>
-            <p id="divider">|</p>
-            <div class="light-turn-text">
-                Light's turn
-            </div>
-
+        <div class="board-navigation">
+            <button id="first" onclick="goFirst()">FIRST</button>
+            <button id="back" onclick="goBack()">BACK</button>
+            <button id="forward" onclick="goForward()">FORWARD</button>
+            <button id="last" onclick="goLast()">LAST</button>
         </div>
+
 		<div class="light-turn-text mobile">
             Light's turn
         </div>
 	</main>
-    
-    <a href="/gameHistory/{{game_id}}/" rel="#overlay">Click here to go to game history</a>
-	 <script src='{% static "javascript/checkers_script.js" %}'></script>
+
+
+    <a href="/game/{{game_id}}/">Click here to go to Actual game</a>
+	 <script src='{% static "javascript/history_script.js" %}'></script>
 
 {% endblock %}
