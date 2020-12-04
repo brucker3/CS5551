@@ -26,7 +26,6 @@ const gameHistoryFile = JSON.parse(document.getElementById('game-history-file').
 const lastLine = gameHistoryFile.length - 2;
 let current_line = lastLine;
 console.log(yourUsername);
-console.log(JSON.parse(gameHistoryFile[current_line]));
 
 update_board(current_line);
 //function which called when message is recieved
@@ -56,13 +55,30 @@ function goForward() {
 }
 
 function goFirst() {
-		current_line=0;
+	current_line=0;
 	update_board(current_line);
 }
 
 function goLast() {
 	current_line=lastLine;
 	update_board(current_line);
+}
+
+function startAutoplay(){
+	autoplayVar = setInterval(function(){
+		if(current_line<lastLine){
+			current_line+=1;
+			update_board(current_line);
+		}
+	}, 800);
+	$("#autoplay").attr("onclick","stopAutoplay()");
+    $("#autoplay").html("Stop Autoplay");
+}
+
+function stopAutoplay(){
+	$("#autoplay").attr("onclick","startAutoplay()");
+    $("#autoplay").html("Start Autoplay");
+	clearInterval(autoplayVar);
 }
 
 function initialize_board(){
@@ -81,16 +97,6 @@ function initialize_board(){
 			}
 		})
 		vue_board.push(temp);
-	}
-}
-
-function show_moves(board, moves, sel_piece){
-	if (sel_piece!= null){		
-		vue_board[sel_piece-1].selection = 'selected';
-		selected_piece = vue_board[sel_piece-1];
-		for (var i in moves){
-			show_possible_square(moves[i],sel_piece)
-		}
 	}
 }
 
@@ -126,31 +132,6 @@ function update_board(board_history_line){
 			}
 			var position_number = parseInt(event.target.id.split("-")[1]);			
 		}
-	}
-}
-
-function add_username_to_turn_text(player1_username, player2_username){
-	$('.dark-turn-text').text("Dark's turn ("+player1_username+")");
-	if (player2_username==''){
-		$('.light-turn-text').text("Light's turn (Waiting for other player to join)");
-	}else{
-		$('.light-turn-text').text("Light's turn ("+player2_username+")");
-	}
-}
-
-
-function show_possible_square(target_position,current_position){
-	vue_board[target_position-1].possible_square = "possible-move";
-	/*add move function here where possible moves are shown on board*/
-	vue_board[target_position-1].select_piece = function(event){
-		hide_possible_squares();
-	}	
-}
-
-function hide_possible_squares(){
-	for (var k=0;k<vue_board.length;k++){
-		vue_board[k].possible_square = 'not-possible-move';
-		vue_board[k].selection = 'not-selected';
 	}
 }
 
