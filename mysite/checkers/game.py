@@ -107,7 +107,6 @@ class Game(object):
 		#boelow line add board to txt file which stores record
 		with open("games_record/"+self.id+".txt", "a") as file:
 			file.write(self.board.board_string(self.board.matrix)+"\n") 
-		self.history[self.move_number] = self.board.board_string(self.board.matrix)
 		self.selected_piece = None
 		self.selected_legal_moves = []
 		self.hop = False
