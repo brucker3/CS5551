@@ -51,8 +51,7 @@ class Game(object):
 			self.selected_legal_moves = self.board.legal_moves(self.selected_piece, self.hop)
 		
 	def update_game_object(self, mouse_position=[0,0]):
-		"""	The event loop. This is where events are triggered 
-		(like a mouse click) and then effect the game state."""
+		"""	This function updates game object based on input of position"""
 		self.mouse_pos = mouse_position # what square is the mouse clicked in? .. format (x,y)
 		if self.hop == False:
 			if self.board.location(self.mouse_pos).occupant != None and self.board.location(self.mouse_pos).occupant.color == self.turn:
@@ -66,7 +65,6 @@ class Game(object):
 				
 					self.hop = True
 					self.selected_piece = self.mouse_pos
-
 				else:
 					self.end_turn()
 		self.update_legal_moves()
@@ -78,12 +76,11 @@ class Game(object):
 
 			if self.board.legal_moves(self.mouse_pos, self.hop) == []:
 					self.end_turn()
-
 			else:
 				self.selected_piece = self.mouse_pos
 
 	def get_update(self):
-		"""Calls on the graphics class to update the game display."""
+		"""Returns all updates on game object in required string format."""
 		#send signal to update front end
 		moves = []
 		for i in self.selected_legal_moves:
@@ -98,13 +95,6 @@ class Game(object):
 		"""Quits the program and ends the game."""
 		print ('game terminated')
 
-	def main(self):
-		""""This executes the game and controls its flow."""
-		self.setup()
-		while True: # main game loop
-			self.update_game_object()
-			self.update()
-
 	def end_turn(self):
 		"""
 		End the turn. Switches the current player. 
@@ -114,7 +104,10 @@ class Game(object):
 			self.turn = LIGHT
 		else:
 			self.turn = DARK
-
+		#boelow line add board to txt file which stores record
+		with open("games_record/"+self.id+".txt", "a") as file:
+			file.write(self.board.board_string(self.board.matrix)+"\n") 
+		self.history[self.move_number] = self.board.board_string(self.board.matrix)
 		self.selected_piece = None
 		self.selected_legal_moves = []
 		self.hop = False
@@ -136,6 +129,21 @@ class Game(object):
 						return False
 
 		return True
+
+	def check_for_both_color_on_board(self):
+		dark_piece = False
+		light_piece = False
+		for x in range(8):
+			for y in range(8):
+				if self.board.location((x,y)).color == BLACK and self.board.location((x,y)).occupant != None:
+					if self.board.location((x,y)).occupant.color == DARK:
+						dark_piece = True
+					elif self.board.location((x,y)).occupant.color == LIGHT:
+						light_piece = True
+		if dark_piece and light_piece:
+			return True
+		else: 
+			return False
 
 
 

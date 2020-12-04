@@ -117,18 +117,11 @@ class game(View):
                                 Q(player2_username = str(get_current_authenticated_user())) ).exclude(
                                     is_active=False
                                 )}
-        logger.info(open_to_join_games_data,my_games_data)
         if request.method == 'GET':
             return render(request,'checkers/game.html',{
                    'all_active_game_data':open_to_join_games_data,
                    'my_active_games': my_games_data,
             })
-
-    def room(request, game_id):
-        logger.info("routing to game room")
-        return render(request, 'game/room.html', {
-            'game_id': game_id
-        })
 
     def create_game(request):
         new_game = Game()
@@ -140,6 +133,9 @@ class game(View):
         record = Game_Session(game_id=new_game.id, player1_username = new_game.player1,
                               game_object = codecs.encode(pickle.dumps(new_game), "base64").decode())
         record.save()
+        #creating a game record file
+        with open("games_record/"+new_game.id+".txt", "a") as file:
+            file.write(new_game.board.board_string(new_game.board.matrix)+"\n")
         return redirect('/game/'+new_game.id)
 
     def join_game(request):
@@ -159,6 +155,21 @@ class game(View):
             selected_game_id = request.POST.get("game-id")
             logger.info("player resumed game")
             return redirect('/game/'+selected_game_id)			
+
+class room(View):
+    def get(self, request, game_id):
+        logger.info("routing to game room")
+        return render(request, 'game/room.html', {
+            'game_id': game_id
+        })
+
+    def history_room(request, game_id):
+        with open("games_record/"+game_id+".txt", "r") as file:
+            temp_opened_file = file.read()
+        return render(request, 'game/history.html', {
+            'game_id': game_id,
+            'game_history_file': temp_opened_file
+        })
 
 
 class ai_game(View):
