@@ -106,7 +106,7 @@ class Game(object):
 			self.turn = LIGHT
 		else:
 			self.turn = DARK
-		self.move_number+=1
+		#boelow line add board to txt file which stores record
 		with open("games_record/"+self.id+".txt", "a") as file:
 			file.write(self.board.board_string(self.board.matrix)+"\n") 
 		self.history[self.move_number] = self.board.board_string(self.board.matrix)
