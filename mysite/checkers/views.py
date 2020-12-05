@@ -16,6 +16,7 @@ from checkers import  players
 logger = logging.getLogger("mylogger")
 
 from .game import Game
+import random, string
 from django_currentuser.middleware import get_current_user, get_current_authenticated_user
 from django.core import serializers
 from django.db.models import Q
@@ -31,6 +32,23 @@ def homeview (request):
 #------------------------------
 #-------registration---------
 #------------------------------
+
+def anonymous_or_real(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    else:
+        username = ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
+        u = User(username=username, first_name='Anonymous', last_name='User')
+        u.set_unusable_password()
+        u.save()
+        u.username = username
+        u.save()
+        authenticate(user=u)
+        login(request,u)
+        return redirect('home')
+
+
+
 class signupview (FormView):
     template_name = 'checkers/signup.html'
     form_class = SignupForm
@@ -152,7 +170,7 @@ class game(View):
         if request.method == "POST":
             selected_game_id = request.POST.get("game-id")
             logger.info("player resumed game")
-            return redirect('/game/'+selected_game_id)			
+            return redirect('/game/'+selected_game_id)
 
 class room(View):
     def get(self, request, game_id):

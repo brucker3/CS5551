@@ -75,7 +75,12 @@ TEMPLATES = [
     },
 ]
 
+# BACKED ADDED TO HANDLE ANONYMOUS USER
+AUTHENTICATION_BACKENDS = ['checkers.middleware.AuthenticationBackendAnonymous']
+
+
 WSGI_APPLICATION = 'mysite.wsgi.application'
+
 
 #Adding Logging so we can print stuff while running server.
 LOGGING = {
