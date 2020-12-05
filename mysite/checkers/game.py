@@ -1,6 +1,6 @@
 import sys, json, random, string
 
-from .board import Board
+from board import Board
 ##COLORS##
 '''
 .   1,0     .   3,0     .   5,0     .   7,0
@@ -39,6 +39,9 @@ class Game(object):
 		self.winner  = ''
 		self.player1 = ''
 		self.player2 = ''
+
+	def get_board(self):
+		return self.board
 		
 	def generate_random_alphanumeric_string(self):
 		return (''.join(random.choices(string.ascii_lowercase + string.digits, k=16))) #here k is length of string
@@ -143,6 +146,5 @@ class Game(object):
 			return True
 		else: 
 			return False
-
 
 

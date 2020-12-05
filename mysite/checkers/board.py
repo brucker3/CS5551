@@ -193,7 +193,13 @@ class Piece:
 		self.color = color
 		self.king = king
 
+	def get_piece(self):
+		return self.king, self.color
+        
 class Square:
 	def __init__(self, color, occupant = None):
 		self.color = color # color is either BLACK or WHITE
 		self.occupant = occupant # occupant is a Square object
+
+	def get_square(self):
+		return self.color, self.occupant
