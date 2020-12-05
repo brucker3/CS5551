@@ -176,13 +176,4 @@ class ai_game(View):
     def get(self, request):
         return render(request, 'checkers/ai_game.html')
 
-    def start_game(reqeust):
-        logger.info("setting up ai game")
-        new_ai_game = Game()
-        new_ai_game.player1 = get_current_authenticated_user()
-        new_ai_game.player2 = Aiplayer()
-        new_game.regnerate_game_id()
-        logger.info("routing to game room")
-        return render(request, 'game/room.html', { 'gameid': game_id })
-
 
