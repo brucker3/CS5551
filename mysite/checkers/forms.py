@@ -10,6 +10,13 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
+class LoginForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Enter your username'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
+    class Meta:
+        model = User
+        fields = ('username','password')
+
 class GuestForm(UserChangeForm):
     def __init__(self, *args, **kwargs):
         super( GuestForm, self).__init__(*args, **kwargs)
@@ -18,10 +25,3 @@ class GuestForm(UserChangeForm):
     class Meta:
         model = User
         fields = ('username',)
-
-class LoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Enter your username'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password'}))
-    class Meta:
-        model = User
-        fields = ('username','password')

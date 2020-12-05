@@ -76,7 +76,7 @@ TEMPLATES = [
 ]
 
 # BACKED ADDED TO HANDLE ANONYMOUS USER
-AUTHENTICATION_BACKENDS = ['checkers.middleware.AuthenticationBackendAnonymous']
+ANONYMOUS_SESSION_PROCESS_FUNCTION = 'checkers.common.middleware.process_anonymous_session'
 
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
