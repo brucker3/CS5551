@@ -44,16 +44,5 @@ class Aiplayer():
 
 
 
-if __name__ == "__main__":
-    print(" ai player main test")
-    player = Aiplayer()
-    print(player.test())
-  #  print(player.minmax(2))
-    print("----------")
-    game= Game()
-    print("game functions output")
-    print(dir(game))
-    print("-----------")
-   # print(game.get_board().matrix)
 
 
