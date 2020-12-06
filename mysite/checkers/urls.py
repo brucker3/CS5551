@@ -20,8 +20,6 @@ urlpatterns = [
     path('game/resumeGame/', game.resume_game, name='resume_game'),
     path('game/<str:game_id>/', room.as_view(), name='game-id'),
     path('gameHistory/<str:game_id>/', room.history_room, name='game-id'),
+    path('anonymous/', guestview.as_view(), name='anonymous')
 
 ]
-
-
-

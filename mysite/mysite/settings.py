@@ -75,7 +75,12 @@ TEMPLATES = [
     },
 ]
 
+# BACKED ADDED TO HANDLE ANONYMOUS USER
+ANONYMOUS_SESSION_PROCESS_FUNCTION = 'checkers.common.middleware.process_anonymous_session'
+
+
 WSGI_APPLICATION = 'mysite.wsgi.application'
+
 
 #Adding Logging so we can print stuff while running server.
 LOGGING = {
