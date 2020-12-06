@@ -18,6 +18,7 @@ urlpatterns = [
     path('game/createGame/', game.create_game, name='create_game'),
     path('game/joinGame/', game.join_game, name='join_game'),
     path('game/resumeGame/', game.resume_game, name='resume_game'),
+    path('checkers/ai_game.html', ai_game.as_view(), name='ai_game'), 
     path('game/<str:game_id>/', room.as_view(), name='game-id'),
     path('gameHistory/<str:game_id>/', room.history_room, name='game-id'),
     path('anonymous/', guestview.as_view(), name='anonymous')

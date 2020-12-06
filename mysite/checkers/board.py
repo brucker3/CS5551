@@ -16,6 +16,7 @@ SOUTHEAST = "southeast"
 class Board:
 	def __init__(self):
 		self.matrix = self.new_board()
+		
 
 	def new_board(self):
 		"""		Create a new board matrix.		"""
@@ -156,6 +157,7 @@ class Board:
 		self.matrix[end_x][end_y].occupant = self.matrix[start_x][start_y].occupant
 		self.remove_piece((start_x, start_y))
 		self.king((end_x, end_y))
+		
 
 	def is_end_square(self, coords):
 		"""
@@ -193,7 +195,13 @@ class Piece:
 		self.color = color
 		self.king = king
 
+	def get_piece(self):
+		return self.king, self.color
+        
 class Square:
 	def __init__(self, color, occupant = None):
 		self.color = color # color is either BLACK or WHITE
 		self.occupant = occupant # occupant is a Square object
+
+	def get_square(self):
+		return self.color, self.occupant

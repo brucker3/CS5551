@@ -12,6 +12,8 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic.edit import FormView
 import logging
+from .aiplayer import * 
+from checkers import  players 
 from checkers import  players
 logger = logging.getLogger("mylogger")
 
@@ -204,3 +206,5 @@ class room(View):
 class ai_game(View):
     def get(self, request):
         return render(request, 'checkers/ai_game.html')
+
+
