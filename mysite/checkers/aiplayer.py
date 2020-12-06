@@ -1,5 +1,5 @@
-from game import *
-from board import *
+from checkers.game import *
+from checkers.board import *
 import math
 import copy
 from itertools import chain
