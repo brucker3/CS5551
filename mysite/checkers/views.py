@@ -2,7 +2,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignupForm,LoginForm
+from .forms import SignupForm,LoginForm, GuestForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -18,6 +18,7 @@ from checkers import  players
 logger = logging.getLogger("mylogger")
 
 from .game import Game
+import random, string
 from django_currentuser.middleware import get_current_user, get_current_authenticated_user
 from django.core import serializers
 from django.db.models import Q
@@ -29,10 +30,40 @@ player_list = []
 def homeview (request):
     return render(request, 'checkers/home.html')
 
+class guestview (FormView):
+    template_name = 'checkers/guestUsername.html'
+    form_class = GuestForm
+    success_url = '/home/'
+    logger.info(" guest sign up view running")
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            messages.success(request, "registration successful, please login to access your space")
+            logger.info(" succesfully sign up redirect to login")
+            user = self.anonymous_or_real(request, username)
+            login(request,user)
+            return redirect('home')
+        return render(request, self.template_name, {'form': form})
+
+    def anonymous_or_real(self, request, username):
+        if request.user.is_authenticated:
+            return request.user
+        else:
+            u = User(username=username, first_name='Anonymous', last_name='User')
+            u.set_unusable_password()
+            u.username = username
+            u.save()
+            authenticate(user=u)
+            #login(request,u)
+            return u
+
 
 #------------------------------
 #-------registration---------
 #------------------------------
+
 class signupview (FormView):
     template_name = 'checkers/signup.html'
     form_class = SignupForm
@@ -154,7 +185,7 @@ class game(View):
         if request.method == "POST":
             selected_game_id = request.POST.get("game-id")
             logger.info("player resumed game")
-            return redirect('/game/'+selected_game_id)			
+            return redirect('/game/'+selected_game_id)
 
 class room(View):
     def get(self, request, game_id):

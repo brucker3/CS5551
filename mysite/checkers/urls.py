@@ -21,8 +21,6 @@ urlpatterns = [
     path('checkers/ai_game.html', ai_game.as_view(), name='ai_game'), 
     path('game/<str:game_id>/', room.as_view(), name='game-id'),
     path('gameHistory/<str:game_id>/', room.history_room, name='game-id'),
+    path('anonymous/', guestview.as_view(), name='anonymous')
 
 ]
-
-
-
