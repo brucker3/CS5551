@@ -1,6 +1,6 @@
 import sys, json, random, string
 
-from board import Board
+from .board import Board
 ##COLORS##
 '''
 .   1,0     .   3,0     .   5,0     .   7,0
