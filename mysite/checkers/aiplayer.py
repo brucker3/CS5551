@@ -121,11 +121,3 @@ class Aiplayer():
                 return False 
 
 
-
-if __name__ == '__main__':
-    game = Game()
-    b = game.get_board()
-    a = Aiplayer(game.get_board())
-   # aiplayer.minmax( posistion, depth, max_player= True, board= board)
-
-
