@@ -83,16 +83,8 @@ class Aiplayer():
             elif self.state.matrix[check2[0]][check2[1]].get_square()[1].get_piece()[1] != self.opponent_color:
                 self.opponent_pieces.pop(i)
 
-    # heurristic for min max might want to add king evalution 
-    #+ (self.white_kings * 0.5 - self.red_kings * 0.5)
     def heuristic(self):
         return  len(self.ai_pieces) - len(self.opponent_pieces) 
-
-    #set of opening baisc opening moves
-    def open_moves(self):
-      #  http://www.quadibloc.com/other/bo1211.htm
-        return None 
-        
 
     def moves(self, player_pieces):
         moves = [] 
