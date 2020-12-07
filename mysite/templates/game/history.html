@@ -112,7 +112,9 @@
 	</main>
 
 
-    <a href="/game/{{game_id}}/">Click here to go to Actual game</a>
+  <a href="/game/{{game_id}}/" rel="#overlay">
+      <button type="button" class="btn btn-warning" style="position:absolute;top:150px; right:100px">Back to the game</button>
+  </a>
 	 <script src='{% static "javascript/history_script.js" %}'></script>
 
 {% endblock %}
