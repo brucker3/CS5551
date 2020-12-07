@@ -110,6 +110,12 @@ class Aiplayer():
             if check == []:
                 return True
             else:
-                return False 
+                return False
+
+
+if __name__ == "__main__":
+    g = Game()
+    b = g.get_board()
+    a = Aiplayer(b)
 
 
