@@ -114,8 +114,15 @@
             Light's turn
         </div>
 	</main>
-    
-    <a href="/gameHistory/{{game_id}}/" rel="#overlay">Click here to go to game history</a>
+  
+<a href="/gameHistory/{{game_id}}/" rel="#overlay">
+    <button type="button" class="btn btn-warning" style="position:absolute;top:100px; right:100px">Go to Game History</button>
+</a>
+
+<a href="/game/{{game_id}}/" rel="#overlay">
+    <button type="button" class="btn btn-warning" style="position:absolute;top:150px; right:100px">Refresh</button>
+</a>
+
 	 <script src='{% static "javascript/checkers_script.js" %}'></script>
 
 {% endblock %}
