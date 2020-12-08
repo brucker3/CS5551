@@ -112,3 +112,5 @@ class GameConsumer(WebsocketConsumer):
         game_record = Game_Session.objects.get(game_id = self.game_id)
         game_record.is_active = False
         game_record.save()
+
+
