@@ -15,7 +15,7 @@
 29	.	30	.	31	.	32	.
 */
 
-//initialize variables and empty board				
+//initialize variables and empty board
 let selected_piece, recieved_data={};
 let vue_board = [];
 initialize_board();
@@ -46,7 +46,7 @@ gameSocket.onmessage = function(e) {
 	if (check_for_winner(data['winner'])){
 		update_winner_ui(data['winner'],data['player1_username'],data['player2_username']);
 	}
-		
+
 	add_username_to_turn_text(data['player1_username'],data['player2_username']);
 	change_board_orientation(yourUsername, data['player1_username'],data['player2_username'])
 };
@@ -87,7 +87,7 @@ function initialize_board(){
 }
 
 function show_moves(board, moves, sel_piece){
-	if (sel_piece!= null){		
+	if (sel_piece!= null){
 		vue_board[sel_piece-1].selection = 'selected';
 		selected_piece = vue_board[sel_piece-1];
 		for (var i in moves){
@@ -98,7 +98,7 @@ function show_moves(board, moves, sel_piece){
 
 function update_board(recieved_data){
 	//create vue object for every position and use that object to manipulate output
-		
+
 	for (var i in recieved_data){
 	// console.log(i,recieved_data[i]);
 		if (recieved_data[i][0].includes('K')){
@@ -113,14 +113,14 @@ function update_board(recieved_data){
 		else{
 			vue_board[i-1].piece_type = "normal";
 		}
-		
+
 		if (recieved_data[i][0].includes('L')){
 			vue_board[i-1].piece_color = 'light-piece';
 		}
 		else if (recieved_data[i][0].includes('D')){
 			vue_board[i-1].piece_color = 'dark-piece';
 		}
-			
+
 		vue_board[i-1].select_piece = function (event){
 			if (selected_piece != null) {
 				selected_piece.selection = 'not-selected';
@@ -132,9 +132,9 @@ function update_board(recieved_data){
 				'selected_piece' : translation_dict[position_number],
 				'game_id':gameId,
 			}));
-			
+
 		}
-		
+
 	}
 }
 
@@ -170,7 +170,7 @@ function show_possible_square(target_position,current_position){
 				'game_id':gameId
 			}));
 		hide_possible_squares();
-	}	
+	}
 }
 
 function hide_possible_squares(){
@@ -210,13 +210,13 @@ function update_winner_ui(winner_color, player1_username, player2_username){
 		var winner_player = player2_username;
 	}
 
-	if ((winner_color=="DARK" && player1_username==yourUsername) || 
+	if ((winner_color=="DARK" && player1_username==yourUsername) ||
 		(winner_color=="LIGHT" && player2_username==yourUsername))
 		{
 		$('#network-error').text('Awesome! YOU WON');
 		$('#network-error').css({'display':'block', 'color':'green'});
 	}
-	else if ((winner_color=="DARK" && player2_username==yourUsername) || 
+	else if ((winner_color=="DARK" && player2_username==yourUsername) ||
 			(winner_color=="LIGHT" && player1_username==yourUsername))
 	{
 		$('#network-error').text('You Lost, Better luck next time!');
@@ -230,6 +230,3 @@ function update_winner_ui(winner_color, player1_username, player2_username){
 	$('.light-turn-text').css('color','lightgray');
 	$('.dark-turn-text').css('color','lightgray');
 }
-
-
-

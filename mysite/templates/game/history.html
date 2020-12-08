@@ -99,11 +99,14 @@
             </tr>
         </table>
         <div class="board-navigation">
-            <button id="first" onclick="goFirst()">FIRST</button>&nbsp
-            <button id="back" onclick="goBack()">BACK</button>&nbsp
-            <button id="autoplay" onclick="startAutoplay()">Start Autoplay</button>&nbsp
-            <button id="forward" onclick="goForward()">FORWARD</button>&nbsp
-            <button id="last" onclick="goLast()">LAST</button>&nbsp
+            <button id="first" onclick="goFirst()" class="btn btn-info">FIRST</button>&nbsp
+            <button id="back" onclick="goBack()" class="btn btn-info">BACK</button>&nbsp
+            <button id="autoplay" onclick="startAutoplay()" class="btn btn-primary">
+                <span id="autoplay-spinner"></span>
+                <span id="autoplay-text">Start Autoplay</span>
+            </button>&nbsp
+            <button id="forward" onclick="goForward()" class="btn btn-info">FORWARD</button>&nbsp
+            <button id="last" onclick="goLast()" class="btn btn-info">LAST</button>&nbsp
         </div>
 
 		<div class="light-turn-text mobile">
@@ -112,7 +115,9 @@
 	</main>
 
 
-    <a href="/game/{{game_id}}/">Click here to go to Actual game</a>
+  <a href="/game/{{game_id}}/" rel="#overlay">
+      <button type="button" class="btn btn-warning" style="position:absolute;top:150px; right:100px">Back to the game</button>
+  </a>
 	 <script src='{% static "javascript/history_script.js" %}'></script>
 
 {% endblock %}
