@@ -16,7 +16,7 @@ SOUTHEAST = "southeast"
 class Board:
 	def __init__(self):
 		self.matrix = self.new_board()
-		
+
 
 	def new_board(self):
 		"""		Create a new board matrix.		"""
@@ -30,7 +30,7 @@ class Board:
 					matrix[y][x] = Square(WHITE)
 				elif (x % 2 == 0) and (y % 2 != 0):
 					matrix[y][x] = Square(BLACK)
-				elif (x % 2 == 0) and (y % 2 == 0): 
+				elif (x % 2 == 0) and (y % 2 == 0):
 					matrix[y][x] = Square(WHITE)
 
 		# initialize the pieces and put them in the appropriate squares
@@ -46,7 +46,7 @@ class Board:
 
 	def board_string(self, board):
 		"""Takes a board and returns a matrix of the board space colors. Used for testing new_board()"""
-		board_dict = {}; counter=1 
+		board_dict = {}; counter=1
 		for x in range(8):
 			for y in range(8):
 				if board[y][x].color == BLACK:
@@ -58,12 +58,12 @@ class Board:
 					else : piece_name = 'X'
 					board_dict[counter] = [piece_name]
 					counter+=1
-		
+
 		return json.dumps(board_dict)
-	
+
 	def get_key_dictionary(self, dictionary, value):
 		return list(dictionary.keys())[list(dictionary.values()).index(list(value))]
-	
+
 	def rel(self, dir, x_y ):
 		"""	Returns the coordinates one square in a different direction to (x,y).	"""
 		[x,y] = x_y
@@ -95,15 +95,15 @@ class Board:
 
 	def blind_legal_moves(self, x_y):
 		"""
-		Returns a list of blind legal move locations from a set of coordinates (x,y) on the board. 
+		Returns a list of blind legal move locations from a set of coordinates (x,y) on the board.
 		If that location is empty, then blind_legal_moves() return an empty list.
 		"""
 		[x,y]  = x_y
 		if self.matrix[x][y].occupant != None:
-			
+
 			if self.matrix[x][y].occupant.king == False and self.matrix[x][y].occupant.color == DARK:
 				blind_legal_moves = [self.rel(NORTHWEST, (x,y)), self.rel(NORTHEAST, (x,y))]
-				
+
 			elif self.matrix[x][y].occupant.king == False and self.matrix[x][y].occupant.color == LIGHT:
 				blind_legal_moves = [self.rel(SOUTHWEST, (x,y)), self.rel(SOUTHEAST, (x,y))]
 
@@ -132,7 +132,7 @@ class Board:
 		If that location is empty, then legal_moves() returns an empty list.
 		"""
 		[x,y] = x_y
-		blind_legal_moves = self.blind_legal_moves((x,y)) 
+		blind_legal_moves = self.blind_legal_moves((x,y))
 		legal_moves = []
 
 		if hop == False:
@@ -154,7 +154,7 @@ class Board:
 
 	def remove_piece(self, x_y):
 		"""
-		Removes a piece from the board at position (x,y). 
+		Removes a piece from the board at position (x,y).
 		"""
 		(x,y) = list(map(int,x_y))
 		self.matrix[x][y].occupant = None
@@ -168,11 +168,11 @@ class Board:
 		self.matrix[end_x][end_y].occupant = self.matrix[start_x][start_y].occupant
 		self.remove_piece((start_x, start_y))
 		self.king((end_x, end_y))
-		
+
 
 	def is_end_square(self, coords):
 		"""
-		Is passed a coordinate tuple (x,y), and returns true or 
+		Is passed a coordinate tuple (x,y), and returns true or
 		false depending on if that square on the board is an end square."""
 
 		if coords[1] == 0 or coords[1] == 7:
@@ -184,7 +184,7 @@ class Board:
 		"""
 		Checks to see if the given square (x,y) lies on the board.
 		If it does, then on_board() return True. Otherwise it returns false."""
-		(x,y)  = x_y	
+		(x,y)  = x_y
 		if x < 0 or y < 0 or x > 7 or y > 7:
 			return False
 		else:
@@ -199,7 +199,7 @@ class Board:
 		(x,y) = x_y
 		if self.location((x,y)).occupant != None:
 			if (self.location((x,y)).occupant.color == DARK and y == 0) or (self.location((x,y)).occupant.color == LIGHT and y == 7):
-				self.location((x,y)).occupant.king = True 
+				self.location((x,y)).occupant.king = True
 
 class Piece:
 	def __init__(self, color, king = False):
@@ -208,7 +208,7 @@ class Piece:
 
 	def get_piece(self):
 		return self.king, self.color
-        
+
 class Square:
 	def __init__(self, color, occupant = None):
 		self.color = color # color is either BLACK or WHITE
