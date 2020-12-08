@@ -115,7 +115,18 @@ class Board:
 
 		return blind_legal_moves
 
-	def legal_moves(self, x_y, hop = False):
+	def check_for_jumps_available(self,turn):
+		"""
+		Checks to see if a player has any jump moves. If so, then return True. Else return False.
+		"""
+		for x in range(8):
+			for y in range(8):
+				if self.location((x,y)).color == BLACK and self.location((x,y)).occupant != None and self.location((x,y)).occupant.color == turn:
+					if self.legal_moves((x,y),jump_available=True) != []:
+						return True
+		return False
+
+	def legal_moves(self, x_y, hop = False, jump_available=False):
 		"""
 		Returns a list of legal move locations from a given set of coordinates (x,y) on the board.
 		If that location is empty, then legal_moves() returns an empty list.
@@ -128,10 +139,10 @@ class Board:
 			for move in blind_legal_moves:
 				if hop == False:
 					if self.on_board(move):
-						if self.location(move).occupant == None:
+						if self.location(move).occupant == None and not jump_available:
 							legal_moves.append(move)
 
-						elif self.location(move).occupant.color != self.location((x,y)).occupant.color and self.on_board((move[0] + (move[0] - x), move[1] + (move[1] - y))) and self.location((move[0] + (move[0] - x), move[1] + (move[1] - y))).occupant == None: # is this location filled by an enemy piece?
+						elif self.location(move).occupant!=None and self.location(move).occupant.color != self.location((x,y)).occupant.color and self.on_board((move[0] + (move[0] - x), move[1] + (move[1] - y))) and self.location((move[0] + (move[0] - x), move[1] + (move[1] - y))).occupant == None: # is this location filled by an enemy piece?
 							legal_moves.append([move[0] + (move[0] - x), move[1] + (move[1] - y)])
 
 		else: # hop == True
