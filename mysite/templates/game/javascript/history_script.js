@@ -72,12 +72,15 @@ function startAutoplay(){
 		}
 	}, 800);
 	$("#autoplay").attr("onclick","stopAutoplay()");
-    $("#autoplay").html("Stop Autoplay");
+	$("#autoplay-text").html("Stop Autoplay");
+	$("#autoplay-spinner").addClass("spinner-grow spinner-grow-sm");
+	
 }
 
 function stopAutoplay(){
 	$("#autoplay").attr("onclick","startAutoplay()");
-    $("#autoplay").html("Start Autoplay");
+    $("#autoplay-text").html("Start Autoplay");
+	$("#autoplay-spinner").removeClass("spinner-grow spinner-grow-sm");
 	clearInterval(autoplayVar);
 }
 
