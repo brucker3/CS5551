@@ -55,7 +55,7 @@ class Game(object):
 			self.selected_legal_moves = self.board.legal_moves(self.selected_piece, self.hop, self.jump_available)
 		
 	def update_game_object(self, mouse_position=[0,0]):
-		self.set_jump_available()
+		if (not self.jump_available): self.set_jump_available()
 		"""	This function updates game object based on input of position"""
 		self.mouse_pos = mouse_position # what square is the mouse clicked in? .. format (x,y)
 		if self.hop == False:

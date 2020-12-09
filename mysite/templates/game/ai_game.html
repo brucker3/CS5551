@@ -1,0 +1,128 @@
+<!-- mysite/templates/game/ai_game.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+    {{ game_id|json_script:"game-id" }}
+
+    <script>const yourUsername = "{{ request.user }}" </script>
+    <link rel="stylesheet" type="text/css" href='{% static "css/checkers_style.css" %}'/>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
+	<h2 id="network-error" style="display:none; color:red">Please Check your network connection!</h2>
+
+	<main class="main">
+        <div class="dark-turn-text mobile">
+            Dark's turn
+        </div>
+        <table id="game-table">
+            <tr>
+                <td class="noPieceHere"></td>
+                <td><div id="position-1" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-2" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-3" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-4" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+            </tr>
+            <tr>
+                <td><div id="position-5" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-6" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-7" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-8" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+            </tr>
+            <tr>
+                <td class="noPieceHere"></td>
+                <td><div id="position-9" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-10" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-11" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-12" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+            </tr>
+            <tr>
+                <td><div id="position-13" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-14" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-15" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-16" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+            </tr>
+            <tr>
+                <td class="noPieceHere"></td>
+                <td><div id="position-17" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-18" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-19" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-20" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+            </tr>
+            <tr>
+                <td><div id="position-21" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-22" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-23" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-24" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+            </tr>
+            <tr>
+                <td class="noPieceHere"></td>
+                <td><div id="position-25" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-26" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-27" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-28" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+            </tr>
+            <tr>
+                <td><div id="position-29" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-30" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+				<td class="noPieceHere"></td>
+				<td><div id="position-31" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+                <td><div id="position-32" v-on:click='select_piece' v-bind:class="[piece_color, piece_type, selection, possible_square]"></div></td>
+                <td class="noPieceHere"></td>
+            </tr>
+
+        </table>
+        <div class="desktop">
+			<div class="dark-turn-text">
+                Dark's turn
+            </div>
+            <p id="divider">|</p>
+            <div class="light-turn-text">
+                Light's turn
+            </div>
+
+        </div>
+		<div class="light-turn-text mobile">
+            Light's turn
+        </div>
+	</main>
+  
+<a href="/gameHistory/{{game_id}}/" rel="#overlay">
+    <button type="button" class="btn btn-warning" style="position:absolute;top:100px; right:100px">Go to Game History</button>
+</a>
+
+<a href="/game/{{game_id}}/" rel="#overlay">
+    <button type="button" class="btn btn-warning btn-xs" style="position:absolute;top:150px; right:100px">Save Game</button>
+</a>
+
+	 <script src='{% static "javascript/ai_checkers_script.js" %}'></script>
+
+{% endblock %}

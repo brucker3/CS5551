@@ -2,14 +2,45 @@
 {% load static %}
 {% block content %}
 
-<div class="container-fluid"  style="height:600px; position:relative;">
+<div class="container-fluid"  style="position:relative;">
     <h1 style="margin-bottom:40px"> Welcome <u>{{request.user}}</u>! </h1>
 </div>
+
+<div class=" center-block">
     <a href={%url 'game'%}>
-    <button type="button" class="btn btn-success" style="width:200px; height:80px; position:absolute;top:200px; right:700px"> Play against Human</button>
+    <button type="button" class="btn btn-success btn-lg" > Play against Human</button>
     </a>
     <a href={%url 'ai_game'%}>
-      <button type="button" class="btn btn-success" style="width:200px; height:80px; position:absolute;top:200px; right:450px"> Play against Computer</button>
+      <button type="button" class="btn btn-success btn-lg" > Play against Computer</button>
+    </a>
+</div>
+    <br><br>
+    {{ my_active_games|json_script:"my-games-data" }}
+    <div style=" position:relative;" rel="#overlay">
+        <form action="/game/resumeGame/" method="post" style="border-style: ridge; ">
+            {% csrf_token %}
+        Your Started Games:
+        <div id="my-games-list-radio"></div>
+        <button id="resume-game" type="submit" value="submit" disabled>RESUME GAME</button><br>
+        </form>
+    </div>  
+    
+    <script>
+		let my_game_data_dict = JSON.parse(document.getElementById('my-games-data').textContent);
+        console.log(my_game_data_dict);
 
+		var dom_my_games = document.getElementById('my-games-list-radio');
+		for (var i in my_game_data_dict) {
+			document.getElementById('resume-game').disabled = false;
+			dom_my_games.innerHTML += ('<label><input type="radio" name="game-id" value="' + i + '" checked/> ' +
+											'created by user:  <b>'+my_game_data_dict[i][0]+ '</b>' );
+			if (my_game_data_dict[i][1]==''){
+				dom_my_games.innerHTML += (' and waiting for other player to join');
+			}else {
+				dom_my_games.innerHTML += (' joined by <b>'+my_game_data_dict[i][1]+'</b>');
+			}
+			dom_my_games.innerHTML += ('  <i>(gameid: '+i+')</i></label><br>');
+		  }
 
+    </script>
 {% endblock %}
