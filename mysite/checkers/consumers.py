@@ -8,8 +8,10 @@ from .game import Game
 from .models import *
 from django_currentuser.middleware import get_current_user, get_current_authenticated_user
 import codecs,pickle
+from .aiplayer import *
 global games
 games = {}
+global aiplayer
 #this class is about websocket communication
 # when websocket is connected disconnects and message is received respective fuctions is triggered
 class GameConsumer(WebsocketConsumer):
@@ -68,6 +70,7 @@ class GameConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data):
         global games
+        global aiplayer
         #print (games[self.game_id].check_for_both_color_on_board())
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
@@ -75,6 +78,16 @@ class GameConsumer(WebsocketConsumer):
         if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
             games[self.game_id].update_game_object(message)
         # logger.info(text_data)
+        # new condition for ai player 
+        if games[self.game_id].player2 == "Computer":
+            logger.info("ai player turn")
+            aiplayer = Aiplayer(games[self.game_id].get_board())
+            aiplayer.minmax(games[self.game_id].get_board(),3)
+            move = aiplayer.get_move()
+            logger.info(aiplayer.get_move())
+            logger.info("ai player running ")
+            games[self.game_id].update_game_object(move[0])
+            games[self.game_id].update_game_object(move[1]) 
         if games[self.game_id].winner != '':
             self.save_winner()
         #click is recieved here are update board is sent back
@@ -112,3 +125,9 @@ class GameConsumer(WebsocketConsumer):
         game_record = Game_Session.objects.get(game_id = self.game_id)
         game_record.is_active = False
         game_record.save()
+
+    def ai_game(self):
+        aiplayer = Aiplayer()
+        games[self.game_id].player2 = aiplayer
+
+
