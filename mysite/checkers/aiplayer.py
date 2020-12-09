@@ -125,11 +125,3 @@ class Aiplayer():
                 return False
 
 
-if __name__ == "__main__":
-    g = Game()
-    b = g.get_board()
-    a= Aiplayer(g.get_board())
-    c= Aiplayer(g.get_board(), color= "D")
-    g.player1 = a
-    g.player2 = b 
-
