@@ -28,7 +28,15 @@ player_list = []
 # Create your views here.
 @login_required(login_url='login')
 def homeview (request):
-    return render(request, 'checkers/home.html')
+    my_games_data = {i.game_id:[i.player1_username, i.player2_username]
+                            for i in Game_Session.objects.filter(
+                            Q(player1_username = str(get_current_authenticated_user())) |
+                            Q(player2_username = str(get_current_authenticated_user())) ).exclude(
+                                is_active=False
+                            )}
+    return render(request, 'checkers/home.html',{
+                   'my_active_games': my_games_data,
+            })
 
 class guestview (FormView):
     template_name = 'checkers/guestUsername.html'
@@ -63,7 +71,6 @@ class guestview (FormView):
 #------------------------------
 #-------registration---------
 #------------------------------
-
 class signupview (FormView):
     template_name = 'checkers/signup.html'
     form_class = SignupForm
@@ -112,7 +119,6 @@ class loginview (FormView):
 #------------------------------
 #-------logout view---------
 #------------------------------
-
 class logoutview(View):
     def get(self, request):
         logout(request)
@@ -142,16 +148,9 @@ class game(View):
                                 ).exclude(
                                 player1_username = str(get_current_authenticated_user())
                                 )} #active 1 means player is waiting for other player to join
-        my_games_data = {i.game_id:[i.player1_username, i.player2_username]
-                                for i in Game_Session.objects.filter(
-                                Q(player1_username = str(get_current_authenticated_user())) |
-                                Q(player2_username = str(get_current_authenticated_user())) ).exclude(
-                                    is_active=False
-                                )}
         if request.method == 'GET':
             return render(request,'checkers/game.html',{
                    'all_active_game_data':open_to_join_games_data,
-                   'my_active_games': my_games_data,
             })
 
     def create_game(request):
@@ -205,6 +204,23 @@ class room(View):
 
 class ai_game(View):
     def get(self, request):
-        return render(request, 'checkers/ai_game.html')
+        new_game = Game()
+        new_game.player1 = str(get_current_authenticated_user())
+        new_game.player2 = "Computer"
+        
+        all_game_ids = [i.game_id for i in Game_Session.objects.all()]
+        while new_game.id in all_game_ids: # this while loop is to avoid game having same session id
+            logger.info("regenerating new game id")
+            new_game.regenerate_game_id()
+        record = Game_Session(game_id=new_game.id, 
+                            player1_username = new_game.player1, 
+                            player2_username = new_game.player2,
+                            game_object = codecs.encode(pickle.dumps(new_game), "base64").decode(),
+                            is_open_to_join = False,)
+        record.save()
+        #creating a game record file
+        with open("games_record/"+new_game.id+".txt", "a") as file:
+            file.write(new_game.board.board_string(new_game.board.matrix)+"\n")
+        return redirect('/game/'+new_game.id)
 
 

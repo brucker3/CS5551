@@ -4,13 +4,6 @@
 
 	<button id="create-game" type="button" >CREATE GAME</button><br><br>
 
-	<form action="/game/resumeGame/" method="post" style="border-style: ridge;">
-		{% csrf_token %}
-	Your Started Games:
-	  <div id="my-games-list-radio"></div>
-	  <button id="resume-game" type="submit" value="submit" disabled>RESUME GAME</button><br>
-	</form>
-
 	<form action="/game/joinGame/" method="post" style="border-style: ridge;">
 		{% csrf_token %}
 	Open to Join Games:
@@ -19,7 +12,6 @@
 	</form>
 
 	{{ all_active_game_data|json_script:"all-active-games-data" }}
-	{{ my_active_games|json_script:"my-games-data" }}
     <script>
 		let active_game_data_dict = JSON.parse(document.getElementById('all-active-games-data').textContent);
 		let my_game_data_dict = JSON.parse(document.getElementById('my-games-data').textContent);
