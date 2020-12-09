@@ -81,13 +81,13 @@ class Aiplayer():
             elif self.state.matrix[i[0]][i[1]].get_square()[1].get_piece()[1] != self.opponent_color:
                 self.opponent_pieces.pop(i)
 
-
-    def full_piece_update(self, board):
+    # if all 1 or none whats it returning in the eval
+    def full_piece_update(self):
         self.ai_pieces = []
         self.opponent_pieces = []
         for i in range(0,8):
             for j in range(0,8):
-                square = board.matrix[i][j]
+                square = self.state.matrix[i][j]
                 if square.get_square()[1] != None:
                     if square.get_square()[1].get_piece()[1] == self.color:
                         self.ai_pieces.append([i,j])
