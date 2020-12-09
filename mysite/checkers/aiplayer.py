@@ -90,11 +90,18 @@ class Aiplayer():
 
     def moves(self, player_pieces):
         moves = []
-        for i in range(0,len(player_pieces)):
-           check = self.state.legal_moves(player_pieces[i])
-           check.append(player_pieces[i])
-           if len(check) >= 2:
-               moves.append(check)
+        if self.state.check_for_jumps_available(self.color) == True:
+            for i in range(0, len(player_pieces)):
+                check = self.state.legal_moves(player_pieces[i],True)
+                check.append(player_pieces[i])
+                if len(check) >= 2:
+                    moves.append(check)
+        else:        
+            for i in range(0,len(player_pieces)):
+               check = self.state.legal_moves(player_pieces[i])
+               check.append(player_pieces[i])
+               if len(check) >= 2:
+                   moves.append(check)
         return moves
 
     def get_move(self):
@@ -123,5 +130,9 @@ class Aiplayer():
                 return True
             else:
                 return False
+
+
+
+
 
 
