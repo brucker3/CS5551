@@ -14,21 +14,7 @@
 	{{ all_active_game_data|json_script:"all-active-games-data" }}
     <script>
 		let active_game_data_dict = JSON.parse(document.getElementById('all-active-games-data').textContent);
-		let my_game_data_dict = JSON.parse(document.getElementById('my-games-data').textContent);
-        console.log(active_game_data_dict,my_game_data_dict);
-
-		var dom_my_games = document.getElementById('my-games-list-radio');
-		for (var i in my_game_data_dict) {
-			document.getElementById('resume-game').disabled = false;
-			dom_my_games.innerHTML += ('<label><input type="radio" name="game-id" value="' + i + '" checked/> ' +
-											'created by user:  <b>'+my_game_data_dict[i][0]+ '</b>' );
-			if (my_game_data_dict[i][1]==''){
-				dom_my_games.innerHTML += (' and waiting for other player to join');
-			}else {
-				dom_my_games.innerHTML += (' joined by <b>'+my_game_data_dict[i][1]+'</b>');
-			}
-			dom_my_games.innerHTML += ('  <i>(gameid: '+i+')</i></label><br>');
-		  }
+        console.log(active_game_data_dict);
 
 		var dom_my_games = document.getElementById('active-games-list-radio');
 		for (var i in active_game_data_dict) {
