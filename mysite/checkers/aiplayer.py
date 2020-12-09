@@ -4,7 +4,6 @@ import math
 import copy
 from itertools import chain
 
-
 class Aiplayer():
     def __init__(self, board, color="L"):
         self.state = copy.deepcopy(board)
@@ -26,7 +25,6 @@ class Aiplayer():
             return self.min_value(self.state, depth)
         return self.best_move
 
-    #alpha to be implemented later
     def max_value(self, state, depth):
         max_eval = float('-inf')
         best_move = None
@@ -116,6 +114,9 @@ class Aiplayer():
         return moves
 
     def get_move(self):
+        if self.best_move ==None:
+            self.full_piece_update()
+            self.minmax(self.state,3)
         return self.best_move
 
     def state_update(self, state):
@@ -135,13 +136,13 @@ class Aiplayer():
     def terminal(self, max_player):
         if max_player == True:
             check = self.moves(self.ai_pieces)
-            if check == []:
+            if len(check) == 0:
                 return True
             else:
                 return False
         elif max_player == False:
             check = self.moves(self.opponent_pieces)
-            if check == []:
+            if len(check) == 0:
                 return True
             else:
                 return False
