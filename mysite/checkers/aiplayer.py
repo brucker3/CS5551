@@ -72,18 +72,29 @@ class Aiplayer():
     # there are bugs in this function 
     # simple fuction for updating each players pieces
     def pieces_update(self):
-        for i in range(0, len(self.ai_pieces)):
-            check = self.ai_pieces[i]
-            if self.state.matrix[check[0]][check[1]].get_square()[1]== None:
+        for i in self.ai_pieces:
+            if self.state.matrix[i[0]][i[1]].get_square()[1]== None:
                 self.ai_pieces.pop(i)
-            elif self.state.matrix[check[0]][check[1]].get_square()[1].get_piece()[1] != self.color:
+            elif self.state.matrix[i[0]][i[1]].get_square()[1].get_piece()[1] != self.color:
                 self.ai_pieces.pop(i)
-        for i in range(0, len(self.opponent_pieces)):
-            check2 = self.opponent_pieces[i]
-            if self.state.matrix[check2[0]][check2[1]].get_square() == None:
+        for i in self.opponent_pieces:
+            if self.state.matrix[i[0]][i[1]].get_square() == None:
                 self.opponent_pieces.pop(i)
-            elif self.state.matrix[check2[0]][check2[1]].get_square()[1].get_piece()[1] != self.opponent_color:
+            elif self.state.matrix[i[0]][i[1]].get_square()[1].get_piece()[1] != self.opponent_color:
                 self.opponent_pieces.pop(i)
+
+
+    def full_piece_update(self):
+        self.ai_pieces = []
+        self.opponent_pieces = []
+        for i in range(0,8):
+            for j in range(0,8):
+                square = self.state.matrix[i][j]
+                if square.get_square()[1] != None:
+                    if square.get_square()[1].get_piece()[1] == self.color:
+                        self.ai_pieces.append([i,j])
+                    elif square.get_square()[1].get_piece()[1] == self.opponent_color:
+                        self.opponent_pieces.append([i,j]) 
 
     def heuristic(self):
         return  len(self.ai_pieces) - len(self.opponent_pieces)
@@ -106,6 +117,10 @@ class Aiplayer():
 
     def get_move(self):
         return self.best_move
+
+    def state_update(self, state):
+        self.state = state
+
 
 
     # might still need an update for the opptuninate
@@ -132,7 +147,10 @@ class Aiplayer():
                 return False
 
 
-
+if __name__ == "__main__":
+    g = Game() 
+    b = g.get_board()
+    a= Aiplayer(g.get_board())
 
 
 

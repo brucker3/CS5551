@@ -85,13 +85,12 @@ class GameConsumer(WebsocketConsumer):
             aiplayer.minmax(games[self.game_id].get_board(),3)
             move = aiplayer.get_move()
             logger.info(aiplayer.get_move())
-            logger.info("ai player running ")
             games[self.game_id].update_game_object(move[0])
             games[self.game_id].update_game_object(move[1])
-            # added the below function helps game run much smoother 
+            # added the below fuciton to help ai player update 
             aiplayer.move_update()
-            # the bleow fuciton need to be added but it having trouble running
-            #aiplayer.pieces_update()
+            aiplayer.state_update(games[self.game_id].get_board())
+            aiplayer.full_piece_update()
         if games[self.game_id].winner != '':
             self.save_winner()
         #click is recieved here are update board is sent back

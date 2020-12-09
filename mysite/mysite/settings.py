@@ -114,7 +114,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME':'checkersdb',
         'USER':'root',
-        'PASSWORD':'Hannibal91',
+        'PASSWORD':'root',
         'PORT':'3306',
         'HOST':'127.0.0.1',
     }
