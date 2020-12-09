@@ -6,7 +6,7 @@
     <h1 style="margin-bottom:40px"> Welcome <u>{{request.user}}</u>! </h1>
 </div>
 
-<div class=" center-block">
+<div class=" center-block" style="margin:auto 400px">
     <a href={%url 'game'%}>
     <button type="button" class="btn btn-success btn-lg" > Play against Human</button>
     </a>
@@ -19,12 +19,16 @@
     <div style=" position:relative;" rel="#overlay">
         <form action="/game/resumeGame/" method="post" style="border-style: ridge; ">
             {% csrf_token %}
-        Your Started Games:
-        <div id="my-games-list-radio"></div>
-        <button id="resume-game" type="submit" value="submit" disabled>RESUME GAME</button><br>
+
+        <ul class="list-group" style="margin:auto 200px">
+          <li class="list-group-item list-group-item-warning">Your Started Games</li>
+           <li class="list-group-item list-group-item-success" id="my-games-list-radio" ></li>
+         </ul>
+        <button class="btn btn-warning" id="resume-game" type="submit" value="submit" style="margin:auto 200px">RESUME GAME</button><br>
         </form>
-    </div>  
-    
+    </div>
+
+
     <script>
 		let my_game_data_dict = JSON.parse(document.getElementById('my-games-data').textContent);
         console.log(my_game_data_dict);
