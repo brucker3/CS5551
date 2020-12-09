@@ -1,5 +1,5 @@
-from checkers.game import *
-from checkers.board import *
+from .game import *
+from .board import *
 import math
 import copy
 from itertools import chain
@@ -68,6 +68,8 @@ class Aiplayer():
             self.opponent_pieces = [(0,5),(0,7),(1,6),(2,5),
             (2,7),(3,6),(4,5),(4,7),(5,6),(6,5),(6,7),(7,6)]
 
+
+    # there are bugs in this function 
     # simple fuction for updating each players pieces
     def pieces_update(self):
         for i in range(0, len(self.ai_pieces)):
@@ -98,6 +100,16 @@ class Aiplayer():
     def get_move(self):
         return self.best_move
 
+
+    # might still need an update for the opptuninate
+    # this funciton switch out the best move and moves it to ai list 
+    def move_update(self):
+        self.ai_pieces = [i for i in self.ai_pieces if i != self.best_move[1]] 
+        self.ai_pieces.append(self.best_move[0])
+
+
+
+
     def terminal(self, max_player):
         if max_player == True:
             check = self.moves(self.ai_pieces)
@@ -112,4 +124,12 @@ class Aiplayer():
             else:
                 return False
 
+
+if __name__ == "__main__":
+    g = Game()
+    b = g.get_board()
+    a= Aiplayer(g.get_board())
+    c= Aiplayer(g.get_board(), color= "D")
+    g.player1 = a
+    g.player2 = b 
 

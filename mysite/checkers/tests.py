@@ -1,10 +1,17 @@
 from django.test import TestCase
 from checkers import  players 
 from checkers.game import Game
+from .aiplayer import *
 
 # Create your tests here.
 # this is a set of new test added for the player class
 test_player = players.Player("ted", "ted@.com")
+game = Game()
+board = game.get_board()
+ai_player = Aiplayer(game.get_board())
+ 
+
+
 #1
 def test_player_build():
     assert isinstance(test_player.name, str)
@@ -60,4 +67,13 @@ def test_game_check_end_game():
     assert isinstance(test_game.check_for_endgame(), bool)
     assert test_game.check_for_endgame() == False
 
+#9
+def test_ai_setup():
+    assert isinstance(ai_player.ai_pieces, list)
+    assert isinstance(ai_player.color, str)
+    assert len(ai_player.ai_pieces) == 12
+    assert len(ai_player.opponent_pieces) ==12
 
+#10
+def test_ai_minmax():
+    assert isinstance(ai_player.minmax(board,3), tuple)

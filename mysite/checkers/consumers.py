@@ -113,4 +113,8 @@ class GameConsumer(WebsocketConsumer):
         game_record.is_active = False
         game_record.save()
 
+    def ai_game(self):
+        aiplayer = Aiplayer()
+        games[self.game_id].player2 = aiplayer
+
 
