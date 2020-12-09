@@ -90,7 +90,7 @@ class GameConsumer(WebsocketConsumer):
             # added the below fuciton to help ai player update 
             aiplayer.move_update()
             aiplayer.state_update(games[self.game_id].get_board())
-            aiplayer.full_piece_update()
+            aiplayer.full_piece_update(games[self.game_id].get_board())
         if games[self.game_id].winner != '':
             self.save_winner()
         #click is recieved here are update board is sent back
