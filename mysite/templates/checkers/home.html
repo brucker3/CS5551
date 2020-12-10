@@ -21,7 +21,7 @@
             {% csrf_token %}
 
         <ul class="list-group" style="margin:auto 200px">
-          <li class="list-group-item list-group-item-warning">Your Started Games</li>
+          <li class="list-group-item list-group-item-warning" ><h5>Your Unfinished Games:</h5></li>
            <li class="list-group-item list-group-item-success" id="my-games-list-radio" ></li>
          </ul>
         <button class="btn btn-warning" id="resume-game" type="submit" value="submit" style="margin:auto 200px">RESUME GAME</button><br>
@@ -37,11 +37,11 @@
 		for (var i in my_game_data_dict) {
 			document.getElementById('resume-game').disabled = false;
 			dom_my_games.innerHTML += ('<label><input type="radio" name="game-id" value="' + i + '" checked/> ' +
-											'created by user:  <b>'+my_game_data_dict[i][0]+ '</b>' );
+											'Created by user:  <b>'+my_game_data_dict[i][0]+ '</b>' );
 			if (my_game_data_dict[i][1]==''){
 				dom_my_games.innerHTML += (' and waiting for other player to join');
 			}else {
-				dom_my_games.innerHTML += (' joined by <b>'+my_game_data_dict[i][1]+'</b>');
+				dom_my_games.innerHTML += ('. &emsp; Joined by user: <b>'+my_game_data_dict[i][1]+'</b>');
 			}
 			dom_my_games.innerHTML += ('  <i>(gameid: '+i+')</i></label><br>');
 		  }

@@ -173,7 +173,7 @@ class game(View):
             selected_game_id = request.POST.get("game-id")
             print (selected_game_id)
             record_edit = Game_Session.objects.get(game_id=selected_game_id)
-            print (dir(record_edit),record_edit, get_current_authenticated_user())
+            print (get_current_authenticated_user())
             record_edit.player2_username = str(get_current_authenticated_user())
             record_edit.is_open_to_join = False
             record_edit.save()
@@ -185,6 +185,24 @@ class game(View):
             selected_game_id = request.POST.get("game-id")
             logger.info("player resumed game")
             return redirect('/game/'+selected_game_id)
+
+    def forfiet_game(request, game_id):
+        record_edit = Game_Session.objects.get(game_id=game_id)
+        print (str(get_current_authenticated_user()), game_id)
+        if (str(get_current_authenticated_user())==record_edit.player1_username):
+            Winner(game_id = game_id, winner_user = record_edit.player2_username).save()
+            record_edit.is_active = False
+            record_edit.winner = "LIGHT"
+            record_edit.save()
+        elif (str(get_current_authenticated_user())==record_edit.player2_username):
+            Winner(game_id = game_id, winner_user = record_edit.player1_username).save()
+            record_edit.is_active = False
+            record_edit.winner = "DARK"
+            record_edit.save()
+            print ("forfieting")
+        return render(request, 'game/room.html', {
+            'game_id': game_id
+        })
 
 class room(View):
     def get(self, request, game_id):
