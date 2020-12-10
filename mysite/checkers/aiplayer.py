@@ -4,6 +4,11 @@ import math
 import copy
 from itertools import chain
 
+WHITE    = 'WHITE'
+DARK     = 'D' #bottom pieces
+LIGHT      = 'L' #uppoer pieces
+BLACK    = 'BLACK'
+
 class Aiplayer():
     def __init__(self, board, color="L"):
         self.state = copy.deepcopy(board)
@@ -11,9 +16,10 @@ class Aiplayer():
         self.opponent_color = "D"
         self.ai_pieces= []
         self.opponent_pieces= []
-        self.full_piece_update()
-        self.best_move= None
+        self.pieces_update()
 
+    def set_state(self, board):
+        self.state = copy.deepcopy(board)
 
     # basic min max will add alpha beta prunning after
     def minmax(self, state, depth, max_player= True, move = None):
@@ -37,6 +43,8 @@ class Aiplayer():
                 if max_eval == evaluation[0]:
                     best_move = move
                     self.best_move = [move, location]
+                    
+        
         return max_eval, best_move
 
 
@@ -53,46 +61,16 @@ class Aiplayer():
                     best_min = move
         return min_eval, best_min
 
-    # this fucntion should be removed it was causing bugs 
-    # set the initial stat of both player pieces
-    def initial_state(self, color):
-        if color == "D":
-            self.opponent_pieces = [(0,1),(1,0),(1,2),(2,1),
-            (3,0),(3,2),(4,1),(5,0),(5,2),(6,1),(7,0),(7,2)]
-            self.ai_pieces = [(0,5),(0,7),(1,6),(2,5),
-            (2,7),(3,6),(4,5),(4,7),(5,6),(6,5),(6,7),(7,6)]
-        elif color == "L":
-            self.ai_pieces = [(0,1),(1,0),(1,2),(2,1),
-            (3,0),(3,2),(4,1),(5,0),(5,2),(6,1),(7,0),(7,2)]
-            self.opponent_pieces = [(0,5),(0,7),(1,6),(2,5),
-            (2,7),(3,6),(4,5),(4,7),(5,6),(6,5),(6,7),(7,6)]
-
 
     # simple fuction for updating each players pieces
     def pieces_update(self):
-        for i in self.ai_pieces:
-            if self.state.matrix[i[0]][i[1]].get_square()[1]== None:
-                self.ai_pieces.pop(i)
-            elif self.state.matrix[i[0]][i[1]].get_square()[1].get_piece()[1] != self.color:
-                self.ai_pieces.pop(i)
-        for i in self.opponent_pieces:
-            if self.state.matrix[i[0]][i[1]].get_square() == None:
-                self.opponent_pieces.pop(i)
-            elif self.state.matrix[i[0]][i[1]].get_square()[1].get_piece()[1] != self.opponent_color:
-                self.opponent_pieces.pop(i)
-
-    # get a complete list of each players pieces 
-    def full_piece_update(self):
-        self.ai_pieces = []
-        self.opponent_pieces = []
-        for i in range(0,8):
-            for j in range(0,8):
-                square = self.state.matrix[i][j]
-                if square.get_square()[1] != None:
-                    if square.get_square()[1].get_piece()[1] == self.color:
-                        self.ai_pieces.append([i,j])
-                    elif square.get_square()[1].get_piece()[1] == self.opponent_color:
-                        self.opponent_pieces.append([i,j]) 
+        for x in range(8):
+            for y in range(8):
+                if (self.state.location((x,y)).color == BLACK and self.state.location((x,y)).occupant !=None):
+                    if (self.state.location((x,y)).occupant.color == self.color):
+                        self.ai_pieces.append((x,y))
+                    elif (self.state.location((x,y)).occupant.color == self.opponent_color):
+                        self.opponent_pieces.append((x,y))
 
     # heuristic used for minmax
     def heuristic(self):
@@ -122,11 +100,8 @@ class Aiplayer():
             self.minmax(self.state,3)
         return self.best_move
 
-    # allows for update of board object 
-    def state_update(self, state):
-        self.state = state
-
-    # this funciton switch out the move played with the list of know piece locations
+    # might still need an update for the opptuninate
+    # this funciton switch out the best move and moves it to ai list 
     def move_update(self):
         self.ai_pieces = [i for i in self.ai_pieces if i != self.best_move[1]] 
         self.ai_pieces.append(self.best_move[0])
@@ -145,7 +120,6 @@ class Aiplayer():
                 return True
             else:
                 return False
-
 
 
 

@@ -17,7 +17,6 @@ class Board:
 	def __init__(self):
 		self.matrix = self.new_board()
 
-
 	def new_board(self):
 		"""		Create a new board matrix.		"""
 

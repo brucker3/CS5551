@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
-	<button id="create-game" type="button" >CREATE GAME</button><br><br>
-
-	<form action="/game/joinGame/" method="post" style="border-style: ridge;">
+<div class ="center">
+	<button id="create-game" type="button" class="btn btn-primary btn-lg">CREATE GAME</button><br><br>
+	<div id = join-game-box>
+	<form action="/game/joinGame/" method="post" >
 		{% csrf_token %}
-	Open to Join Games:
+	<h3>Open to Join Games:</h3>
 	  <div id="active-games-list-radio"></div>
-	  <button id="join-game" type="submit" value="submit" disabled>JOIN GAME</button><br>
+	  <button id="join-game" type="submit" value="submit" disabled class="btn btn-success btn-lg">JOIN GAME</button><br>
 	</form>
-
+</div>
+</div>
 	{{ all_active_game_data|json_script:"all-active-games-data" }}
     <script>
 		let active_game_data_dict = JSON.parse(document.getElementById('all-active-games-data').textContent);
@@ -21,7 +22,8 @@
 			document.getElementById('join-game').disabled = false;
 			dom_my_games.innerHTML += ('<label><input type="radio" name="game-id" value="' + i + '" checked/> ' +
 										'created by user:  '+active_game_data_dict[i] +
-										'  <i>(gameid: '+i+')</i></label><br>');
+										'</label><br>');
+			dom_my_games.innerHTML1	+= 	'created by user:  '+active_game_data_dict[i]+'<br>';					
 		}
 
 		document.querySelector('#create-game').onclick = function(e) {
