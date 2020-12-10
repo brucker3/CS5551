@@ -82,7 +82,7 @@ class GameConsumer(WebsocketConsumer):
         while( games[self.game_id].player2 == "Computer" and games[self.game_id].turn == "L" and games[self.game_id].winner == ''):
             logger.info("ai game loop ai player move")
             aiplayer = Aiplayer(games[self.game_id].get_board())
-            aiplayer.minmax(games[self.game_id].get_board(),4)
+            aiplayer.minmax(games[self.game_id].get_board(),10)
             move = aiplayer.get_move()
             games[self.game_id].update_game_object(move[1])
             games[self.game_id].update_game_object(move[0])
