@@ -15,8 +15,10 @@ class Aiplayer():
         self.initial_state(self.color)
         self.best_move= None
 
-
+    def set_state(self, board):
+        self.state = copy.deepcopy(board)
     # basic min max will add alpha beta prunning after
+
     def minmax(self, state, depth, max_player= True, move = None):
         if depth == 0 or self.terminal(max_player):
             return self.heuristic(), move
@@ -39,6 +41,8 @@ class Aiplayer():
                 if max_eval == evaluation[0]:
                     best_move = move
                     self.best_move = [move, location]
+                    
+        
         return max_eval, best_move
 
 
@@ -105,8 +109,21 @@ class Aiplayer():
         return moves
 
     def get_move(self):
+        if self.best_move == None:
+            print (self.get_possible_random_move())
         return self.best_move
 
+    def get_possible_random_move(self):
+        moves = []
+        jump_available_temp = True
+        while(moves!=[]):
+            for x in range(8):
+                for y in range(8):
+                    moves.append(self.state.legal_moves((x,y),jump_available=jump_available_temp))
+                    if moves!= []:
+                        return ([moves[0],[x,y]])
+            jump_available_temp = False
+        
 
     # might still need an update for the opptuninate
     # this funciton switch out the best move and moves it to ai list 
