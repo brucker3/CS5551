@@ -98,7 +98,7 @@ class Aiplayer():
     # returns best move with starting location 
     def get_move(self):
         if self.best_move ==None:
-             self.pieces_update()
+            self.pieces_update()
             self.minmax(self.state,3)
         return self.best_move
 
