@@ -75,11 +75,11 @@ class GameConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 		#below line check if click is coming from correct person or not
-        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or 1 or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
+        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
             games[self.game_id].update_game_object(message)
         # logger.info(text_data)
         # new condition for ai player 
-        if games[self.game_id].player2 == "Computer" and games[self.game_id].turn == "L" and games[self.game_id].winner == '':
+        while( games[self.game_id].player2 == "Computer" and games[self.game_id].turn == "L" and games[self.game_id].winner == ''):
             logger.info("ai player turn")
             aiplayer = Aiplayer(games[self.game_id].get_board())
             aiplayer.minmax(games[self.game_id].get_board(),10)
