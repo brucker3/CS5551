@@ -56,6 +56,7 @@ gameSocket.onmessage = function(e) {
 gameSocket.onclose = function(e) {
 	// add something which shows to user that network connection is broken
 	//console.error('Game socket closed unexpectedly');
+	update_viewers_number(0);
 	$('.main').css('display','none'); //hide whole table on loss of connection
 	$('#network-error').text('Please Check your network connection!');
 	$('#network-error').css({'display':'block', 'color':'red'}); //show error message on loss of connection
