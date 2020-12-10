@@ -80,14 +80,12 @@ class GameConsumer(WebsocketConsumer):
         # logger.info(text_data)
         # new condition for ai player 
         while( games[self.game_id].player2 == "Computer" and games[self.game_id].turn == "L" and games[self.game_id].winner == ''):
-            logger.info("ai player turn")
+            logger.info("ai game loop ai player move")
             aiplayer = Aiplayer(games[self.game_id].get_board())
             aiplayer.minmax(games[self.game_id].get_board(),10)
             move = aiplayer.get_move()
-            logger.info(aiplayer.get_move())
-            logger.info("ai player running ")
             games[self.game_id].update_game_object(move[1])
-            games[self.game_id].update_game_object(move[0]) 
+            games[self.game_id].update_game_object(move[0])
         if games[self.game_id].winner != '':
             self.save_winner()
         #click is recieved here are update board is sent back
