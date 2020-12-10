@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Play Checkers Game</title>
   
     <!-- Latest compiled and minified CSS -->
@@ -15,6 +16,35 @@
 
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+  .center{
+    margin: 0 auto;
+    width: 30%;
+    height: 50%;
+    padding: 10px;
+    text-align: center;
+  }
+  #join-game-box{
+    text-align:center;
+    padding: 10px;
+    border: 3px solid green;
+  }
+@include media-breakpoint-up(sm) { ... }
+@include media-breakpoint-up(md) { ... }
+@include media-breakpoint-up(lg) { ... }
+@include media-breakpoint-up(xl) { ... }
+@include media-breakpoint-up(xxl) { ... }
+
+.custom-class {
+  display: none;
+}
+@include media-breakpoint-up(sm) {
+  .custom-class {
+    display: block;
+  }
+}
+
+</style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

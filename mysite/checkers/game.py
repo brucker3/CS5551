@@ -25,13 +25,13 @@ for i in range(8):
 			translation_dict[k]=[j,i]
 			k+=1
 
-class Game(object):
+class Game(Board):
 	"""
 	The main game control.
 	"""
 	def __init__(self):
 		self.id = self.generate_random_alphanumeric_string()
-		self.board = Board()
+		self.matrix = self.new_board()
 		self.turn = DARK
 		self.selected_piece = None # a board location. 
 		self.jump_available = False # this instance var is to force player to jump
@@ -42,7 +42,7 @@ class Game(object):
 		self.player2 = ''
 
 	def get_board(self):
-		return self.board
+		return self
 
 	def generate_random_alphanumeric_string(self):
 		return (''.join(random.choices(string.ascii_lowercase + string.digits, k=16))) #here k is length of string
@@ -52,21 +52,21 @@ class Game(object):
 
 	def update_legal_moves(self):
 		if self.selected_piece != None:
-			self.selected_legal_moves = self.board.legal_moves(self.selected_piece, self.hop, self.jump_available)
+			self.selected_legal_moves = self.legal_moves(self.selected_piece, self.hop, self.jump_available)
 		
 	def update_game_object(self, mouse_position=[0,0]):
-		if (not self.jump_available): self.set_jump_available()
+		#if (not self.jump_available): self.set_jump_available()
 		"""	This function updates game object based on input of position"""
 		self.mouse_pos = mouse_position # what square is the mouse clicked in? .. format (x,y)
 		if self.hop == False:
-			if self.board.location(self.mouse_pos).occupant != None and self.board.location(self.mouse_pos).occupant.color == self.turn:
+			if self.location(self.mouse_pos).occupant != None and self.location(self.mouse_pos).occupant.color == self.turn:
 				self.selected_piece = self.mouse_pos
 
-			elif self.selected_piece != None and self.mouse_pos in self.board.legal_moves(self.selected_piece,jump_available=self.jump_available):
-				self.board.move_piece(self.selected_piece, self.mouse_pos)
+			elif self.selected_piece != None and self.mouse_pos in self.legal_moves(self.selected_piece,jump_available=self.jump_available):
+				self.move_piece(self.selected_piece, self.mouse_pos)
 
-				if self.mouse_pos not in self.board.adjacent(self.selected_piece):
-					self.board.remove_piece((self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) / 2, self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) / 2))
+				if self.mouse_pos not in self.adjacent(self.selected_piece):
+					self.remove_piece((self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) / 2, self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) / 2))
 
 					self.hop = True
 					self.selected_piece = self.mouse_pos
@@ -75,11 +75,11 @@ class Game(object):
 		self.update_legal_moves()
 		
 		if self.hop == True:					
-			if self.selected_piece != None and self.mouse_pos in self.board.legal_moves(self.selected_piece, self.hop, jump_available=self.jump_available):
-				self.board.move_piece(self.selected_piece, self.mouse_pos)
-				self.board.remove_piece((self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) / 2, self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) / 2))
+			if self.selected_piece != None and self.mouse_pos in self.legal_moves(self.selected_piece, self.hop, jump_available=self.jump_available):
+				self.move_piece(self.selected_piece, self.mouse_pos)
+				self.remove_piece((self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) / 2, self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) / 2))
 
-			if self.board.legal_moves(self.mouse_pos, self.hop,jump_available=self.jump_available) == []:
+			if self.legal_moves(self.mouse_pos, self.hop,jump_available=self.jump_available) == []:
 					self.end_turn()
 			else:
 				self.selected_piece = self.mouse_pos
@@ -89,16 +89,16 @@ class Game(object):
 		#send signal to update front end
 		moves = []
 		for i in self.selected_legal_moves:
-			moves.append(self.board.get_key_dictionary(translation_dict,i))
+			moves.append(self.get_key_dictionary(translation_dict,i))
 
 		if self.selected_piece != None:
-			sel_piece = (self.board.get_key_dictionary(translation_dict,self.selected_piece))
+			sel_piece = (self.get_key_dictionary(translation_dict,self.selected_piece))
 		else: sel_piece = None
-		return (self.board.board_string(self.board.matrix), moves, sel_piece) #self.selected_legal_moves
+		return (self.board_string(self.matrix), moves, sel_piece) #self.selected_legal_moves
 
 	def set_jump_available(self):
 		#
-		if(self.board.check_for_jumps_available(self.turn)):
+		if(self.check_for_jumps_available(self.turn)):
 			self.jump_available = True
 
 	def terminate_game(self):
@@ -116,7 +116,7 @@ class Game(object):
 			self.turn = DARK
 		#boelow line add board to txt file which stores record
 		with open("games_record/"+self.id+".txt", "a") as file:
-			file.write(self.board.board_string(self.board.matrix)+"\n")
+			file.write(self.board_string(self.matrix)+"\n")
 		self.selected_piece = None
 		self.selected_legal_moves = []
 		self.hop = False
@@ -134,8 +134,8 @@ class Game(object):
 		"""
 		for x in range(8):
 			for y in range(8):
-				if self.board.location((x,y)).color == BLACK and self.board.location((x,y)).occupant != None and self.board.location((x,y)).occupant.color == self.turn:
-					if self.board.legal_moves((x,y)) != []:
+				if self.location((x,y)).color == BLACK and self.location((x,y)).occupant != None and self.location((x,y)).occupant.color == self.turn:
+					if self.legal_moves((x,y)) != []:
 						return False
 
 		return True
@@ -145,10 +145,10 @@ class Game(object):
 		light_piece = False
 		for x in range(8):
 			for y in range(8):
-				if self.board.location((x,y)).color == BLACK and self.board.location((x,y)).occupant != None:
-					if self.board.location((x,y)).occupant.color == DARK:
+				if self.location((x,y)).color == BLACK and self.location((x,y)).occupant != None:
+					if self.location((x,y)).occupant.color == DARK:
 						dark_piece = True
-					elif self.board.location((x,y)).occupant.color == LIGHT:
+					elif self.location((x,y)).occupant.color == LIGHT:
 						light_piece = True
 		if dark_piece and light_piece:
 			return True
