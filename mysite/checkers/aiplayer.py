@@ -88,8 +88,7 @@ class Aiplayer():
                     if (self.state.location((x,y)).occupant.color == self.color):
                         self.ai_pieces.append((x,y))
                     elif (self.state.location((x,y)).occupant.color == self.opponent_color):
-                        self.opponent_pieces.append((x,y)) 
-        print(self.ai_pieces, self.opponent_pieces)
+                        self.opponent_pieces.append((x,y))
 
     def heuristic(self):
         return  len(self.ai_pieces) - len(self.opponent_pieces)

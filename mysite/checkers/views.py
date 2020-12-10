@@ -165,7 +165,7 @@ class game(View):
         record.save()
         #creating a game record file
         with open("games_record/"+new_game.id+".txt", "a") as file:
-            file.write(new_game.board.board_string(new_game.board.matrix)+"\n")
+            file.write(new_game.board_string(new_game.matrix)+"\n")
         return redirect('/game/'+new_game.id)
 
     def join_game(request):
@@ -220,7 +220,7 @@ class ai_game(View):
         record.save()
         #creating a game record file
         with open("games_record/"+new_game.id+".txt", "a") as file:
-            file.write(new_game.board.board_string(new_game.board.matrix)+"\n")
+            file.write(new_game.board_string(new_game.matrix)+"\n")
         return redirect('/game/'+new_game.id)
 
 
