@@ -17,12 +17,12 @@ class Aiplayer():
         self.ai_pieces= []
         self.opponent_pieces= []
         self.pieces_update()
-        self.best_move= None
+        self.best_move = None
 
     def set_state(self, board):
         self.state = copy.deepcopy(board)
-    # basic min max will add alpha beta prunning after
 
+    # basic min max will add alpha beta prunning after
     def minmax(self, state, depth, max_player= True, move = None):
         if depth == 0 or self.terminal(max_player):
             return self.heuristic(), move
@@ -32,7 +32,6 @@ class Aiplayer():
             return self.min_value(self.state, depth)
         return self.best_move
 
-    #alpha to be implemented later
     def max_value(self, state, depth):
         max_eval = float('-inf')
         best_move = None
@@ -63,25 +62,9 @@ class Aiplayer():
                     best_min = move
         return min_eval, best_min
 
-    # set the initial stat of both player pieces
-    def initial_state(self, color):
-        if color == "D":
-            self.opponent_pieces = [(0,1),(1,0),(1,2),(2,1),
-            (3,0),(3,2),(4,1),(5,0),(5,2),(6,1),(7,0),(7,2)]
-            self.ai_pieces = [(0,5),(0,7),(1,6),(2,5),
-            (2,7),(3,6),(4,5),(4,7),(5,6),(6,5),(6,7),(7,6)]
-        elif color == "L":
-            self.ai_pieces = [(0,1),(1,0),(1,2),(2,1),
-            (3,0),(3,2),(4,1),(5,0),(5,2),(6,1),(7,0),(7,2)]
-            self.opponent_pieces = [(0,5),(0,7),(1,6),(2,5),
-            (2,7),(3,6),(4,5),(4,7),(5,6),(6,5),(6,7),(7,6)]
 
-
-    # there are bugs in this function 
     # simple fuction for updating each players pieces
     def pieces_update(self):
-        self.ai_pieces= []
-        self.opponent_pieces= []
         for x in range(8):
             for y in range(8):
                 if (self.state.location((x,y)).color == BLACK and self.state.location((x,y)).occupant !=None):
@@ -90,9 +73,12 @@ class Aiplayer():
                     elif (self.state.location((x,y)).occupant.color == self.opponent_color):
                         self.opponent_pieces.append((x,y))
 
+
+    # heuristic used for minmax
     def heuristic(self):
         return  len(self.ai_pieces) - len(self.opponent_pieces)
 
+    # gives a list of moved assoictated with each piece 
     def moves(self, player_pieces):
         moves = []
         if self.state.check_for_jumps_available(self.color) == True:
@@ -108,10 +94,12 @@ class Aiplayer():
                if len(check) >= 2:
                    moves.append(check)
         return moves
-
+    
+    # returns best move with starting location 
     def get_move(self):
-        if self.best_move == None:
-            print ("OOOPS no best move whattttttt;something is wrong")
+        if self.best_move ==None:
+            self.pieces_update()
+            self.minmax(self.state,3)
         return self.best_move
 
     # might still need an update for the opptuninate
@@ -120,18 +108,20 @@ class Aiplayer():
         self.ai_pieces = [i for i in self.ai_pieces if i != self.best_move[1]] 
         self.ai_pieces.append(self.best_move[0])
 
+    # checks for basic termnial game situations 
     def terminal(self, max_player):
         if max_player == True:
             check = self.moves(self.ai_pieces)
-            if check == []:
+            if len(check) == 0:
                 return True
             else:
                 return False
         elif max_player == False:
             check = self.moves(self.opponent_pieces)
-            if check == []:
+            if len(check) == 0:
                 return True
             else:
                 return False
+
 
 
