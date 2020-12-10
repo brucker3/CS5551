@@ -17,6 +17,7 @@ class Aiplayer():
         self.ai_pieces= []
         self.opponent_pieces= []
         self.pieces_update()
+        self.best_move = None
 
     def set_state(self, board):
         self.state = copy.deepcopy(board)
@@ -71,6 +72,7 @@ class Aiplayer():
                         self.ai_pieces.append((x,y))
                     elif (self.state.location((x,y)).occupant.color == self.opponent_color):
                         self.opponent_pieces.append((x,y))
+
 
     # heuristic used for minmax
     def heuristic(self):
