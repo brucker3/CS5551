@@ -43,6 +43,7 @@ gameSocket.onmessage = function(e) {
 	// show_turn_text(data['turn']);
 	show_moves(board,moves,sel_piece);
 	update_turn_text(data.turn);
+	update_viewers_number(data['current_watchers']);
 	if (check_for_winner(data['winner'])){
 		update_winner_ui(data['winner'],data['player1_username'],data['player2_username']);
 	}
@@ -55,6 +56,7 @@ gameSocket.onmessage = function(e) {
 gameSocket.onclose = function(e) {
 	// add something which shows to user that network connection is broken
 	//console.error('Game socket closed unexpectedly');
+	update_viewers_number(0);
 	$('.main').css('display','none'); //hide whole table on loss of connection
 	$('#network-error').text('Please Check your network connection!');
 	$('#network-error').css({'display':'block', 'color':'red'}); //show error message on loss of connection
@@ -147,6 +149,12 @@ function update_turn_text(turn_text_letter){
 	else if (turn_text_letter=="L"){
 		$('.light-turn-text').css('color','black');
 		$('.dark-turn-text').css('color','lightgray');
+	}
+}
+
+function update_viewers_number(viewer_number){
+	if (viewer_number!=undefined){
+		$('#spectator-number').html('Current Viewers: '+ viewer_number);
 	}
 }
 

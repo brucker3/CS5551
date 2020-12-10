@@ -1,5 +1,5 @@
 # chat/consumers.py
-import json
+import json,codecs,pickle,collections
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import logging
@@ -7,15 +7,15 @@ logger = logging.getLogger("mylogger")
 from .game import Game
 from .models import *
 from django_currentuser.middleware import get_current_user, get_current_authenticated_user
-import codecs,pickle
 from .aiplayer import *
-global games
+global games, aiplayer, spectator_list
 games = {}
-global aiplayer
+spectator_list = collections.defaultdict(list)
 #this class is about websocket communication
 # when websocket is connected disconnects and message is received respective fuctions is triggered
 class GameConsumer(WebsocketConsumer):
     def connect(self):
+        global games, spectator_list
         self.auth_user = str(self.scope['user'])
         self.game_id = self.scope['url_route']['kwargs']['game_id']
         self.game_group_id = 'game_%s' % self.game_id
@@ -25,9 +25,9 @@ class GameConsumer(WebsocketConsumer):
             self.game_group_id,
             self.channel_name
         )
+        spectator_list[self.game_group_id].append(self.channel_name)
 		#call some function here which return board according to the room and player who is requesting
         logger.info('connected to websocket')
-        global games
         # if server restarts unsaved game will be lost!!!!
         #following condition is to avoid conflict of object retriveing from database and object currently in use
         # other condition to let other player in when player2 joins
@@ -37,30 +37,19 @@ class GameConsumer(WebsocketConsumer):
             games[self.game_id].player1 = game_record.player1_username
             games[self.game_id].player2 = game_record.player2_username
             games[self.game_id].update_game_object()
-        board, moves, selected_piece = games[self.game_id].get_update()
         print ("Current games being played: ", len(games)) # showing number of games being played simultaneously
-        async_to_sync(self.channel_layer.group_send)(
-            self.game_group_id,
-            {
-                'type': 'game_message',
-                'message': board,
-				'moves': moves,
-				'selected_piece' : selected_piece,
-				'turn': games[self.game_id].turn,
-                'winner': games[self.game_id].winner,
-                'player1_username': games[self.game_id].player1,
-                'player2_username': games[self.game_id].player2,
-            }
-        )
-
+        self.send_update_message()
         self.accept()
 
     def disconnect(self, close_code):
+        global spectator_list
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
             self.game_group_id,
             self.channel_name
         )
+        spectator_list[self.game_group_id].remove(self.channel_name)
+        self.send_update_message()
         logger.info('websocket disconnected and saves last game to database')
         record_edit = Game_Session.objects.get(game_id = self.game_id)
         record_edit.game_object = game_object = codecs.encode(pickle.dumps(games[self.game_id]), "base64").decode()
@@ -69,13 +58,12 @@ class GameConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data):
-        global games
-        global aiplayer
-        #print (games[self.game_id].check_for_both_color_on_board())
+        global games,aiplayer, spectator_list
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+        print (spectator_list)
 		#below line check if click is coming from correct person or not
-        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
+        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or 1 or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
             games[self.game_id].update_game_object(message)
         # logger.info(text_data)
         # new condition for ai player 
@@ -89,20 +77,7 @@ class GameConsumer(WebsocketConsumer):
         if games[self.game_id].winner != '':
             self.save_winner()
         #click is recieved here are update board is sent back
-        board, moves, selected_piece = games[self.game_id].get_update()
-        async_to_sync(self.channel_layer.group_send)(
-            self.game_group_id,
-            {
-                'type': 'game_message',
-                'message': board,
-                'moves': moves,
-                'selected_piece' : selected_piece,
-                'game_id':self.game_id,
-                'turn': games[self.game_id].turn,
-                'winner': games[self.game_id].winner,
-                'player1_username': games[self.game_id].player1,
-                'player2_username': games[self.game_id].player2,
-                })
+        self.send_update_message()
 
 
     # Receive message from room group
@@ -113,6 +88,22 @@ class GameConsumer(WebsocketConsumer):
         # logger.info('game_message funcion')
         # logger.info(event)
 
+    def send_update_message(self):
+        board, moves, selected_piece = games[self.game_id].get_update()
+        async_to_sync(self.channel_layer.group_send)(
+            self.game_group_id,
+            {
+                'type': 'game_message',
+                'message': board,
+				'moves': moves,
+				'selected_piece' : selected_piece,
+				'turn': games[self.game_id].turn,
+                'winner': games[self.game_id].winner,
+                'player1_username': games[self.game_id].player1,
+                'player2_username': games[self.game_id].player2,
+                'current_watchers': len(spectator_list[self.game_group_id]),
+            }
+        )
 
     def save_winner(self):
         if (games[self.game_id].winner == 'DARK'):
