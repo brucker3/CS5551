@@ -4,6 +4,10 @@ import math
 import copy
 from itertools import chain
 
+WHITE    = 'WHITE'
+DARK     = 'D' #bottom pieces
+LIGHT      = 'L' #uppoer pieces
+BLACK    = 'BLACK'
 
 class Aiplayer():
     def __init__(self, board, color="L"):
@@ -12,7 +16,7 @@ class Aiplayer():
         self.opponent_color = "D"
         self.ai_pieces= []
         self.opponent_pieces= []
-        self.initial_state(self.color)
+        self.pieces_update()
         self.best_move= None
 
     def set_state(self, board):
@@ -76,18 +80,16 @@ class Aiplayer():
     # there are bugs in this function 
     # simple fuction for updating each players pieces
     def pieces_update(self):
-        for i in range(0, len(self.ai_pieces)):
-            check = self.ai_pieces[i]
-            if self.state.matrix[check[0]][check[1]].get_square()[1]== None:
-                self.ai_pieces.pop(i)
-            elif self.state.matrix[check[0]][check[1]].get_square()[1].get_piece()[1] != self.color:
-                self.ai_pieces.pop(i)
-        for i in range(0, len(self.opponent_pieces)):
-            check2 = self.opponent_pieces[i]
-            if self.state.matrix[check2[0]][check2[1]].get_square() == None:
-                self.opponent_pieces.pop(i)
-            elif self.state.matrix[check2[0]][check2[1]].get_square()[1].get_piece()[1] != self.opponent_color:
-                self.opponent_pieces.pop(i)
+        self.ai_pieces= []
+        self.opponent_pieces= []
+        for x in range(8):
+            for y in range(8):
+                if (self.state.location((x,y)).color == BLACK and self.state.location((x,y)).occupant !=None):
+                    if (self.state.location((x,y)).occupant.color == self.color):
+                        self.ai_pieces.append((x,y))
+                    elif (self.state.location((x,y)).occupant.color == self.opponent_color):
+                        self.opponent_pieces.append((x,y)) 
+        print(self.ai_pieces, self.opponent_pieces)
 
     def heuristic(self):
         return  len(self.ai_pieces) - len(self.opponent_pieces)
@@ -110,29 +112,14 @@ class Aiplayer():
 
     def get_move(self):
         if self.best_move == None:
-            print (self.get_possible_random_move())
+            print ("OOOPS no best move whattttttt;something is wrong")
         return self.best_move
-
-    def get_possible_random_move(self):
-        moves = []
-        jump_available_temp = True
-        while(moves!=[]):
-            for x in range(8):
-                for y in range(8):
-                    moves.append(self.state.legal_moves((x,y),jump_available=jump_available_temp))
-                    if moves!= []:
-                        return ([moves[0],[x,y]])
-            jump_available_temp = False
-        
 
     # might still need an update for the opptuninate
     # this funciton switch out the best move and moves it to ai list 
     def move_update(self):
         self.ai_pieces = [i for i in self.ai_pieces if i != self.best_move[1]] 
         self.ai_pieces.append(self.best_move[0])
-
-
-
 
     def terminal(self, max_player):
         if max_player == True:
@@ -147,9 +134,5 @@ class Aiplayer():
                 return True
             else:
                 return False
-
-
-
-
 
 
