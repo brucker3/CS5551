@@ -11,7 +11,6 @@ class Aiplayer():
         self.opponent_color = "D"
         self.ai_pieces= []
         self.opponent_pieces= []
-        #self.initial_state(self.color)
         self.full_piece_update()
         self.best_move= None
 
@@ -54,6 +53,7 @@ class Aiplayer():
                     best_min = move
         return min_eval, best_min
 
+    # this fucntion should be removed it was causing bugs 
     # set the initial stat of both player pieces
     def initial_state(self, color):
         if color == "D":
@@ -68,7 +68,6 @@ class Aiplayer():
             (2,7),(3,6),(4,5),(4,7),(5,6),(6,5),(6,7),(7,6)]
 
 
-    # there are bugs in this function 
     # simple fuction for updating each players pieces
     def pieces_update(self):
         for i in self.ai_pieces:
@@ -82,7 +81,7 @@ class Aiplayer():
             elif self.state.matrix[i[0]][i[1]].get_square()[1].get_piece()[1] != self.opponent_color:
                 self.opponent_pieces.pop(i)
 
-    # if all 1 or none whats it returning in the eval
+    # get a complete list of each players pieces 
     def full_piece_update(self):
         self.ai_pieces = []
         self.opponent_pieces = []
@@ -95,9 +94,11 @@ class Aiplayer():
                     elif square.get_square()[1].get_piece()[1] == self.opponent_color:
                         self.opponent_pieces.append([i,j]) 
 
+    # heuristic used for minmax
     def heuristic(self):
         return  len(self.ai_pieces) - len(self.opponent_pieces)
 
+    # gives a list of moved assoictated with each piece 
     def moves(self, player_pieces):
         moves = []
         if self.state.check_for_jumps_available(self.color) == True:
@@ -113,27 +114,24 @@ class Aiplayer():
                if len(check) >= 2:
                    moves.append(check)
         return moves
-
+    
+    # returns best move with starting location 
     def get_move(self):
         if self.best_move ==None:
             self.full_piece_update()
             self.minmax(self.state,3)
         return self.best_move
 
+    # allows for update of board object 
     def state_update(self, state):
         self.state = state
 
-
-
-    # might still need an update for the opptuninate
-    # this funciton switch out the best move and moves it to ai list 
+    # this funciton switch out the move played with the list of know piece locations
     def move_update(self):
         self.ai_pieces = [i for i in self.ai_pieces if i != self.best_move[1]] 
         self.ai_pieces.append(self.best_move[0])
 
-
-
-
+    # checks for basic termnial game situations 
     def terminal(self, max_player):
         if max_player == True:
             check = self.moves(self.ai_pieces)
