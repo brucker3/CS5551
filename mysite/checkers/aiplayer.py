@@ -11,7 +11,8 @@ class Aiplayer():
         self.opponent_color = "D"
         self.ai_pieces= []
         self.opponent_pieces= []
-        self.initial_state(self.color)
+        #self.initial_state(self.color)
+        self.full_piece_update()
         self.best_move= None
 
 

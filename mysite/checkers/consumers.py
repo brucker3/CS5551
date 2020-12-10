@@ -86,7 +86,7 @@ class GameConsumer(WebsocketConsumer):
             #aiplayer.state_update(games[self.game_id].get_board())
             #aiplayer.full_piece_update()
             move = aiplayer.get_move()
-            logger.info(aiplayer.get_move())
+            logger.info(move)
             games[self.game_id].update_game_object(move[1])
             games[self.game_id].update_game_object(move[0])
             # added the below fuciton to help ai player update 
