@@ -61,12 +61,12 @@ class GameConsumer(WebsocketConsumer):
         global games,aiplayer, spectator_list
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        print (spectator_list)
 		#below line check if click is coming from correct person or not
-        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or 1 or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
+        if (games[self.game_id].turn == 'D' and self.auth_user==games[self.game_id].player1) or (games[self.game_id].turn == 'L' and self.auth_user==games[self.game_id].player2):
             games[self.game_id].update_game_object(message)
         # logger.info(text_data)
         # new condition for ai player 
+        self.send_update_message()
         while( games[self.game_id].player2 == "Computer" and games[self.game_id].turn == "L" and games[self.game_id].winner == ''):
             logger.info("ai game loop ai player move")
             aiplayer = Aiplayer(games[self.game_id].get_board())

@@ -21,9 +21,8 @@
 		for (var i in active_game_data_dict) {
 			document.getElementById('join-game').disabled = false;
 			dom_my_games.innerHTML += ('<label><input type="radio" name="game-id" value="' + i + '" checked/> ' +
-										'created by user:  '+active_game_data_dict[i] +
-										'</label><br>');
-			dom_my_games.innerHTML1	+= 	'created by user:  '+active_game_data_dict[i]+'<br>';					
+										'Created by user:  '+active_game_data_dict[i] +
+										'</label><br>');					
 		}
 
 		document.querySelector('#create-game').onclick = function(e) {

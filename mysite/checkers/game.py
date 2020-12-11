@@ -1,3 +1,8 @@
+"""
+I adapted some code from checkers.py found at
+@ inspired by: https://github.com/everestwitman/Pygame-Checkers/blob/master/checkers.py
+"""
+
 import sys, json, random, string
 
 from .board import Board
@@ -33,7 +38,7 @@ class Game(Board):
 		self.id = self.generate_random_alphanumeric_string()
 		self.matrix = self.new_board()
 		self.turn = DARK
-		self.selected_piece = None # a board location. 
+		self.selected_piece = None # a board location.
 		self.jump_available = False # this instance var is to force player to jump
 		self.hop = False
 		self.selected_legal_moves = []
@@ -53,9 +58,9 @@ class Game(Board):
 	def update_legal_moves(self):
 		if self.selected_piece != None:
 			self.selected_legal_moves = self.legal_moves(self.selected_piece, self.hop, self.jump_available)
-		
+
 	def update_game_object(self, mouse_position=[0,0]):
-		#if (not self.jump_available): self.set_jump_available()
+		if (not self.jump_available): self.set_jump_available()
 		"""	This function updates game object based on input of position"""
 		self.mouse_pos = mouse_position # what square is the mouse clicked in? .. format (x,y)
 		if self.hop == False:
@@ -73,8 +78,8 @@ class Game(Board):
 				else:
 					self.end_turn()
 		self.update_legal_moves()
-		
-		if self.hop == True:					
+
+		if self.hop == True:
 			if self.selected_piece != None and self.mouse_pos in self.legal_moves(self.selected_piece, self.hop, jump_available=self.jump_available):
 				self.move_piece(self.selected_piece, self.mouse_pos)
 				self.remove_piece((self.selected_piece[0] + (self.mouse_pos[0] - self.selected_piece[0]) / 2, self.selected_piece[1] + (self.mouse_pos[1] - self.selected_piece[1]) / 2))

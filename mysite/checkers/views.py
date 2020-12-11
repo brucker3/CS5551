@@ -1,4 +1,11 @@
 # checkers/views.py
+"""
+I adapted some code from checkers.py found at
+@ inspired by: https://djangosnippets.org/snippets/1723/
+@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
+@ inspired by: https://docs.djangoproject.com/en/3.1/
+@ inspired by: https://www.youtube.com/watch?v=Kc1Q_ayAeQk
+"""
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -12,8 +19,8 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic.edit import FormView
 import logging
-from .aiplayer import * 
-from checkers import  players 
+from .aiplayer import *
+from checkers import  players
 from checkers import  players
 logger = logging.getLogger("mylogger")
 
@@ -91,6 +98,7 @@ class signupview (FormView):
 #------------------------------
 #-------login view---------
 #------------------------------
+
 class loginview (FormView):
     template_name = 'checkers/login.html'
     form_class = LoginForm
@@ -119,6 +127,7 @@ class loginview (FormView):
 #------------------------------
 #-------logout view---------
 #------------------------------
+
 class logoutview(View):
     def get(self, request):
         logout(request)
@@ -173,7 +182,7 @@ class game(View):
             selected_game_id = request.POST.get("game-id")
             print (selected_game_id)
             record_edit = Game_Session.objects.get(game_id=selected_game_id)
-            print (dir(record_edit),record_edit, get_current_authenticated_user())
+            print (get_current_authenticated_user())
             record_edit.player2_username = str(get_current_authenticated_user())
             record_edit.is_open_to_join = False
             record_edit.save()
@@ -185,6 +194,24 @@ class game(View):
             selected_game_id = request.POST.get("game-id")
             logger.info("player resumed game")
             return redirect('/game/'+selected_game_id)
+
+    def forfiet_game(request, game_id):
+        record_edit = Game_Session.objects.get(game_id=game_id)
+        print (str(get_current_authenticated_user()), game_id)
+        if (str(get_current_authenticated_user())==record_edit.player1_username):
+            Winner(game_id = game_id, winner_user = record_edit.player2_username).save()
+            record_edit.is_active = False
+            record_edit.winner = "LIGHT"
+            record_edit.save()
+        elif (str(get_current_authenticated_user())==record_edit.player2_username):
+            Winner(game_id = game_id, winner_user = record_edit.player1_username).save()
+            record_edit.is_active = False
+            record_edit.winner = "DARK"
+            record_edit.save()
+            print ("forfieting")
+        return render(request, 'game/room.html', {
+            'game_id': game_id
+        })
 
 class room(View):
     def get(self, request, game_id):
@@ -207,13 +234,13 @@ class ai_game(View):
         new_game = Game()
         new_game.player1 = str(get_current_authenticated_user())
         new_game.player2 = "Computer"
-        
+
         all_game_ids = [i.game_id for i in Game_Session.objects.all()]
         while new_game.id in all_game_ids: # this while loop is to avoid game having same session id
             logger.info("regenerating new game id")
             new_game.regenerate_game_id()
-        record = Game_Session(game_id=new_game.id, 
-                            player1_username = new_game.player1, 
+        record = Game_Session(game_id=new_game.id,
+                            player1_username = new_game.player1,
                             player2_username = new_game.player2,
                             game_object = codecs.encode(pickle.dumps(new_game), "base64").decode(),
                             is_open_to_join = False,)
@@ -222,5 +249,3 @@ class ai_game(View):
         with open("games_record/"+new_game.id+".txt", "a") as file:
             file.write(new_game.board_string(new_game.matrix)+"\n")
         return redirect('/game/'+new_game.id)
-
-
