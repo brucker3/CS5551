@@ -1,6 +1,6 @@
 #mysite/checkers/board.py
 """
-I adapted some code from checkers.py found at
+I adapted some code found at
 @ inspired by: https://github.com/everestwitman/Pygame-Checkers/blob/master/checkers.py
 """
 import sys
