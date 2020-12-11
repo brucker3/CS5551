@@ -1,4 +1,11 @@
 # checkers/views.py
+"""
+I adapted some code from checkers.py found at
+@ inspired by: https://djangosnippets.org/snippets/1723/
+@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
+@ inspired by: https://docs.djangoproject.com/en/3.1/
+@ inspired by: https://www.youtube.com/watch?v=Kc1Q_ayAeQk
+"""
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -38,14 +45,6 @@ def homeview (request):
                    'my_active_games': my_games_data,
             })
 
-"""
-I adapted some code from checkers.py found at
-@ inspired by: https://djangosnippets.org/snippets/1723/
-@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
-@ inspired by: https://docs.djangoproject.com/en/3.1/
-"""
-
-
 class guestview (FormView):
     template_name = 'checkers/guestUsername.html'
     form_class = GuestForm
@@ -79,13 +78,6 @@ class guestview (FormView):
 #------------------------------
 #-------registration---------
 #------------------------------
-
-"""
-I adapted some code from checkers.py found at
-@ inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
-@ inspired by: https://docs.djangoproject.com/en/3.1/
-"""
-
 class signupview (FormView):
     template_name = 'checkers/signup.html'
     form_class = SignupForm
@@ -106,11 +98,7 @@ class signupview (FormView):
 #------------------------------
 #-------login view---------
 #------------------------------
-"""
-I adapted some code from checkers.py found at
-@ inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
-@ inspired by: https://docs.djangoproject.com/en/3.1/
-"""
+
 class loginview (FormView):
     template_name = 'checkers/login.html'
     form_class = LoginForm
@@ -139,11 +127,6 @@ class loginview (FormView):
 #------------------------------
 #-------logout view---------
 #------------------------------
-"""
-I adapted some code from checkers.py found at
-@ inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
-@ inspired by: https://docs.djangoproject.com/en/3.1/
-"""
 
 class logoutview(View):
     def get(self, request):
