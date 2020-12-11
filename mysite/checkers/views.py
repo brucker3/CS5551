@@ -83,7 +83,6 @@ class guestview (FormView):
 """
 I adapted some code from checkers.py found at
 @ inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
-@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
 @ inspired by: https://docs.djangoproject.com/en/3.1/
 """
 
@@ -110,7 +109,6 @@ class signupview (FormView):
 """
 I adapted some code from checkers.py found at
 @ inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
-@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
 @ inspired by: https://docs.djangoproject.com/en/3.1/
 """
 class loginview (FormView):
@@ -144,7 +142,6 @@ class loginview (FormView):
 """
 I adapted some code from checkers.py found at
 @ inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
-@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
 @ inspired by: https://docs.djangoproject.com/en/3.1/
 """
 
