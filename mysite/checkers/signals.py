@@ -1,6 +1,6 @@
 
 """
-I adapted some code from checkers.py found at
+I adapted some code found at
 @ inspired by: https://www.youtube.com/watch?v=Kc1Q_ayAeQk
 """
 

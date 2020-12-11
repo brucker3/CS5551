@@ -1,5 +1,10 @@
-
-# @ inspired by: https://docs.djangoproject.com/en/3.1/
+"""
+I adapted some code found at
+@ inspired by: https://djangosnippets.org/snippets/1723/
+@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
+@ inspired by: https://docs.djangoproject.com/en/3.1/
+@ inspired by: https://www.youtube.com/watch?v=Kc1Q_ayAeQk
+"""
 
 from django import forms
 from django.contrib.auth.models import User

@@ -1,5 +1,5 @@
 """
-I adapted some code from checkers.py found at
+I adapted some code found at
 @inspired by: https://djangosnippets.org/snippets/1723/
 @inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
 @ inspired by: https://docs.djangoproject.com/en/3.1/
