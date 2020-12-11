@@ -12,8 +12,8 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic.edit import FormView
 import logging
-from .aiplayer import * 
-from checkers import  players 
+from .aiplayer import *
+from checkers import  players
 from checkers import  players
 logger = logging.getLogger("mylogger")
 
@@ -37,6 +37,10 @@ def homeview (request):
     return render(request, 'checkers/home.html',{
                    'my_active_games': my_games_data,
             })
+
+#@inspired by: https://djangosnippets.org/snippets/1723/
+#@inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
+#@inspired by: https://docs.djangoproject.com/en/3.1/
 
 class guestview (FormView):
     template_name = 'checkers/guestUsername.html'
@@ -71,7 +75,9 @@ class guestview (FormView):
 #------------------------------
 #-------registration---------
 #------------------------------
-class signupview (FormView):
+
+#@inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
+# @ inspired by: https://docs.djangoproject.com/en/3.1/class signupview (FormView):
     template_name = 'checkers/signup.html'
     form_class = SignupForm
     success_url = '/login/'
@@ -91,6 +97,8 @@ class signupview (FormView):
 #------------------------------
 #-------login view---------
 #------------------------------
+#@inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
+# @ inspired by: https://docs.djangoproject.com/en/3.1/
 class loginview (FormView):
     template_name = 'checkers/login.html'
     form_class = LoginForm
@@ -119,6 +127,8 @@ class loginview (FormView):
 #------------------------------
 #-------logout view---------
 #------------------------------
+#@inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
+# @ inspired by: https://docs.djangoproject.com/en/3.1/
 class logoutview(View):
     def get(self, request):
         logout(request)
@@ -225,13 +235,13 @@ class ai_game(View):
         new_game = Game()
         new_game.player1 = str(get_current_authenticated_user())
         new_game.player2 = "Computer"
-        
+
         all_game_ids = [i.game_id for i in Game_Session.objects.all()]
         while new_game.id in all_game_ids: # this while loop is to avoid game having same session id
             logger.info("regenerating new game id")
             new_game.regenerate_game_id()
-        record = Game_Session(game_id=new_game.id, 
-                            player1_username = new_game.player1, 
+        record = Game_Session(game_id=new_game.id,
+                            player1_username = new_game.player1,
                             player2_username = new_game.player2,
                             game_object = codecs.encode(pickle.dumps(new_game), "base64").decode(),
                             is_open_to_join = False,)
@@ -240,5 +250,3 @@ class ai_game(View):
         with open("games_record/"+new_game.id+".txt", "a") as file:
             file.write(new_game.board_string(new_game.matrix)+"\n")
         return redirect('/game/'+new_game.id)
-
-
