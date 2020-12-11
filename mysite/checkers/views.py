@@ -38,9 +38,13 @@ def homeview (request):
                    'my_active_games': my_games_data,
             })
 
-#@inspired by: https://djangosnippets.org/snippets/1723/
-#@inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
-#@inspired by: https://docs.djangoproject.com/en/3.1/
+"""
+I adapted some code from checkers.py found at
+@ inspired by: https://djangosnippets.org/snippets/1723/
+@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
+@ inspired by: https://docs.djangoproject.com/en/3.1/
+"""
+
 
 class guestview (FormView):
     template_name = 'checkers/guestUsername.html'
@@ -76,8 +80,14 @@ class guestview (FormView):
 #-------registration---------
 #------------------------------
 
-#@inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
-# @ inspired by: https://docs.djangoproject.com/en/3.1/class signupview (FormView):
+"""
+I adapted some code from checkers.py found at
+@ inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
+@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
+@ inspired by: https://docs.djangoproject.com/en/3.1/
+"""
+
+class signupview (FormView):
     template_name = 'checkers/signup.html'
     form_class = SignupForm
     success_url = '/login/'
@@ -97,8 +107,12 @@ class guestview (FormView):
 #------------------------------
 #-------login view---------
 #------------------------------
-#@inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
-# @ inspired by: https://docs.djangoproject.com/en/3.1/
+"""
+I adapted some code from checkers.py found at
+@ inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
+@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
+@ inspired by: https://docs.djangoproject.com/en/3.1/
+"""
 class loginview (FormView):
     template_name = 'checkers/login.html'
     form_class = LoginForm
@@ -127,8 +141,13 @@ class loginview (FormView):
 #------------------------------
 #-------logout view---------
 #------------------------------
-#@inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
-# @ inspired by: https://docs.djangoproject.com/en/3.1/
+"""
+I adapted some code from checkers.py found at
+@ inspired by: https://www.udemy.com/course/practical-django-launch-your-startup-today/learn/lecture/19861442#overview
+@ inspired by: https://gist.github.com/DrMartiner/ee93bd6fe1af4875f086f8396d13acd8
+@ inspired by: https://docs.djangoproject.com/en/3.1/
+"""
+
 class logoutview(View):
     def get(self, request):
         logout(request)
