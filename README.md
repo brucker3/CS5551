@@ -1,6 +1,18 @@
 # CS5551
 
-this is a README file for CS5551 semester project
+this is a README file for CS5551 semester project using PYTHON 3
+
+Django project is in 'mysite' folder
+
+To install requirements: `pip install mysite/requirements.txt`
+
+To run project: `python mysite/manage.py runserver`
+
+Before running project Make sure to turn on Docker, Mysql server with username: root and password: root (else change your mysite/mysite/settings.py)
+
+Run `python mysite/manage.py makemigrations`
+
+Run `python mysite/manage.py migrate`
 
 the design docs file contains some files that are built on 
 draw.io to open these docs go to draw.io and load them to the site.
